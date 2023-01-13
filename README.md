@@ -1,9 +1,9 @@
-# CG2023Student
+# Computer Graphics
 
 Clone and initialize the repository:
 ```
-git clone https://github.com/upf-gti/CG2023
-cd CG2023
+git clone https://github.com/upf-gti/CG2023Student
+cd CG2023Student
 git submodule update --init
 ```
 
