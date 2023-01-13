@@ -27,6 +27,7 @@
 #include <iostream>
 #include <cmath>
 #include <cassert>
+#include <string.h>
 
 // Used to access opengl extensions
 //void* getGLProcAddress(const char*);
