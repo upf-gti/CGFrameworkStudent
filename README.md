@@ -21,7 +21,7 @@ MS Visual Studio Community can be downloaded from [here](https://visualstudio.mi
 
 In addition you need to install *CMake* which can be downloaded from [here](https://cmake.org/download/). Select "Windows x64 Installer" for the last version. Remember to set **"Add CMake to PATH"** when asked while installing, otherwhise you won't be able to call CMake from the terminal.
 
-Once you have all required software go to the project folder and run this on a windows console:
+Once you have all required open a Windows Terminal, go to the project folder and do this steps:
 ```console
 mkdir build
 cd build
@@ -44,7 +44,7 @@ Continue by installing *cmake* using this command:
 brew install cmake
 ```
 
-Once you have all required software go to the project folder and run this on a MacOs terminal:
+Once you have all required open a MacOS Terminal, go to the project folder and do this steps:
 ```console
 mkdir build && cd build
 cmake -G "Xcode" ..
@@ -67,7 +67,7 @@ sudo apt install build-essential
 sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev
 ```
 
-Once you have all required software go to the project folder and run this on a Linux terminal:
+Once you have all required open a Linux Terminal, go to the project folder and do this steps:
 ```console
 mkdir build && cd build
 cmake ..
@@ -85,7 +85,7 @@ Visual Studio Code can be downloaded for each platform [here](https://code.visua
 
 #### Configuring VSCode
 
-After the VSCode and the requirements for each platform are installed, the following extensions are needed to work with C++ code:
+After the VSCode and the requirements for each platform are installed **(the steps for each platform are mandatory!)**, the following extensions are needed to work with C++ code:
 
 ```
 C/C++
