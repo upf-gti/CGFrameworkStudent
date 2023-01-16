@@ -28,27 +28,29 @@
 
 std::string absResPath( const std::string& p_sFile )
 {
-    std::string sFullPath;
-    std::string sFileName;
+	std::string sFullPath;
+	std::string sFileName;
+	std::string sFixedPath = std::string("../../res/") + p_sFile;
+
 #if defined(WIN32)
-    char result[PATH_MAX];
-    GetModuleFileName( NULL, (LPSTR)result, PATH_MAX);
-    sFileName = '\\' + p_sFile;
-    sFullPath = result;
+	char result[PATH_MAX];
+	GetModuleFileName( NULL, (LPSTR)result, PATH_MAX);
+	sFileName = '\\' + sFixedPath;
+	sFullPath = result;
 #elif defined(__linux__)
-    char result[PATH_MAX];
-    ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
-    sFullPath = std::string( result, ( count > 0 ) ? count : 0 );
-    sFileName = '/' + p_sFile;
+	char result[PATH_MAX];
+	ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
+	sFullPath = std::string( result, ( count > 0 ) ? count : 0 );
+	sFileName = '/' + sFixedPath;
 #elif defined(__APPLE__)
-    char result[PATH_MAX];
-    uint32_t bufsize = PATH_MAX;
-    if( !_NSGetExecutablePath( result, &bufsize ) )
-        puts( result );
-    sFullPath = &result[0];
-    sFileName = '/' + p_sFile;
+	char result[PATH_MAX];
+	uint32_t bufsize = PATH_MAX;
+	if( !_NSGetExecutablePath( result, &bufsize ) )
+		puts( result );
+	sFullPath = &result[0];
+	sFileName = '/' + sFixedPath;
 #endif
-    return sFullPath.substr( 0, sFullPath.find_last_of( "\\/" ) ) + sFileName;
+	return sFullPath.substr( 0, sFullPath.find_last_of( "\\/" ) ) + sFileName;
 }
 
 // This function is used to access OpenGL Extensions (special features not supported by all cards)
@@ -110,7 +112,8 @@ SDL_Window* createWindow(const char* caption, int width, int height )
 
 #ifdef WIN32
 	HWND hwnd = wmInfo.info.win.window;
-	dir_watcher_data.start("../res/shaders", hwnd);
+	std::string sShadersPath = absResPath("shaders");
+	dir_watcher_data.start(sShadersPath.c_str(), hwnd);
 #endif
 
 	// Create an OpenGL context associated with the window.

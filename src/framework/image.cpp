@@ -128,7 +128,8 @@ void Image::FlipY()
 
 bool Image::LoadPNG(const char* filename, bool flip_y)
 {
-	std::ifstream file(filename, std::ios::in | std::ios::binary | std::ios::ate);
+	std::string sfullPath = absResPath(filename);
+	std::ifstream file(sfullPath, std::ios::in | std::ios::binary | std::ios::ate);
 
 	// Get filesize
 	std::streamsize size = 0;
