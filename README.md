@@ -64,7 +64,7 @@ Install *cmake* and needed libraries using this command:
 ```console
 sudo apt install cmake
 sudo apt install build-essential
-sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev
+sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
 ```
 
 Once you have all required open a Linux Terminal, go to the project folder and do this steps:
