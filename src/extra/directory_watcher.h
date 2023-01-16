@@ -57,7 +57,6 @@ public:
 
 				if (rc == 0) {
 					DWORD e = GetLastError();
-					std::cout << hDirectory << std::endl;
 				}
 
 				if (fni.i.Action != 0) {
