@@ -33,6 +33,8 @@ void Application::Init(void)
 void Application::Render(void)
 {
 	// ...
+	framebuffer.SetPixel(100, 100, Color(0, 255, 0));
+
 
 	framebuffer.Render();
 }
