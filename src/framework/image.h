@@ -74,7 +74,7 @@ public:
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);
 
 	// Save or load images from the hard drive
-	bool LoadPNG(const char* filename, bool flip_y = false);
+	bool LoadPNG(const char* filename, bool flip_y = true);
 	bool LoadTGA(const char* filename, bool flip_y = false);
 	bool SaveTGA(const char* filename);
 

@@ -87,15 +87,15 @@ void Texture::Upload(unsigned int format, unsigned int type, bool mipmaps, Uint8
 
 bool Texture::Load(const char* filename, bool mipmaps)
 {
-	std::string str = filename;
-	std::string ext = str.substr( str.size() - 4,4 );
+	std::string sfullPath = absResPath(filename);
+	std::string ext = sfullPath.substr(sfullPath.size() - 4,4 );
 
 	if (ext == ".tga" || ext == ".TGA") {
-		TGAInfo* tgainfo = LoadTGA(filename);
+		TGAInfo* tgainfo = LoadTGA(sfullPath.c_str());
 		if (tgainfo == NULL)
 			return false;
 
-		this->filename = filename;
+		this->filename = sfullPath;
 		Create(tgainfo->width, tgainfo->height, tgainfo->bpp == 24 ? GL_BGR : GL_BGRA, GL_UNSIGNED_BYTE, mipmaps, tgainfo->data, (tgainfo->bpp == 24 ? 3 : 4));
 
 		delete tgainfo->data;
@@ -104,8 +104,11 @@ bool Texture::Load(const char* filename, bool mipmaps)
 	}
 	else if (ext == ".png" || ext == ".PNG") {
 		Image* image = new Image();
-		image->LoadPNG(filename, true);
-		this->filename = filename;
+		if (!image->LoadPNG(filename)) {
+			delete image;
+			return false;
+		}
+		this->filename = sfullPath;
 		Create(image->width, image->height, image->bytes_per_pixel == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, mipmaps, (Uint8*)image->pixels);
 		return true;
 	}

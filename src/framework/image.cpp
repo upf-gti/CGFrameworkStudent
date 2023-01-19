@@ -156,9 +156,24 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 		return false;
 
 	size_t bufferSize = out_image.size();
-	pixels = new Color[bufferSize];
-	bytes_per_pixel = bufferSize / (width * height);
-	memcpy(pixels, &out_image[0], bufferSize);
+	unsigned int originalBytesPerPixel = bufferSize / (width * height);
+	
+	// Force 3 channels
+	bytes_per_pixel = 3;
+
+	if (originalBytesPerPixel == 3) {
+		pixels = new Color[bufferSize];
+		memcpy(pixels, &out_image[0], bufferSize);
+	}
+	else if (originalBytesPerPixel == 4) {
+
+		pixels = new Color[bufferSize * 0.75];
+
+		unsigned int k = 0;
+		for (unsigned int i = 0; i < bufferSize; i += originalBytesPerPixel) {
+			pixels[k++] = Color(out_image[i], out_image[i + 1], out_image[i + 2]);
+		}
+	}
 
 	// Flip pixels in Y
 	if (flip_y)
