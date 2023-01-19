@@ -156,7 +156,7 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 		return false;
 
 	size_t bufferSize = out_image.size();
-	unsigned int originalBytesPerPixel = bufferSize / (width * height);
+	unsigned int originalBytesPerPixel = (unsigned int)bufferSize / (width * height);
 	
 	// Force 3 channels
 	bytes_per_pixel = 3;
@@ -167,11 +167,13 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 	}
 	else if (originalBytesPerPixel == 4) {
 
-		pixels = new Color[bufferSize * 0.75];
+		unsigned int newBufferSize = width * height * bytes_per_pixel;
+		pixels = new Color[newBufferSize];
 
 		unsigned int k = 0;
 		for (unsigned int i = 0; i < bufferSize; i += originalBytesPerPixel) {
-			pixels[k++] = Color(out_image[i], out_image[i + 1], out_image[i + 2]);
+			pixels[k] = Color(out_image[i], out_image[i + 1], out_image[i + 2]);
+			k++;
 		}
 	}
 
@@ -250,7 +252,9 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 	for (unsigned int y = 0; y < height; ++y) {
 		for (unsigned int x = 0; x < width; ++x) {
 			unsigned int pos = y * width * bytesPerPixel + x * bytesPerPixel;
-			SetPixel(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
+			// Make sure we don't access out of memory
+			if( (pos < imageSize) && (pos + 1 < imageSize) && (pos + 2 < imageSize))
+				SetPixel(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
 		}
 	}
 
