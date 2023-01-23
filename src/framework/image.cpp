@@ -273,7 +273,8 @@ bool Image::SaveTGA(const char* filename)
 {
 	unsigned char TGAheader[12] = {0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-	FILE *file = fopen(filename, "wb");
+	std::string fullPath = absResPath(filename);
+	FILE *file = fopen(fullPath.c_str(), "wb");
 	if ( file == NULL )
 	{
 		perror("Failed to open file: ");
@@ -295,7 +296,7 @@ bool Image::SaveTGA(const char* filename)
 	for(unsigned int y = 0; y < height; ++y)
 		for(unsigned int x = 0; x < width; ++x)
 		{
-			Color c = pixels[(height-y-1)*width+x];
+			Color c = pixels[y*width+x];
 			unsigned int pos = (y*width+x)*3;
 			bytes[pos+2] = c.r;
 			bytes[pos+1] = c.g;
@@ -304,7 +305,21 @@ bool Image::SaveTGA(const char* filename)
 
 	fwrite(bytes, 1, width*height*3, file);
 	fclose(file);
+
 	return true;
+}
+
+void Image::DrawRect(int x, int y, int w, int h, const Color& c)
+{
+	for (int i = 0; i < w; ++i) {
+		SetPixel(x + i, y, c);
+		SetPixel(x + i, y + h, c);
+	}
+
+	for (int j = 0; j < h; ++j) {
+		SetPixel(x, y + j, c);
+		SetPixel(x + w, y + j, c);
+	}
 }
 
 #ifndef IGNORE_LAMBDAS

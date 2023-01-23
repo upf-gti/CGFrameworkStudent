@@ -21,7 +21,7 @@ Application::Application(const char* caption, int width, int height)
 
 Application::~Application()
 {
-	delete keystate;
+	SDL_DestroyWindow(window);
 }
 
 void Application::Init(void)
