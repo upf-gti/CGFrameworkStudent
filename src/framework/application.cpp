@@ -34,6 +34,7 @@ void Application::Render(void)
 {
 	// ...
 	//framebuffer.SetPixel(100, 100, Color(0, 255, 255));
+	framebuffer.DrawLineDDA(200, 500, 10, 50, Color(255, 0, 0));
 
 
 	framebuffer.Render();

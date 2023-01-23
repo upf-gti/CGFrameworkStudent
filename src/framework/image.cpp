@@ -310,9 +310,10 @@ bool Image::SaveTGA(const char* filename)
 //TODO: Create a function in the Image class that draws lines using the DDA algorithm (L1-3.1)
 void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c) {
 	//We compute d as the largest leg of the triangle
-	int dy = abs(y0 - y1);
-	int dx = abs(x0 - x1);
-	int d = (dy >= dx) ? dy : dx;
+	float dy = y1 - y0;
+	float dx = x1 - x0;
+	if (abs(dy) == abs(dx)) return; //Avoid Same start-end point error
+	float d = (abs(dy) > abs(dx)) ? abs(dy) : abs(dx);
 	dx = dx / d;
 	dy = dy / d;
 	for (int i = 0; i < d; i++) {
@@ -322,6 +323,8 @@ void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c) {
 
 //TODO:Create a method in the Image class that draws lines using the efficient Bresenham lines algorithm (L1-3.2)
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c) {
+	//First Octant
+
 
 }
 
