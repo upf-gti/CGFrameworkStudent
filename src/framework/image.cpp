@@ -315,6 +315,7 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& c)
 		SetPixel(x + i, y, c);
 		SetPixel(x + i, y + h, c);
 	}
+}
 
 //TODO:Create a method in the Image class that draws lines using the efficient Bresenham lines algorithm (L1-3.2)
 void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c) {
