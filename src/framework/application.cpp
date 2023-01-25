@@ -21,7 +21,7 @@ Application::Application(const char* caption, int width, int height)
 
 Application::~Application()
 {
-	delete keystate;
+	SDL_DestroyWindow(window);
 }
 
 void Application::Init(void)
@@ -34,7 +34,13 @@ void Application::Render(void)
 {
 	// ...
 	//framebuffer.SetPixel(100, 100, Color(0, 255, 255));
-	framebuffer.DrawLineDDA(200, 500, 10, 50, Color(255, 0, 0));
+	//framebuffer.DrawLineDDA(200, 500, 10, 50, Color(255, 0, 0));
+	//randomize colors
+	unsigned char r = rand() % 256;
+	unsigned char g = rand() % 256;
+	unsigned char b = rand() % 256;
+	framebuffer.DrawLineBresenham(300, 300, 300 + 200 * cos(time * 3), 300 + 200 * sin(time * 3), Color(r, g, b));
+	//framebuffer.DrawLineBresenham(300, 300, 300, 500, Color::WHITE);
 
 
 	framebuffer.Render();

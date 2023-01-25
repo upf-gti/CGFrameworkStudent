@@ -78,9 +78,11 @@ public:
 	bool LoadTGA(const char* filename, bool flip_y = false);
 	bool SaveTGA(const char* filename);
 
+	void DrawRect(int x, int y, int w, int h, const Color& c);
+
 	//Draws lines using the DDA algorithm
 	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
-	
+
 	//Draws lines using the efficient Bresenham lines algorithm
 	void DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c);
 
