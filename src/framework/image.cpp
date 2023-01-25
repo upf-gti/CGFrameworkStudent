@@ -377,6 +377,29 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c) {
 	}
 }
 
+//Implement the Bresenham circle algorithm as a method of the Image class (L1-3.3)
+void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
+	//Code of bresenham circle one octant
+	int  x, y; int v;
+	x = 0;
+	y = r;
+	v = 1 - r;
+	SetPixel(x, y, c);
+	while (y > x) {
+		if (v < 0) {
+			v = v + 2 * x + 3;
+			x++;
+		}
+		else {
+			v = v + 2 * (x - y) + 5;
+			x++;
+			y--;
+		}
+		SetPixel(x, y, c);
+	}
+}
+
+
 #ifndef IGNORE_LAMBDAS
 
 // You can apply and algorithm for two images and store the result in the first one

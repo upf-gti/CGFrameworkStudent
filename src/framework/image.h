@@ -86,6 +86,9 @@ public:
 	//Draws lines using the efficient Bresenham lines algorithm
 	void DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c);
 
+	//Bresenham circle algorithm to draw a circle
+	void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill);
+
 	// Used to easy code
 	#ifndef IGNORE_LAMBDAS
 
