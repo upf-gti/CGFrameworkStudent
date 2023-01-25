@@ -42,6 +42,7 @@ void Application::Render(void)
 	framebuffer.DrawLineBresenham(300, 300, 300 + 200 * cos(time * 3), 300 + 200 * sin(time * 3), Color(r, g, b));
 	//framebuffer.DrawLineBresenham(300, 300, 300, 500, Color::WHITE);
 
+
 	framebuffer.Render();
 }
 

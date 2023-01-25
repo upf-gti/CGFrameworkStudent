@@ -314,6 +314,20 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& c)
 	for (int i = 0; i < w; ++i) {
 		SetPixel(x + i, y, c);
 		SetPixel(x + i, y + h, c);
+  }
+}
+
+//TODO: Create a function in the Image class that draws lines using the DDA algorithm (L1-3.1)
+void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c) {
+	//We compute d as the largest leg of the triangle
+	float dy = y1 - y0;
+	float dx = x1 - x0;
+	if (abs(dy) == abs(dx)) return; //Avoid Same start-end point error
+	float d = (abs(dy) > abs(dx)) ? abs(dy) : abs(dx);
+	dx = dx / d;
+	dy = dy / d;
+	for (int i = 0; i < d; i++) {
+		SetPixel(x0+(i*dx), y0+(i*dy), c);
 	}
 }
 
