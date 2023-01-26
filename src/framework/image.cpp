@@ -384,10 +384,11 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 	x = 0;
 	y = r;
 	v = 1 - r;
-	SetPixel(x, y, c);
+	SetPixel(x + x0, y + y0, c);
+	DrawLineBresenham(x0 + x, y0 + y, x0 + x, y0 - y, c);
 	while (y > x) {
 		if (v < 0) {
-			v = v + 2 * x + 3;
+			v = v + 2 * x- + 3;
 			x++;
 		}
 		else {
@@ -395,7 +396,20 @@ void Image::DrawCircle(int x0, int y0, int r, const Color& c, bool fill) {
 			x++;
 			y--;
 		}
-		SetPixel(x, y, c);
+		SetPixel(x0 + x, y0 + y, c);
+		SetPixel(x0 - x, y0 + y, c);
+		SetPixel(x0 - x, y0 - y, c);
+		SetPixel(x0 + x, y0 - y, c); 
+		SetPixel(y0 + y, x0 + x, c);
+		SetPixel(y0 + y, x0 - x, c);
+		SetPixel(y0 - y, x0 - x, c);
+		SetPixel(y0 - y, x0 + x, c);
+		if (fill) {
+			DrawLineBresenham(x0 + x, y0 + y, x0 + x, y0 - y,c);
+			DrawLineBresenham(x0 - x, y0 + y, x0 - x, y0 - y, c);
+			DrawLineBresenham(y0 - y, x0 + x, y0 - y, x0 - x, c);
+			DrawLineBresenham(y0 + y, x0 + x, y0 + y, x0 - x, c);
+		}
 	}
 }
 
