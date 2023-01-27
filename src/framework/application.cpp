@@ -4,7 +4,7 @@
 #include "utils.h"
 
 //if you de-comment the lines: 32,38,45 you'll se the animation.
-
+//lsk<<>aaAsdadkjasnfsadadas
 Application::Application(const char* caption, int width, int height)
 {
     this->window = createWindow(caption, width, height);
@@ -29,7 +29,7 @@ Application::~Application()
 void Application::Init(void)
 {
     std::cout << "Initiating app..." << std::endl;
-    anim.SetAnimation(10, framebuffer.width, framebuffer.height);
+    //anim.SetAnimation(10, framebuffer.width, framebuffer.height);
 }
 
 // Render one frame
