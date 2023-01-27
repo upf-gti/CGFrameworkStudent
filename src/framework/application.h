@@ -34,7 +34,7 @@ public:
         
         void update(float time, int w,int h){ //updating positions of the animation
             
-            if (posx<w-10 || posy<h-10){
+            if (posx == 0 || posy==10){
                 posx = posx - time * velocity;
                 posy = posy - time * velocity;
             }else{

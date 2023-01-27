@@ -4,7 +4,7 @@
 #include "utils.h"
 
 //if you de-comment the lines: 32,38,45 you'll se the animation.
-
+//hola marc
 Application::Application(const char* caption, int width, int height)
 {
     this->window = createWindow(caption, width, height);
@@ -29,20 +29,20 @@ Application::~Application()
 void Application::Init(void)
 {
     std::cout << "Initiating app..." << std::endl;
-    //anim.SetAnimation(10, framebuffer.width, framebuffer.height);
+    anim.SetAnimation(15, framebuffer.width, framebuffer.height);
 }
 
 // Render one frame
 void Application::Render(void)
 {
-    //framebuffer = anim.img;
+    framebuffer = anim.img;
     framebuffer.Render();
 }
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
     
-    //anim.UpdateAnimation(seconds_elapsed);
+    anim.UpdateAnimation(seconds_elapsed);
 
 }
 
