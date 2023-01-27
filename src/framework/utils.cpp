@@ -195,7 +195,7 @@ void launchLoop(Application* app)
 
 		// Get mouse position and delta
 		app->mouse_state = SDL_GetMouseState(&x,&y);
-		app->mouse_delta.set( app->mouse_position.x - x, app->mouse_position.y - y );
+		app->mouse_delta.set( app->mouse_position.x - x, app->window_height - app->mouse_position.y - y );
 		app->mouse_position.set(x, app->window_height - y);
 
 		// Update logic
