@@ -4,8 +4,7 @@
 #include "utils.h"
 
 //if you de-comment the lines: 32,38,45 you'll se the animation.
-//hola marc
-//anashe
+//
 Application::Application(const char* caption, int width, int height)
 {
     this->window = createWindow(caption, width, height);
