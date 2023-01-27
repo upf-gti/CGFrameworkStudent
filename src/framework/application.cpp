@@ -29,20 +29,20 @@ Application::~Application()
 void Application::Init(void)
 {
     std::cout << "Initiating app..." << std::endl;
-    //anim.SetAnimation(10, framebuffer.width, framebuffer.height);
+    anim.SetAnimation(10, framebuffer.width, framebuffer.height);
 }
 
 // Render one frame
 void Application::Render(void)
 {
-    //framebuffer = anim.img;
+    framebuffer = anim.img;
     framebuffer.Render();
 }
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
     
-    //anim.UpdateAnimation(seconds_elapsed);
+    anim.UpdateAnimation(seconds_elapsed);
 
 }
 
