@@ -4,9 +4,12 @@ class Entity
 {
 public:
 	Mesh * mesh;
+	Matrix44 model;
 
-	//Constructor
+	//Constructors
 	Entity();
+	Entity(Mesh *);
+	Entity(char*);
 
 	//Destructor
 	~Entity();
