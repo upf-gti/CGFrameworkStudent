@@ -23,3 +23,13 @@ Entity::Entity(char* dir) {
 Entity::~Entity() {
 
 }
+
+//Render function to render mesh object
+void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
+	Matrix44 cam_view_Matrix = camera->GetViewProjectionMatrix();
+	for (Vector3 v : mesh->GetVertices()) {
+		
+	}
+}
+
+

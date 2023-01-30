@@ -1,5 +1,7 @@
 #pragma once
 #include "mesh.h"
+#include "image.h"
+
 class Entity
 {
 public:
@@ -13,6 +15,9 @@ public:
 
 	//Destructor
 	~Entity();
+
+	//Render Function
+	void Entity::Render(Image* framebuffer, Camera* camera, const Color& c);
 
 };
 

@@ -35,15 +35,19 @@ void Application::Init(void)
 // Render one frame
 void Application::Render(void)
 {
+
+    //Animation
+    /*
     framebuffer = anim.img;
     framebuffer.Render();
+    */
 }
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
+    //Animation
+    //anim.UpdateAnimation(seconds_elapsed);
     
-    anim.UpdateAnimation(seconds_elapsed);
-
 }
 
 //keyboard press event
