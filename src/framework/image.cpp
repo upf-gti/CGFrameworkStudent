@@ -347,7 +347,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c) {
     int d = 2 * dy - dx;
     int x = x0;
     int y = y0;
-    SetPixel(x0, y0, c);
+    SetPixelSafe(x0, y0, c);//UPDATED: SETPIXEL TO SETPIXELSAFE
 
     bool main_axis_Y = false; // To detect if dy > dx and so octant 2
 
@@ -373,7 +373,7 @@ void Image::DrawLineBresenham(int x0, int y0, int x1, int y1, const Color& c) {
             x = x + 1;
             y = y + dir_Y;
         }
-        SetPixel(x, y, c);
+        SetPixelSafe(x, y, c);
     }
 }
 

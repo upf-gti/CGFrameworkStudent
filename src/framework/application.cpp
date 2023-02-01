@@ -2,9 +2,9 @@
 #include "mesh.h"
 #include "shader.h"
 #include "utils.h"
+#include "entity.h"
 
 //if you de-comment the lines: 32,38,45 you'll se the animation.
-//lsk<<>aaAsdadkjasnfsadadas
 Application::Application(const char* caption, int width, int height)
 {
     this->window = createWindow(caption, width, height);
@@ -29,24 +29,26 @@ Application::~Application()
 void Application::Init(void)
 {
     std::cout << "Initiating app..." << std::endl;
-    //anim.SetAnimation(10, framebuffer.width, framebuffer.height);
+
+    Mesh* mesh = new Mesh();
+    mesh->LoadOBJ("../res/meshes/lee.obj");
+
+    Entity* e = new Entity(mesh);
+    Camera c = Camera();
+    c.SetPerspective(45, 1, .01, 100);
+    e->Render(&framebuffer, &c, Color::WHITE);
+
 }
 
 // Render one frame
 void Application::Render(void)
 {
-
-    //Animation
-    /*
-    framebuffer = anim.img;
     framebuffer.Render();
-    */
 }
+
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-    //Animation
-    //anim.UpdateAnimation(seconds_elapsed);
     
 }
 
