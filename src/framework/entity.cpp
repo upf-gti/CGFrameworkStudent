@@ -11,7 +11,7 @@ Entity::Entity(Mesh * m) {
 	mesh = m;
 }
 
-Entity::Entity(char* dir) {
+Entity::Entity(const char* dir) {
 	mesh = new Mesh();
 	mesh->LoadOBJ(dir);
 }
@@ -20,6 +20,8 @@ Entity::Entity(char* dir) {
 Entity::~Entity() {
 
 }
+
+
 
 //Render function to render mesh object
 void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
