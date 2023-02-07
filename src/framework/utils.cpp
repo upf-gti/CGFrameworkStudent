@@ -176,6 +176,9 @@ void launchLoop(Application* app)
 					case SDL_KEYUP:  // EXAMPLE OF sync keyboard input
 						app->OnKeyPressed(sdlEvent.key);
 						break;
+					case SDL_MOUSEWHEEL:
+						app->OnWheel(sdlEvent.wheel);
+						break;
 					case SDL_WINDOWEVENT:
 						switch (sdlEvent.window.event) {
 							case SDL_WINDOWEVENT_RESIZED: // Resize OpenGL context
