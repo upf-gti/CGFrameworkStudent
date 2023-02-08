@@ -6,7 +6,7 @@
 Camera::Camera()
 {
 	view_matrix.SetIdentity();
-	SetOrthographic(-100,100,100,-100,-100,100);
+	SetOrthographic(-1,1,1,-1,-1,1);
 }
 
 Vector3 Camera::GetLocalVector(const Vector3& v)
