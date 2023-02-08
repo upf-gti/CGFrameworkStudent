@@ -144,7 +144,9 @@ void Matrix44::SetIdentity()
 }
 
 void Matrix44::SetScale(float a){
-    
+    m[12] *= a;
+    m[13] *= a;
+    m[14] *= a;
 }
 
 void Matrix44::Transpose()

@@ -39,8 +39,12 @@ void Application::Init(void)
 
     e = new Entity(mesh);
     c = Camera();
-    c.LookAt(Vector3(-0.1,1,-1), Vector3(0,0,0), Vector3::UP);
-    c.SetPerspective(45, float(framebuffer.width)/float(framebuffer.height), .01, 100);
+    
+    e->model.Rotate(90, Vector3(1,1,1));
+    
+    //camera
+    c.LookAt(Vector3(0.5,-0.05,0.1), Vector3(0,0.8,1), Vector3::UP);
+    c.SetPerspective(40, 1, .01, 100);
 
 }
 
@@ -55,8 +59,8 @@ void Application::Render(void)
 
 // Called after render
 void Application::Update(float seconds_elapsed){
-    e->Update(seconds_elapsed);
-    framebuffer.Fill(Color::BLACK);
+    //e->Update(seconds_elapsed);
+    //framebuffer.Fill(Color::BLACK);
     
     
 }

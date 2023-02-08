@@ -4,16 +4,21 @@
 
 Entity::Entity() {
 	mesh = new Mesh();
+    model.SetIdentity();
 
 }
 
 Entity::Entity(Mesh * m) {
 	mesh = m;
+    model.SetIdentity();
+
 }
 
 Entity::Entity(const char* dir) {
 	mesh = new Mesh();
 	mesh->LoadOBJ(dir);
+    model.SetIdentity();
+
 }
 
 //Destructor
@@ -63,6 +68,8 @@ void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
             framebuffer->DrawLineBresenham(v2.x, v2.y, v3.x, v3.y, c);
             framebuffer->DrawLineBresenham(v3.x, v3.y, v1.x, v1.y, c);
         }
+        model.SetIdentity();
+
         
     }
 }
