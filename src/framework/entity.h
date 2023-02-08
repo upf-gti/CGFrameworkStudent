@@ -23,7 +23,8 @@ public:
 	void setMesh(Mesh* m) { mesh = m; }
 
 	//Render Function
-	void Entity::Render(Image* framebuffer, Camera* camera, const Color& c);
+    void Render(Image* framebuffer, Camera* camera, const Color& c);
+    void Update(float sec);
 
 };
 

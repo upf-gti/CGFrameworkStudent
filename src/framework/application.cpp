@@ -4,6 +4,10 @@
 #include "utils.h"
 #include "entity.h"
 
+
+Entity* e;
+Camera c;
+
 //if you de-comment the lines: 32,38,45 you'll se the animation.
 Application::Application(const char* caption, int width, int height)
 {
@@ -33,22 +37,27 @@ void Application::Init(void)
     Mesh* mesh = new Mesh();
     mesh->LoadOBJ("../res/meshes/lee.obj");
 
-    Entity* e = new Entity(mesh);
-    Camera c = Camera();
-    c.SetPerspective(45, 1, .01, 100);
-    e->Render(&framebuffer, &c, Color::WHITE);
+    e = new Entity(mesh);
+    c = Camera();
+    c.LookAt(Vector3(-0.1,1,-1), Vector3(0,0,0), Vector3::UP);
+    c.SetPerspective(45, float(framebuffer.width)/float(framebuffer.height), .01, 100);
 
 }
 
 // Render one frame
 void Application::Render(void)
 {
+    e->Render(&framebuffer, &c, Color::WHITE);
+
     framebuffer.Render();
+    
 }
 
 // Called after render
-void Application::Update(float seconds_elapsed)
-{
+void Application::Update(float seconds_elapsed){
+    e->Update(seconds_elapsed);
+    framebuffer.Fill(Color::BLACK);
+    
     
 }
 

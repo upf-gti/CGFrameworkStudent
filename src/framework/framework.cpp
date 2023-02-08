@@ -143,10 +143,20 @@ void Matrix44::SetIdentity()
 	m[3]=0; m[7]=0; m[11]=0; m[15]=1;
 }
 
+void Matrix44::SetScale(float a){
+    
+}
+
 void Matrix44::Transpose()
 {
    std::swap(m[1],m[4]); std::swap(m[2],m[8]); std::swap(m[3],m[12]);
    std::swap(m[6],m[9]); std::swap(m[7],m[13]); std::swap(m[11],m[14]);
+}
+
+void Matrix44::Scale(float a){
+    Matrix44 M;
+    M.SetScale(a);
+    
 }
 
 void Matrix44::Translate(float x, float y, float z)
@@ -458,7 +468,6 @@ bool Matrix44::Inverse()
 
       // No non-zero pivot.  The CMatrix is singular, which shouldn't
       // happen.  This means the user gave us a bad CMatrix.
-
 
 #define MATRIX_SINGULAR_THRESHOLD 0.00001 //change this if you experience problems with matrices
 
