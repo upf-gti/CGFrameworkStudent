@@ -23,7 +23,10 @@ Vector3 Camera::ProjectVector(Vector3 pos, bool& negZ)
 	Vector4 pos4 = Vector4(pos.x, pos.y, pos.z, 1.0);
 	Vector4 result = viewprojection_matrix * pos4;
 	negZ = result.z < 0;
-	return result.GetVector3() / result.w;
+	if (type == ORTHOGRAPHIC)
+		return result.GetVector3();
+	else
+		return result.GetVector3() / result.w;
 }
 
 void Camera::Rotate(float angle, const Vector3& axis)
