@@ -46,6 +46,8 @@ public:
 	void operator += (const Color& v) { r += v.r; g += v.g; b += v.b; }
 	Color operator - (const Color& v) { return Color((float)(r-v.r), (float)(g-v.g), (float)(b-v.b)); }
 	void operator -= (const Color& v) { r -= v.r; g -= v.g; b -= v.b; }
+	Color operator * (const Color& v) { return Color((float)(r * v.r), (float)(g * v.g), (float)(b * v.b)); }
+	void operator *= (const Color& v) { r *= v.r; g *= v.g; b *= v.b; }
 
 	//some colors to help
 	static const Color WHITE;
@@ -62,6 +64,48 @@ public:
 inline Color operator * (const Color& c, float v) { return Color((unsigned char)(c.r*v), (unsigned char)(c.g*v), (unsigned char)(c.b*v)); }
 inline Color operator * (float v, const Color& c) { return Color((unsigned char)(c.r*v), (unsigned char)(c.g*v), (unsigned char)(c.b*v)); }
 //*********************************
+
+class Vector2
+{
+public:
+	union
+	{
+		struct { float x, y; };
+		float value[2];
+	};
+
+	Vector2() { x = y = 0.0f; }
+	Vector2(float x, float y) { this->x = x; this->y = y; }
+
+	float length() { return sqrt(x * x + y * y); }
+	float length() const { return sqrt(x * x + y * y); }
+
+	float Dot(const Vector2& v);
+	float Perpdot(const Vector2& v);
+
+	void set(float x, float y) { this->x = x; this->y = y; }
+
+	Vector2& normalize() { *this *= (float)length(); return *this; }
+
+	float Distance(const Vector2& v);
+	void Random(float range);
+	void Clamp(float min, float max);
+
+	void operator *= (float v) { x *= v; y *= v; }
+	void operator *= (const Vector2& v) { x *= v.x; y *= v.y; }
+	void operator += (const Vector2& v) { x += v.x; y += v.y; }
+	void operator -= (const Vector2& v) { x -= v.x; y -= v.y; }
+};
+
+Vector2 operator * (const Vector2& a, float v);
+Vector2 operator / (const Vector2& a, float v);
+Vector2 operator + (const Vector2& a, const Vector2& b);
+Vector2 operator - (const Vector2& a, const Vector2& b);
+Vector2 operator * (const Vector2& a, const Vector2& b);
+Vector2 operator / (const Vector2& a, const Vector2& b);
+
+inline float distance(const Vector2& a, const Vector2& b) { return (float)(a - b).length(); }
+inline float distance(float x, float y, float x2, float y2) { return sqrtf((x - x2) * (x - x2) + (y - y2) * (y - y2)); }
 
 class Vector3
 {
@@ -82,15 +126,20 @@ public:
 	void Set(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
 
 	Vector3& Normalize();
+	Vector3 Cross( const Vector3& v ) const;
+	Vector2 GetVector2() { return Vector2(x, y); }
+
 	void Random(float range);
 	void Random(Vector3 range);
+	void Clamp(float min, float max);
 
 	float Distance(const Vector3& v) const;
-
-	Vector3 Cross( const Vector3& v ) const;
 	float Dot( const Vector3& v ) const;
 
 	static const Vector3 UP;
+	static const Vector3 DOWN;
+	static const Vector3 RIGHT;
+	static const Vector3 LEFT;
 };
 
 
@@ -181,47 +230,6 @@ Vector3 operator / (const Vector3& a, float v);
 Vector3 operator * (const Vector3& a, const Vector3& b);
 Vector3 operator / (const Vector3& a, const Vector3& b);
 Vector4 operator * (const Matrix44& matrix, const Vector4& v);
-
-class Vector2
-{
-public:
-	union
-	{
-		struct { float x,y; };
-		float value[2];
-	};
-
-	Vector2() { x = y = 0.0f; }
-	Vector2(float x, float y) { this->x = x; this->y = y; }
-
-	float length() { return sqrt(x*x + y*y); }
-	float length() const { return sqrt(x*x + y*y); }
-
-	float Dot( const Vector2& v );
-	float Perpdot( const Vector2& v );
-
-	void set(float x, float y) { this->x = x; this->y = y; }
-
-	Vector2& normalize() { *this *= (float)length(); return *this; }
-
-	float Distance(const Vector2& v);
-	void Random(float range);
-
-	void operator *= (float v) { x*=v; y*=v; }
-	void operator += (const Vector2& v) { x+=v.x; y += v.y; }
-	void operator -= (const Vector2& v) { x -= v.x; y -= v.y; }
-};
-
-Vector2 operator * (const Vector2& a, float v);
-Vector2 operator / (const Vector2& a, float v);
-Vector2 operator + (const Vector2& a, const Vector2& b);
-Vector2 operator - (const Vector2& a, const Vector2& b);
-Vector2 operator * (const Vector2& a, const Vector2& b);
-Vector2 operator / (const Vector2& a, const Vector2& b);
-
-inline float distance(const Vector2& a, const Vector2& b) { return (float)(a-b).length(); }
-inline float distance(float x, float y, float x2, float y2) { return sqrtf( (x-x2)*(x-x2) + (y-y2)*(y-y2)); }
-
 
 class Vector3u
 {

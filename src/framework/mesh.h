@@ -10,10 +10,11 @@
 
 class Mesh
 {
-public:
 	std::vector<Vector3> vertices;
 	std::vector<Vector3> normals;
 	std::vector<Vector2> uvs;
+
+public:
 
 	Mesh();
 	void Clear();
@@ -23,4 +24,6 @@ public:
 	bool LoadOBJ(const char* filename);
 
 	const std::vector<Vector3>& GetVertices() { return vertices; }
+	const std::vector<Vector3>& GetNormals() { return normals; }
+	const std::vector<Vector2>& GetUVs() { return uvs; }
 };

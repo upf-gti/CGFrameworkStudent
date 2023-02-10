@@ -36,6 +36,12 @@ float Vector2::Dot( const Vector2& v )
 	return x * v.x + y * v.y;
 }
 
+void Vector2::Clamp(float min, float max)
+{
+	x = clamp(x, min, max);
+	y = clamp(y, min, max);
+}
+
 float Vector2::Perpdot( const Vector2& v )
 {
 	return y * v.x + -x * v.y;
@@ -60,6 +66,9 @@ Vector2 operator / (const Vector2& a, const Vector2& b) { return Vector2(a.x / b
 
 // Vector3
 const Vector3 Vector3::UP(0, 1, 0);
+const Vector3 Vector3::DOWN(0, -1, 0);
+const Vector3 Vector3::RIGHT(1, 0, 0);
+const Vector3 Vector3::LEFT(-1, 0, 0);
 
 float Vector3::Length()
 {
@@ -111,6 +120,12 @@ void Vector3::Random(Vector3 range)
 	z = (rand() / (float)RAND_MAX) * 2 * range.z - range.z; //value between -range and range
 }
 
+void Vector3::Clamp(float min, float max)
+{
+	x = clamp(x, min, max);
+	y = clamp(y, min, max);
+	z = clamp(z, min, max);
+}
 
 //*********************************
 Matrix44::Matrix44()
