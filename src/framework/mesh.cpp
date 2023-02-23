@@ -1,6 +1,5 @@
 #include "mesh.h"
 #include "utils.h"
-#include "main/includes.h"
 #include "camera.h"
 
 #include <string>
@@ -47,6 +46,29 @@ void Mesh::Render(int primitive)
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+void Mesh::CreateQuad()
+{
+	vertices.clear();
+	normals.clear();
+	uvs.clear();
+
+	// Create six vertices (3 for upperleft triangle and 3 for lowerright)
+	vertices.push_back(Vector3(1, 1, 0));
+	vertices.push_back(Vector3(1, -1, 0));
+	vertices.push_back(Vector3(-1, -1, 0));
+	vertices.push_back(Vector3(-1, 1, 0));
+	vertices.push_back(Vector3(1, 1, 0));
+	vertices.push_back(Vector3(-1, -1, 0));
+
+	// Texture coordinates
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+}
+
 void Mesh::CreatePlane(float size)
 {
 	vertices.clear();
@@ -62,7 +84,7 @@ void Mesh::CreatePlane(float size)
 	vertices.push_back(Vector3(size, 0, size));
 	vertices.push_back(Vector3(-size, 0, -size));
 
-	//all of them have the same normal
+	// All of them have the same normal
 	normals.push_back(Vector3(0, 1, 0));
 	normals.push_back(Vector3(0, 1, 0));
 	normals.push_back(Vector3(0, 1, 0));
@@ -70,7 +92,7 @@ void Mesh::CreatePlane(float size)
 	normals.push_back(Vector3(0, 1, 0));
 	normals.push_back(Vector3(0, 1, 0));
 
-	//texture coordinates
+	// Texture coordinates
 	uvs.push_back(Vector2(1, 1));
 	uvs.push_back(Vector2(1, 0));
 	uvs.push_back(Vector2(0, 0));

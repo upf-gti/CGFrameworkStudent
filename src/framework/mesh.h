@@ -7,6 +7,7 @@
 #include <vector>
 #include "framework.h"
 #include "camera.h"
+#include "main/includes.h"
 
 class Mesh
 {
@@ -18,9 +19,11 @@ public:
 
 	Mesh();
 	void Clear();
-	void Render(int primitive);
+	void Render(int primitive = GL_TRIANGLES);
 
 	void CreatePlane(float size);
+	void CreateQuad();
+
 	bool LoadOBJ(const char* filename);
 
 	const std::vector<Vector3>& GetVertices() { return vertices; }
