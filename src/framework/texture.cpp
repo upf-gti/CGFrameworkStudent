@@ -5,12 +5,6 @@
 #include <iostream> //to output
 #include <cmath>
 
-#ifndef __APPLE__
-//function to create mipmaps using the GPU (much faster)
-typedef void (APIENTRY *glGenerateMipmapEXT_func)( GLenum target );
-glGenerateMipmapEXT_func glGenerateMipmapEXT = NULL;
-#endif
-
 std::map<std::string, Texture*> Texture::s_Textures;
 
 Texture::Texture()
@@ -21,11 +15,6 @@ Texture::Texture()
 	wrapS = wrapT = GL_CLAMP_TO_EDGE;
 	mipmaps = false;
 	type = GL_UNSIGNED_BYTE;
-
-#ifndef __APPLE__
-	if(glGenerateMipmapEXT == NULL) //get the extension
-		glGenerateMipmapEXT = (glGenerateMipmapEXT_func) SDL_GL_GetProcAddress("glGenerateMipmapEXT");
-#endif
 }
 
 Texture* Texture::Get(const char* filename)

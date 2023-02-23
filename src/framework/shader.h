@@ -21,8 +21,6 @@ class Shader
 {
 	int last_slot;
 
-	static bool s_ready; // Used to initialize shader vars
-
 public:
 	static Shader* current;
 
@@ -41,7 +39,6 @@ public:
 	virtual void Enable();
 	virtual void Disable();
 
-	static void Init();
 	static void DisableShaders();
 
 	// Uniform exist

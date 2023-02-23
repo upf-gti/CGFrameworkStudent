@@ -2,62 +2,11 @@
 #include "utils.h"
 #include <iostream>
 
-#ifndef __APPLE__
-REGISTER_GLEXT( GLuint, glCreateProgramObjectARB, void )
-REGISTER_GLEXT( void, glLinkProgramARB, GLuint programObj )
-REGISTER_GLEXT( void, glGetObjectParameterivARB, GLuint obj, GLenum pname, GLint *params )
-REGISTER_GLEXT( void, glValidateProgramARB, GLuint obj )
-REGISTER_GLEXT( GLuint, glCreateShaderObjectARB, GLenum shaderType )
-REGISTER_GLEXT( void, glShaderSourceARB, GLuint shaderObj, GLsizei count, const GLcharARB* *string, const GLint *length)
-REGISTER_GLEXT( void, glCompileShaderARB, GLuint shaderObj )
-REGISTER_GLEXT( void, glAttachObjectARB, GLuint containerObj, GLuint obj )
-REGISTER_GLEXT( void, glDetachObjectARB, GLuint containerObj, GLuint attachedObj )
-REGISTER_GLEXT( void, glDeleteObjectARB, GLuint obj )
-REGISTER_GLEXT( void, glUseProgramObjectARB, GLuint obj )
-REGISTER_GLEXT( void, glActiveTexture, GLenum texture )
-REGISTER_GLEXT( void, glGetInfoLogARB, GLuint obj, GLsizei maxLength, GLsizei *length, GLcharARB *infoLog )
-REGISTER_GLEXT( GLint, glGetUniformLocationARB, GLuint programObj, const GLcharARB *name)
-REGISTER_GLEXT( GLint, glGetAttribLocationARB, GLuint programObj, const GLcharARB *name)
-REGISTER_GLEXT( void, glUniform1iARB, GLint location, GLint v0 )
-REGISTER_GLEXT( void, glUniform2iARB, GLint location, GLint v0, GLint v1 )
-REGISTER_GLEXT( void, glUniform3iARB, GLint location, GLint v0, GLint v1, GLint v2 )
-REGISTER_GLEXT( void, glUniform4iARB, GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
-REGISTER_GLEXT( void, glUniform1ivARB, GLint location, GLsizei count, const GLint *value )
-REGISTER_GLEXT( void, glUniform2ivARB, GLint location, GLsizei count, const GLint *value )
-REGISTER_GLEXT( void, glUniform3ivARB, GLint location, GLsizei count, const GLint *value )
-REGISTER_GLEXT( void, glUniform4ivARB, GLint location, GLsizei count, const GLint *value )
-REGISTER_GLEXT( void, glUniform1fARB, GLint location, GLfloat v0 )
-REGISTER_GLEXT( void, glUniform2fARB, GLint location, GLfloat v0, GLfloat v1)
-REGISTER_GLEXT( void, glUniform3fARB, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
-REGISTER_GLEXT( void, glUniform4fARB, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
-REGISTER_GLEXT( void, glUniform1fvARB, GLint location, GLsizei count, const GLfloat *value)
-REGISTER_GLEXT( void, glUniform2fvARB, GLint location, GLsizei count, const GLfloat *value)
-REGISTER_GLEXT( void, glUniform3fvARB, GLint location, GLsizei count, const GLfloat *value)
-REGISTER_GLEXT( void, glUniform4fvARB, GLint location, GLsizei count, const GLfloat *value)
-REGISTER_GLEXT( void, glUniformMatrix4fvARB, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
-#else
-
-#ifdef GL_VERTEX_SHADER_ARB
-#undef GL_VERTEX_SHADER_ARB
-#endif
-#ifdef GL_FRAGMENT_SHADER_ARB
-#undef GL_FRAGMENT_SHADER_ARB
-#endif
-
-#define GL_VERTEX_SHADER_ARB GL_VERTEX_SHADER
-#define GL_FRAGMENT_SHADER_ARB GL_FRAGMENT_SHADER
-#endif
-
-
 std::map<std::string,Shader*> Shader::s_Shaders;
-bool Shader::s_ready = false;
 Shader* Shader::current = NULL;
-
 
 Shader::Shader()
 {
-	if(!Shader::s_ready)
-		Shader::Init();
 	compiled = false;
 }
 
@@ -628,49 +577,4 @@ void Shader::SetMatrix44(const char* varname, const Matrix44 &m)
 	}
 		
 	assert (glGetError() == GL_NO_ERROR);
-}
-
-void Shader::Init()
-{
-	static bool firsttime = true;
-	Shader::s_ready = true;
-#ifndef __APPLE__	
-	if(firsttime)
-	{
-		IMPORT_GLEXT( glCreateProgramObjectARB );
-		IMPORT_GLEXT( glLinkProgramARB );
-		IMPORT_GLEXT( glGetObjectParameterivARB );
-		IMPORT_GLEXT( glValidateProgramARB );
-		IMPORT_GLEXT( glCreateShaderObjectARB );
-		IMPORT_GLEXT( glShaderSourceARB );
-		IMPORT_GLEXT( glCompileShaderARB );
-		IMPORT_GLEXT( glAttachObjectARB );
-		IMPORT_GLEXT( glDetachObjectARB );
-		IMPORT_GLEXT( glDeleteObjectARB );
-		IMPORT_GLEXT( glUseProgramObjectARB );
-		IMPORT_GLEXT( glActiveTexture );
-		IMPORT_GLEXT( glGetInfoLogARB );
-		IMPORT_GLEXT( glGetUniformLocationARB );
-		IMPORT_GLEXT( glGetAttribLocationARB );
-		IMPORT_GLEXT( glUniform1iARB );
-		IMPORT_GLEXT( glUniform2iARB );
-		IMPORT_GLEXT( glUniform3iARB );
-		IMPORT_GLEXT( glUniform4iARB );
-		IMPORT_GLEXT( glUniform1ivARB );
-		IMPORT_GLEXT( glUniform2ivARB );
-		IMPORT_GLEXT( glUniform3ivARB );
-		IMPORT_GLEXT( glUniform4ivARB );
-		IMPORT_GLEXT( glUniform1fARB );
-		IMPORT_GLEXT( glUniform2fARB );
-		IMPORT_GLEXT( glUniform3fARB );
-		IMPORT_GLEXT( glUniform4fARB );
-		IMPORT_GLEXT( glUniform1fvARB );
-		IMPORT_GLEXT( glUniform2fvARB );
-		IMPORT_GLEXT( glUniform3fvARB );
-		IMPORT_GLEXT( glUniform4fvARB );
-		IMPORT_GLEXT( glUniformMatrix4fvARB );
-	}
-#endif
-	
-	firsttime = false;
 }

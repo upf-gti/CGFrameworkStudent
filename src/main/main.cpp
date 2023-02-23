@@ -10,7 +10,13 @@ int main(int argc, char **argv)
 	std::cout << "Starting loop..." << std::endl;
 	launchLoop(app);
 
+	SDL_Window* window = app->window;
+
 	delete app;
+
+	if (window) {
+		SDL_DestroyWindow(window);
+	}
 
 	return 0;
 }
