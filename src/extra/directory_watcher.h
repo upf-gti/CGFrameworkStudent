@@ -16,6 +16,8 @@ class CDirectoryWatcher {
 
 public:
 
+	char      file_name[MAX_PATH];
+
 	static const UINT WM_FILE_CHANGED = WM_USER + 1234;
 
 	void start(const char* new_folder, HWND new_hWnd) {
@@ -86,7 +88,7 @@ public:
 
 						  ::PostMessage(hWnd, WM_FILE_CHANGED, fni.i.Action, LPARAM(full_name));
 						  SDL_Event sdlevent;
-						  sprintf(sdlevent.text.text, "%s", full_name);
+						  sprintf(file_name, "%s", full_name);
 						  sdlevent.type = WM_FILE_CHANGED;
 						  SDL_PushEvent(&sdlevent);
 						}

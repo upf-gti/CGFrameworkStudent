@@ -93,8 +93,12 @@ void Shader::ReloadSingleShader(const char* filename)
 
 		if (shader->vs_filename.find(filename) > 0 ||
 			shader->ps_filename.find(filename) > 0) {
-			shader->Recompile();
-			std::cout << "Shader " << std::string(filename) << " recompiled" << std::endl;
+			if (shader->Recompile()) {
+				std::string s_filename = filename;
+				size_t index = s_filename.find("shaders/");
+				s_filename = s_filename.substr(index);
+				std::cout << ">>>>> " << s_filename << " recompiled" << std::endl;
+			}
 		}
 	}
 }

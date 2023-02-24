@@ -196,7 +196,7 @@ void launchLoop(Application* app)
 						break;
 #ifdef WIN32
 					case CDirectoryWatcher::WM_FILE_CHANGED:
-						const char* filename = (const char*)(sdlEvent.text.text);
+						const char* filename = (const char*)(dir_watcher_data.file_name);
 						app->OnFileChanged(filename);
 						break;
 #endif
