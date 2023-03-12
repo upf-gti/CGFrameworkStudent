@@ -46,6 +46,7 @@ public:
 
 	// Upload
 	virtual void SetFloat(const char* varname, const float& input) { SetUniform1(varname, input); }
+	virtual void SetVector2(const char* varname, const Vector2& input) { SetUniform2(varname, input.x, input.y); }
 	virtual void SetVector3(const char* varname, const Vector3& input) { SetUniform3(varname, input.x, input.y, input.z); }
 	virtual void SetMatrix44(const char* varname, const float* m);
 	virtual void SetMatrix44(const char* varname, const Matrix44 &m);
