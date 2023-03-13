@@ -22,6 +22,7 @@ public:
 	void Render(int primitive = GL_TRIANGLES);
 
 	void CreatePlane(float size);
+	void CreateCube(float size);
 	void CreateQuad();
 
 	bool LoadOBJ(const char* filename);

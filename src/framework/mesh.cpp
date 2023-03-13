@@ -101,6 +101,143 @@ void Mesh::CreatePlane(float size)
 	uvs.push_back(Vector2(0, 0));
 }
 
+void Mesh::CreateCube(float size)
+{
+	vertices.clear();
+	normals.clear();
+	uvs.clear();
+
+	
+	vertices.push_back(Vector3(size,  size, size));
+	vertices.push_back(Vector3(size,  size, -size));
+	vertices.push_back(Vector3(-size, size, -size));
+	vertices.push_back(Vector3(-size, size, size));
+	vertices.push_back(Vector3(size,  size, size));
+	vertices.push_back(Vector3(-size, size, -size));
+
+	vertices.push_back(Vector3(size, size, size));
+	vertices.push_back(Vector3(size, size, -size));
+	vertices.push_back(Vector3(size, -size, -size));
+	vertices.push_back(Vector3(size, -size, size));
+	vertices.push_back(Vector3(size, size, size));
+	vertices.push_back(Vector3(size, -size, -size));
+
+	vertices.push_back(Vector3(size,  size , size ));
+	vertices.push_back(Vector3(size, -size,  size ));
+	vertices.push_back(Vector3(-size, -size, size ));
+	vertices.push_back(Vector3(-size, size,  size ));
+	vertices.push_back(Vector3(size, size,   size ));
+	vertices.push_back(Vector3(-size, -size, size ));
+
+	vertices.push_back(Vector3(size, -size, size));
+	vertices.push_back(Vector3(size, -size, -size));
+	vertices.push_back(Vector3(-size, -size, -size));
+	vertices.push_back(Vector3(-size, -size, size));
+	vertices.push_back(Vector3(size, -size, size));
+	vertices.push_back(Vector3(-size, -size, -size));
+
+	vertices.push_back(Vector3(-size, size, size));
+	vertices.push_back(Vector3(-size, size, -size));
+	vertices.push_back(Vector3(-size, -size, -size));
+	vertices.push_back(Vector3(-size, -size, size));
+	vertices.push_back(Vector3(-size, size, size));
+	vertices.push_back(Vector3(-size, -size, -size));
+
+	vertices.push_back(Vector3(size, size, -size));
+	vertices.push_back(Vector3(size, -size, -size));
+	vertices.push_back(Vector3(-size, -size, -size));
+	vertices.push_back(Vector3(-size, size, -size));
+	vertices.push_back(Vector3(size, size, -size));
+	vertices.push_back(Vector3(-size, -size, -size));
+
+	// All of them have the same normal
+	normals.push_back(Vector3(0, 1, 0));
+	normals.push_back(Vector3(0, 1, 0));
+	normals.push_back(Vector3(0, 1, 0));
+	normals.push_back(Vector3(0, 1, 0));
+	normals.push_back(Vector3(0, 1, 0));
+	normals.push_back(Vector3(0, 1, 0));
+
+	normals.push_back(Vector3(1, 0, 0));
+	normals.push_back(Vector3(1, 0, 0));
+	normals.push_back(Vector3(1, 0, 0));
+	normals.push_back(Vector3(1, 0, 0));
+	normals.push_back(Vector3(1, 0, 0));
+	normals.push_back(Vector3(1, 0, 0));
+
+	normals.push_back(Vector3(0, 0, 1));
+	normals.push_back(Vector3(0, 0, 1));
+	normals.push_back(Vector3(0, 0, 1));
+	normals.push_back(Vector3(0, 0, 1));
+	normals.push_back(Vector3(0, 0, 1));
+	normals.push_back(Vector3(0, 0, 1));
+
+	// All of them have the same normal
+	normals.push_back(Vector3(0, -1, 0));
+	normals.push_back(Vector3(0, -1, 0));
+	normals.push_back(Vector3(0, -1, 0));
+	normals.push_back(Vector3(0, -1, 0));
+	normals.push_back(Vector3(0, -1, 0));
+	normals.push_back(Vector3(0, -1, 0));
+
+	normals.push_back(Vector3(-1, 0, 0));
+	normals.push_back(Vector3(-1, 0, 0));
+	normals.push_back(Vector3(-1, 0, 0));
+	normals.push_back(Vector3(-1, 0, 0));
+	normals.push_back(Vector3(-1, 0, 0));
+	normals.push_back(Vector3(-1, 0, 0));
+
+	normals.push_back(Vector3(0, 0, -1));
+	normals.push_back(Vector3(0, 0, -1));
+	normals.push_back(Vector3(0, 0, -1));
+	normals.push_back(Vector3(0, 0, -1));
+	normals.push_back(Vector3(0, 0, -1));
+	normals.push_back(Vector3(0, 0, -1));
+
+	// Texture coordinates
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(1, 0));
+	uvs.push_back(Vector2(0, 0));
+	uvs.push_back(Vector2(0, 1));
+	uvs.push_back(Vector2(1, 1));
+	uvs.push_back(Vector2(0, 0));
+}
+
 bool Mesh::LoadOBJ(const char* filename)
 {
 	struct stat stbuffer;
