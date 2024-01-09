@@ -2,7 +2,7 @@
 
 Clone and initialize the repository:
 ```
-git clone --recurse-submodules -j8 https://github.com/upf-gti/CG2023Student.git
+git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
 ```
 
 The framework provided is compatible with all operating systems.
