@@ -60,7 +60,7 @@ void Texture::Upload(unsigned int format, unsigned int type, bool mipmaps, Uint8
 {
 	glBindTexture(GL_TEXTURE_2D, texture_id);	// We activate this id to tell opengl we are going to use this texture
 
-	glTexImage2D(GL_TEXTURE_2D, 0, internal_format == 0 ? format : internal_format, width, height, 0, format, type, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, internal_format == 0 ? format : internal_format, static_cast<GLsizei>(width), static_cast<GLsizei>(height), 0, format, type, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	//set the mag filter
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST); //set the min filter

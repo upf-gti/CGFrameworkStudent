@@ -146,7 +146,7 @@ void launchLoop(Application* app)
 	int x,y;
 
 	SDL_GetMouseState(&x,&y);
-	app->mouse_position.set(x,y);
+	app->mouse_position.set(static_cast<float>(x), static_cast<float>(y));
 
 	Uint32 start_time = SDL_GetTicks();
 
@@ -206,7 +206,7 @@ void launchLoop(Application* app)
 		// Get mouse position and delta
 		app->mouse_state = SDL_GetMouseState(&x,&y);
 		app->mouse_delta.set( app->mouse_position.x - x, app->window_height - app->mouse_position.y - y );
-		app->mouse_position.set(x, app->window_height - y);
+		app->mouse_position.set(static_cast<float>(x), static_cast<float>(app->window_height - y));
 
 		// Update logic
 		Uint32 now = SDL_GetTicks();

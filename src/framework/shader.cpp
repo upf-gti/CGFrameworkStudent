@@ -128,7 +128,7 @@ bool Shader::ReadFile(const std::string& filename, std::string& content)
 {
 	content.clear();
 
-	int count=0;
+	size_t count=0;
 
 	FILE *fp = fopen(filename.c_str(),"rb");
 	if (fp == NULL) 
@@ -144,7 +144,7 @@ bool Shader::ReadFile(const std::string& filename, std::string& content)
 	content.resize(count);
 	if (count > 0) 
 	{
-		count = fread(&content[0],sizeof(char),count,fp);
+		count = fread(&content[0], sizeof(char), count, fp);
 	}
 	fclose(fp);
 

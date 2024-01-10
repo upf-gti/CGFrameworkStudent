@@ -37,7 +37,7 @@ void Mesh::Render(int primitive)
 		glTexCoordPointer(2, GL_FLOAT, 0, &uvs[0]);
 	}
 
-	glDrawArrays(primitive, 0, vertices.size());
+	glDrawArrays(primitive, 0, static_cast<GLsizei>(vertices.size()));
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	if (normals.size())
@@ -296,17 +296,17 @@ bool Mesh::LoadOBJ(const char* filename)
 
 		if (tokens[0] == "v" && tokens.size() == 4)
 		{
-			Vector3 v(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()));
+			Vector3 v(std::stof(tokens[1].c_str()), std::stof(tokens[2].c_str()), std::stof(tokens[3].c_str()));
 			indexed_positions.push_back(v);
 		}
 		else if (tokens[0] == "vt" && (tokens.size() == 4 || tokens.size() == 3))
 		{
-			Vector2 v(atof(tokens[1].c_str()), atof(tokens[2].c_str()));
+			Vector2 v(std::stof(tokens[1].c_str()), std::stof(tokens[2].c_str()));
 			indexed_uvs.push_back(v);
 		}
 		else if (tokens[0] == "vn" && tokens.size() == 4)
 		{
-			Vector3 v(atof(tokens[1].c_str()), atof(tokens[2].c_str()), atof(tokens[3].c_str()));
+			Vector3 v(std::stof(tokens[1].c_str()), std::stof(tokens[2].c_str()), std::stof(tokens[3].c_str()));
 			indexed_normals.push_back(v);
 		}
 		else if (tokens[0] == "f" && tokens.size() >= 4)
