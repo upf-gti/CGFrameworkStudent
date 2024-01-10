@@ -90,10 +90,14 @@ endif (NOT UNIX)
 target_link_libraries(ComputerGraphics PRIVATE SDL2)
 target_link_libraries(ComputerGraphics PRIVATE SDL2main)
 include_directories(ComputerGraphics libraries/sdl2/include)
+set_property(TARGET SDL2 PROPERTY FOLDER "External/SDL2")
+set_property(TARGET SDL2main PROPERTY FOLDER "External/SDL2")
+set_property(TARGET sdl_headers_copy PROPERTY FOLDER "External/SDL2")
 
 # glew
 add_definitions(-DGLEW_STATIC)
 target_link_libraries(ComputerGraphics PRIVATE libglew_static)
+set_property(TARGET libglew_static PROPERTY FOLDER "External/libglew_static")
 
 #opengl
 target_link_libraries(ComputerGraphics PRIVATE OpenGL::GL OpenGL::GLU)
