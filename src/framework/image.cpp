@@ -313,12 +313,12 @@ void Image::DrawRect(int x, int y, int w, int h, const Color& c)
 {
 	for (int i = 0; i < w; ++i) {
 		SetPixel(x + i, y, c);
-		SetPixel(x + i, y + h, c);
+		SetPixel(x + i, y + h - 1, c);
 	}
 
 	for (int j = 0; j < h; ++j) {
 		SetPixel(x, y + j, c);
-		SetPixel(x + w, y + j, c);
+		SetPixel(x + w - 1, y + j, c);
 	}
 }
 
