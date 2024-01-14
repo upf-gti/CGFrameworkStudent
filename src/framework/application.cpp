@@ -30,7 +30,24 @@ void Application::Init(void)
 	framebuffer.Fill(Color::BLACK);
 
 	// Creamos un loop para cargar todas las imagenes una al lado del otra con un loop
-	std::vector<char *> imagePaths = {"../res/images/clear.png", "../res/images/load.png", "../res/images/save.png", "../res/images/eraser.png", "../res/images/paint.png", "../res/images/line.png", "../res/images/rectangle.png", "../res/images/circle.png", "../res/images/triangle.png", "../res/images/black.png", "../res/images/white.png", "../res/images/pink.png", "../res/images/yellow.png", "../res/images/red.png", "../res/images/blue.png", "../res/images/cyan.png", "../res/images/green.png"};
+	std::vector<const char *> imagePaths = {
+		"../res/images/clear.png",
+		"../res/images/load.png",
+		"../res/images/save.png",
+		"../res/images/eraser.png",
+		"../res/images/paint.png",
+		"../res/images/line.png",
+		"../res/images/rectangle.png",
+		"../res/images/circle.png",
+		"../res/images/triangle.png",
+		"../res/images/black.png",
+		"../res/images/white.png",
+		"../res/images/pink.png",
+		"../res/images/yellow.png",
+		"../res/images/red.png",
+		"../res/images/blue.png",
+		"../res/images/cyan.png",
+		"../res/images/green.png"};
 
 	std::vector<ButtonType> buttonTypes = {BTN_CLEAR, BTN_LOAD, BTN_SAVE, BTN_ERASER, BTN_PAINT, BTN_LINE, BTN_RECTANGLE, BTN_CIRCLE, BTN_TRIANGLE, BTN_BLACK, BTN_WHITE, BTN_PINK, BTN_YELLOW, BTN_RED, BTN_BLUE, BTN_CYAN, BTN_GREEN};
 

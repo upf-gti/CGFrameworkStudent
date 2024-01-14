@@ -36,5 +36,5 @@ public:
     Image &GetImage();
     int GetWidth();
     ButtonType GetType();
-    Vector2 Button::GetPosition();
+    Vector2 GetPosition();
 };

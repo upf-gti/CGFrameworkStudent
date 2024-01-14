@@ -99,21 +99,21 @@ public:
 	bool SaveTGA(const char *filename);
 
 	// LAB1: Dibujar linea de (x0,y0) a (x1,y1)
-	void Image::DrawLineDDA(int x0, int y0, int x1, int y1, const Color &c);
+	void DrawLineDDA(int x0, int y0, int x1, int y1, const Color &c);
 
 	// LAB1: Dibujar rectangulo de (x,y) a (x+w,y+h) (Update)
-	void Image::DrawRect(int x, int y, int w, int h, const Color &borderColor, int borderWidth, bool isFilled, const Color &fillColor);
+	void DrawRect(int x, int y, int w, int h, const Color &borderColor, int borderWidth, bool isFilled, const Color &fillColor);
 
 	// LAB1: Dibujar circulo con centro en (x,y) y radio
-	void Image::DrawCircle(int x, int y, int r, const Color &borderColor, int borderWidth, bool isFilled, const Color &fillColor);
+	void DrawCircle(int x, int y, int r, const Color &borderColor, int borderWidth, bool isFilled, const Color &fillColor);
 
 	// LAB1: Almacena en table los valores de x para cada valor de y entre y0 e y1
-	void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell> &table);
+	void ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell> &table);
 	// LAB1: Dibujar triangulo con vertices en p0, p1, p2
-	void Image::DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2, const Color &borderColor, bool isFilled, const Color &fillColor);
+	void DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2, const Color &borderColor, bool isFilled, const Color &fillColor);
 
 	// LAB1: Rasterizar una imagen por pantalla
-	void Image::DrawImage(const Image &image, int x, int y, bool top);
+	void DrawImage(const Image &image, int x, int y, bool top);
 
 // Used to easy code
 #ifndef IGNORE_LAMBDAS
