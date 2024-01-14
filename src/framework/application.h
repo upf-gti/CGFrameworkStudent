@@ -84,9 +84,6 @@ public:
 	// Vector para almacenar los puntos de los dibujos (temporal)
 	std::vector<Vector2> puntos;
 
-	// Estado para saber si el boton está presionado o no
-	bool isLeftButtonPressed = false;
-
 	void DrawCirclesDDA(Vector2 start, Vector2 end, int radius, const Color &color);
 	// Última posición del ratón para pintar y que no se vea el trazo
 	Vector2 lastMousePosition = {-1, -1};
