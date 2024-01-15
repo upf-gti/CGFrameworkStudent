@@ -63,6 +63,7 @@ public:
 		this->window_height = height;
 
 		framebuffer.Resize(width, height); // Lab1: Resize framebuffer adaptandolo a la nueva resolucion de la pantalla
+		tempbuffer.Resize(width, height);  // Lab1: Resize tempbuffer adaptandolo a la nueva resolucion de la pantalla
 	}
 
 	Vector2 GetWindowSize()
@@ -87,4 +88,8 @@ public:
 	void DrawCirclesDDA(Vector2 start, Vector2 end, int radius, const Color &color);
 	// Última posición del ratón para pintar y que no se vea el trazo
 	Vector2 lastMousePosition = {-1, -1};
+
+	bool clickedOnToolbarButton = false;
+
+	Image tempbuffer;
 };

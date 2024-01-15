@@ -16,6 +16,7 @@ Application::Application(const char *caption, int width, int height)
 	this->window_height = h;
 	this->keystate = SDL_GetKeyboardState(nullptr);
 
+	this->tempbuffer.Resize(w, h);
 	this->framebuffer.Resize(w, h);
 }
 
@@ -122,7 +123,7 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		exit(0);
 		break; // ESC key, kill the app
 	case SDLK_PLUS:
-		if (borderWidth <= 50)
+		if (borderWidth <= 100)
 			borderWidth++; // Ponemos un limite por cuestiones de rendimiento
 		break;
 	case SDLK_MINUS:
@@ -167,7 +168,7 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 {
 	// std::cout << "Mouse button pressed: " << (int)event.button << SDL_BUTTON_LEFT << std::endl;
-	bool clickedOnToolbarButton = false;
+	clickedOnToolbarButton = false;
 
 	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
 	{
@@ -269,42 +270,61 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 			}
 		}
 
+		// TODO: Poner bonito el if
 		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && !clickedOnToolbarButton) // Si se está dibujando algo
 		{
-			// Añadimos un punto al vector de puntos 
-			puntos.push_back(mouse_position);
+			if (currentState == DRAWING_TRIANGLE || puntos.size() == 0)
+			{
+				puntos.push_back(mouse_position);
 
-			std::cout << "Punto añadido: " << mouse_position.x << ", " << mouse_position.y << std::endl;
-			std::cout << "Puntos en el vector: " << puntos.size() << std::endl;
-			std::cout << "Estado actual: " << currentState << std::endl;
+				tempbuffer = framebuffer; // Guardamos el framebuffer en el temporal
+				// Añadimos un punto al vector de puntos
+				std::cout << "Punto añadido: " << mouse_position.x << ", " << mouse_position.y << std::endl;
+				std::cout << "Puntos en el vector: " << puntos.size() << std::endl;
+				std::cout << "Estado actual: " << currentState << std::endl;
+				switch (currentState)
+				{
+				case DRAWING_TRIANGLE:
+					if (puntos.size() == 3)
+					{
+						framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, drawingColor);
+						puntos.clear();
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
+{
+	// std::cout << "Mouse button released: " << (int)event.button << std::endl;
+
+	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
+	{
+		// TODO: Poner bonito el if
+		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && currentState != DRAWING_TRIANGLE && !clickedOnToolbarButton)
+		{
+			puntos.push_back(mouse_position);
 
 			switch (currentState)
 			{
 			case DRAWING_LINE:
 				if (puntos.size() == 2)
 				{
-					framebuffer.DrawLineDDA(puntos[0].x, puntos[0].y, puntos[1].x, puntos[1].y, drawingColor);
 					puntos.clear();
 				}
 				break;
 			case DRAWING_RECTANGLE:
 				if (puntos.size() == 2)
 				{
-					framebuffer.DrawRect(puntos[0].x, puntos[0].y, puntos[1].x - puntos[0].x, puntos[1].y - puntos[0].y, drawingColor, borderWidth, isFilled, drawingColor);
 					puntos.clear();
 				}
 				break;
 			case DRAWING_CIRCLE:
 				if (puntos.size() == 2)
 				{
-					framebuffer.DrawCircle(puntos[0].x, puntos[0].y, sqrt(pow(puntos[1].x - puntos[0].x, 2) + pow(puntos[1].y - puntos[0].y, 2)), drawingColor, borderWidth, isFilled, drawingColor);
-					puntos.clear();
-				}
-				break;
-			case DRAWING_TRIANGLE:
-				if (puntos.size() == 3)
-				{
-					framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, drawingColor);
 					puntos.clear();
 				}
 				break;
@@ -313,10 +333,6 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 			}
 		}
 	}
-}
-
-void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
-{
 }
 
 void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color &color)
@@ -345,14 +361,44 @@ void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color
 // TODO: Añadir un efecto hover cuando se pasa por encima de los botones
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-
-	if (mouse_state == SDL_BUTTON_LEFT && currentState == DRAWING_FREE) // Miramos si se está pintando y si se está pintando libremente
+	// TODO: Poner if bonito
+	if (mouse_state == SDL_BUTTON_LEFT) // Miramos si se está pintando y si se está pintando libremente
 	{
-		if (lastMousePosition.x != -1 && lastMousePosition.y != -1) // Miramos si es la primera vez que se pinta
+		if (currentState == DRAWING_FREE)
 		{
-			// Dibuja círculos interpolados entre la última posición y la actual
-			DrawCirclesDDA(lastMousePosition, mouse_position, borderWidth / 2, drawingColor);
+			if (lastMousePosition.x != -1 && lastMousePosition.y != -1) // Miramos si es la primera vez que se pinta
+			{
+				// Dibuja círculos interpolados entre la última posición y la actual
+				DrawCirclesDDA(lastMousePosition, mouse_position, borderWidth / 2, drawingColor);
+			}
 		}
+		else if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && currentState != DRAWING_TRIANGLE && !clickedOnToolbarButton)
+		{
+			if (currentState == DRAWING_LINE && !puntos.empty())
+			{
+				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
+				// Restaura el estado del framebuffer desde el buffer temporal.
+				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
+
+				// Dibuja la nueva línea temporal.
+				framebuffer.DrawLineDDA(puntos[0].x, puntos[0].y, mouse_position.x, mouse_position.y, drawingColor);
+			}
+			else if (currentState == DRAWING_RECTANGLE && !puntos.empty())
+			{
+				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
+				// Restaura el estado del framebuffer desde el buffer temporal.
+				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
+
+				// Dibuja la nueva línea temporal.
+				framebuffer.DrawRect(puntos[0].x, puntos[0].y, mouse_position.x - puntos[0].x, mouse_position.y - puntos[0].y, drawingColor, borderWidth, isFilled, drawingColor);
+			}
+			else if (currentState == DRAWING_CIRCLE && !puntos.empty())
+			{
+				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
+				framebuffer.DrawCircle(puntos[0].x, puntos[0].y, sqrt(pow(mouse_position.x - puntos[0].x, 2) + pow(mouse_position.y - puntos[0].y, 2)), drawingColor, borderWidth, isFilled, drawingColor);
+			}
+		}
+
 		lastMousePosition = mouse_position; // Cambiamos la última posición por la actual
 	}
 	else // Si no se está pintando libremente, se resetea la última posición
@@ -365,6 +411,9 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 {
 	float dy = event.preciseY;
 
+	// Añadir borde a la figura o el pencil
+	if (borderWidth >= 0 && borderWidth <= 100)
+		borderWidth += dy;
 	// ...
 }
 
