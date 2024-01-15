@@ -191,15 +191,17 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 					break;
 				case BTN_LOAD:
 					std::cout << "Load";
-					// TODO: Load image from TGA
+					framebuffer.LoadPNG("../res/images/fruits.png");
 					break;
 				case BTN_SAVE:
 					std::cout << "Save";
-					// TODO: Save image to TGA
+					framebuffer.SaveTGA("../res/images/save.tga");
 					break;
 				case BTN_ERASER:
 					std::cout << "Eraser";
-					// TODO: Erase
+					currentState = DRAWING_FREE;
+					drawingColor = Color::BLACK;
+					puntos.clear();
 					break;
 				case BTN_PAINT:
 					std::cout << "Paint";
@@ -269,7 +271,7 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 
 		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && !clickedOnToolbarButton) // Si se está dibujando algo
 		{
-			// Añadimos un punto al vector de puntos
+			// Añadimos un punto al vector de puntos 
 			puntos.push_back(mouse_position);
 
 			std::cout << "Punto añadido: " << mouse_position.x << ", " << mouse_position.y << std::endl;
