@@ -20,6 +20,10 @@ enum DrawingState
 	DRAWING_TRIANGLE
 };
 
+// Constantes para el tamaño del borde
+#define MAX_BORDER_WIDTH 100
+#define MIN_BORDER_WIDTH 1
+
 class Application
 {
 public:
@@ -74,7 +78,7 @@ public:
 	}
 
 	// LAB 1: Ajustes de borde
-	int borderWidth = 1;
+	int borderWidth = 2;
 	std::vector<Button> toolbarButtons; // Botones en el Toolbar
 
 	// Estado del dibujo

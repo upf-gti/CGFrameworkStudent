@@ -122,12 +122,13 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 	case SDLK_ESCAPE:
 		exit(0);
 		break; // ESC key, kill the app
+	// FIXME: Solucionar error que permet que el borde no aumenti ni baixi
 	case SDLK_PLUS:
-		if (borderWidth <= 100)
+		if (borderWidth < MAX_BORDER_WIDTH)
 			borderWidth++; // Ponemos un limite por cuestiones de rendimiento
 		break;
 	case SDLK_MINUS:
-		if (borderWidth > 0)
+		if (borderWidth > MIN_BORDER_WIDTH)
 			borderWidth--; // Debemos tener en cuenta que el borde no puede ser negativo
 		break;
 	case SDLK_1:
@@ -412,7 +413,8 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 	float dy = event.preciseY;
 
 	// Añadir borde a la figura o el pencil
-	if (borderWidth >= 0 && borderWidth <= 100)
+	// FIXME: Solucionar error que permet que el borde no aumenti ni baixi
+	if (borderWidth > MIN_BORDER_WIDTH && borderWidth < MAX_BORDER_WIDTH)
 		borderWidth += dy;
 	// ...
 }
