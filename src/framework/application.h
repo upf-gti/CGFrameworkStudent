@@ -8,6 +8,7 @@
 #include "framework.h"
 #include "image.h"
 #include "button.h"
+#include "particle-system.h"
 
 // Necesitamos un estado para saber si estamos dibujando o no y el que
 enum DrawingState
@@ -17,7 +18,8 @@ enum DrawingState
 	DRAWING_LINE,
 	DRAWING_RECTANGLE,
 	DRAWING_CIRCLE,
-	DRAWING_TRIANGLE
+	DRAWING_TRIANGLE,
+	DRAWING_ANIMATION
 };
 
 // Constantes para el tamaño del borde
@@ -50,6 +52,9 @@ public:
 
 	// CPU Global framebuffer
 	Image framebuffer;
+
+	// 
+	ParticleSystem particleSystem;
 
 	// Constructor and main methods
 	Application(const char *caption, int width, int height);

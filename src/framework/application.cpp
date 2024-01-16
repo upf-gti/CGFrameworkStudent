@@ -3,6 +3,8 @@
 #include "shader.h"
 #include "utils.h"
 
+
+
 Application::Application(const char *caption, int width, int height)
 {
 	this->window = createWindow(caption, width, height);
@@ -60,6 +62,8 @@ void Application::Init(void)
 		toolbarButtons.emplace_back(imagePaths[i], Vector2(toolbarIndexX, 10), buttonTypes[i]);
 		toolbarIndexX += toolbarButtons.back().GetImage().width + 10; // Cogemos image y le sumamos 10 para que haya un espacio entre cada botón
 	}
+
+    bool inactive = true;
 }
 
 // Render one frame
@@ -100,12 +104,18 @@ void Application::Render(void)
 	}
 
 	framebuffer.Render();
-}
 
+	if (currentState = DRAWING_ANIMATION)
+	{
+		particleSystem.Render(&framebuffer);
+		particleSystem.Update(0.1);
+	}
+
+}
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-	// INFO: Esto se ejecuta en cada actualizacion del frame
+
 }
 
 // keyboard press event
@@ -156,7 +166,10 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		puntos.clear();
 		break;
 	case SDLK_6:
-		// TODO: Animation
+		// Animation
+		currentState = DRAWING_ANIMATION;
+		particleSystem.Init();
+		puntos.clear();
 		break;
 	case SDLK_f:
 		// Fill Shapes
