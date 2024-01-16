@@ -3,8 +3,6 @@
 #include "shader.h"
 #include "utils.h"
 
-
-
 Application::Application(const char *caption, int width, int height)
 {
 	this->window = createWindow(caption, width, height);
@@ -63,7 +61,7 @@ void Application::Init(void)
 		toolbarIndexX += toolbarButtons.back().GetImage().width + 10; // Cogemos image y le sumamos 10 para que haya un espacio entre cada botón
 	}
 
-    bool inactive = true;
+	bool inactive = true;
 }
 
 // Render one frame
@@ -103,19 +101,20 @@ void Application::Render(void)
 		button.Render(framebuffer);
 	}
 
-	framebuffer.Render();
-
-	if (currentState = DRAWING_ANIMATION)
+	if (currentState == DRAWING_ANIMATION)
 	{
 		particleSystem.Render(&framebuffer);
-		particleSystem.Update(0.1);
 	}
 
+	framebuffer.Render();
 }
 // Called after render
 void Application::Update(float seconds_elapsed)
 {
-
+	if (currentState == DRAWING_ANIMATION)
+	{
+		particleSystem.Update(seconds_elapsed);
+	}
 }
 
 // keyboard press event
