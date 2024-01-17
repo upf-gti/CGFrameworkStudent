@@ -113,7 +113,7 @@ void Application::Update(float seconds_elapsed)
 {
 	if (currentState == DRAWING_ANIMATION)
 	{
-		particleSystem.Update(seconds_elapsed);
+        particleSystem.Update(seconds_elapsed);
 	}
 }
 

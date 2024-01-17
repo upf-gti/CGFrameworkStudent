@@ -10,6 +10,7 @@ class ParticleSystem
     struct Particle
     {
         Vector2 position;
+        Vector2 lastPosition;
         Vector2 velocity; // Normalized speed and direction of the particle
         Color color;
         float acceleration;

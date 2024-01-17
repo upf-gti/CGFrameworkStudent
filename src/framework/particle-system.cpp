@@ -15,7 +15,7 @@ void ParticleSystem::Init()
     {
         particles[i].inactive = false;
         particles[i].position = Vector2(rand() % 1280, rand() % 720);
-        particles[i].velocity = Vector2(rand() % 10, rand() % 10);
+        particles[i].velocity = Vector2(rand()% (10*2+1)-10, -rand() % 20);
         particles[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
         particles[i].ttl = 100;
     }
@@ -29,11 +29,13 @@ void ParticleSystem::Render(Image *framebuffer)
     {
 
         for (int i = 0; i < 100; i++)
-        {
+        {            
+            framebuffer->SetPixelSafe(particles[i].lastPosition.x, particles[i].lastPosition.y, Color(0,0,0));
             framebuffer->SetPixelSafe(particles[i].position.x, particles[i].position.y, particles[i].color);
-        }
+            }
+        
     }
-}
+} 
 
 void ParticleSystem::Update(float dt)
 {
@@ -43,6 +45,8 @@ void ParticleSystem::Update(float dt)
     {
         if (particles[i].inactive == false)
         {
+            particles[i].lastPosition = particles[i].position;
+
             particles[i].position = particles[i].position + particles[i].velocity * dt;
             particles[i].ttl -= dt;
             particles[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
