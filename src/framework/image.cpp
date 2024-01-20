@@ -445,6 +445,7 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell> &table
 
 void Image::DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2, const Color &borderColor, bool isFilled, const Color &fillColor)
 {
+	// FIXME: Modifiy to adapt to the AET Triangle drawing algorithm
 	std::vector<Cell> table(height);
 
 	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, table);
