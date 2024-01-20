@@ -8,34 +8,34 @@ ParticleSystem::ParticleSystem()
 
 void ParticleSystem::Init()
 {
-    std::cout << "Initializing particle system" << std::endl;
 
     // Initialize all particles as inactive
     for (int i = 0; i < MAX_PARTICLES; i++)
     {
         particles[i].inactive = false;
         particles[i].position = Vector2(rand() % 1280, rand() % 720);
-        particles[i].velocity = Vector2(rand()% (10*2+1)-10, -rand() % 20);
+        particles[i].velocity = Vector2(rand() % (30 * 2 + 1) - 30, -rand() % 40);
         particles[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
         particles[i].ttl = 100;
     }
-
-    std::cout << "Particle system initialized" << std::endl;
 }
 
 void ParticleSystem::Render(Image *framebuffer)
 {
+
     if (particles->inactive == false)
     {
+        for (int i = 0; i < MAX_PARTICLES; i++)
+        {
 
-        for (int i = 0; i < 100; i++)
-        {            
-            framebuffer->SetPixelSafe(particles[i].lastPosition.x, particles[i].lastPosition.y, Color(0,0,0));
-            framebuffer->SetPixelSafe(particles[i].position.x, particles[i].position.y, particles[i].color);
-            }
-        
+            // Limpiar la posición anterior dibujando un círculo del color de fondo
+            framebuffer->DrawCircle(particles[i].lastPosition.x, particles[i].lastPosition.y, 2, Color::BLACK, 1, true, Color::BLACK);
+
+            // Dibujar la partícula en la nueva posición como un círculo semi-redondo
+            framebuffer->DrawCircle(particles[i].position.x, particles[i].position.y, 2, particles[i].color, 1, true, particles[i].color);
+        }
     }
-} 
+}
 
 void ParticleSystem::Update(float dt)
 {
@@ -45,12 +45,13 @@ void ParticleSystem::Update(float dt)
     {
         if (particles[i].inactive == false)
         {
-            particles[i].lastPosition = particles[i].position;
 
-            particles[i].position = particles[i].position + particles[i].velocity * dt;
-            particles[i].ttl -= dt;
-            particles[i].color = Color(rand() % 255, rand() % 255, rand() % 255);
-            if (particles[i].ttl <= 0)
+            particles[i].lastPosition = particles[i].position; // Calculamos la posicion anterior de la particula
+
+            particles[i].position = particles[i].position + particles[i].velocity * dt; // Calculamos la nueva posicion de la particula en funcion de la ecuacion de movimiento
+            particles[i].ttl -= dt;                                                     // Calculamos el tiempo que le queda a la particula
+            // particles[i].color = Color(rand() % 56 + 120, rand() % 56 + 120, rand() % 56 + 120); // Creamos un color aleatorio para la particula en cada uno de los frames
+            if (particles[i].ttl <= 0) // Cuando la particula tenga que desaparecer
             {
                 particles[i].inactive = true;
             }

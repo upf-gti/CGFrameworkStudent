@@ -4,7 +4,7 @@
 class ParticleSystem
 {
 
-    static const int MAX_PARTICLES = 3000;
+    static const int MAX_PARTICLES = 150;
     constexpr static const float MAX_LIFETIME = 10;
 
     struct Particle
