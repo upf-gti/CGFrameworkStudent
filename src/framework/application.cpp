@@ -113,7 +113,7 @@ void Application::Update(float seconds_elapsed)
 {
 	if (currentState == DRAWING_ANIMATION)
 	{
-        particleSystem.Update(seconds_elapsed);
+		particleSystem.Update(seconds_elapsed);
 	}
 }
 
@@ -204,7 +204,7 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 					break;
 				case BTN_LOAD:
 					std::cout << "Load";
-					framebuffer.LoadPNG("../res/images/fruits.png");
+					framebuffer.LoadPNG("../res/images/gos.png");
 					break;
 				case BTN_SAVE:
 					std::cout << "Save";
