@@ -299,7 +299,7 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 				case DRAWING_TRIANGLE:
 					if (puntos.size() == 3)
 					{
-						framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, drawingColor);
+						framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
 						puntos.clear();
 					}
 					break;
@@ -370,10 +370,8 @@ void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color
 	}
 }
 
-// TODO: Añadir un efecto hover cuando se pasa por encima de los botones
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-	// TODO: Poner if bonito
 	if (mouse_state == SDL_BUTTON_LEFT) // Miramos si se está pintando y si se está pintando libremente
 	{
 		if (currentState == DRAWING_FREE)
@@ -390,7 +388,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 			{
 				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
 				// Restaura el estado del framebuffer desde el buffer temporal.
-				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
+				framebuffer = tempbuffer;
 
 				// Dibuja la nueva línea temporal.
 				framebuffer.DrawLineDDA(puntos[0].x, puntos[0].y, mouse_position.x, mouse_position.y, drawingColor);
@@ -399,15 +397,15 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 			{
 				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
 				// Restaura el estado del framebuffer desde el buffer temporal.
-				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
+				framebuffer = tempbuffer;
 
 				// Dibuja la nueva línea temporal.
-				framebuffer.DrawRect(puntos[0].x, puntos[0].y, mouse_position.x - puntos[0].x, mouse_position.y - puntos[0].y, drawingColor, borderWidth, isFilled, drawingColor);
+				framebuffer.DrawRect(puntos[0].x, puntos[0].y, mouse_position.x - puntos[0].x, mouse_position.y - puntos[0].y, drawingColor, borderWidth, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
 			}
 			else if (currentState == DRAWING_CIRCLE && !puntos.empty())
 			{
-				framebuffer = tempbuffer; // Esto debería invocar al operador de asignación.
-				framebuffer.DrawCircle(puntos[0].x, puntos[0].y, sqrt(pow(mouse_position.x - puntos[0].x, 2) + pow(mouse_position.y - puntos[0].y, 2)), drawingColor, borderWidth, isFilled, drawingColor);
+				framebuffer = tempbuffer;
+				framebuffer.DrawCircle(puntos[0].x, puntos[0].y, sqrt(pow(mouse_position.x - puntos[0].x, 2) + pow(mouse_position.y - puntos[0].y, 2)), drawingColor, borderWidth, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
 			}
 		}
 
@@ -423,7 +421,7 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 {
 	float dy = event.preciseY;
 
-	// Añadimos limites para que no se pueda hacer infinitamente grande o pequeño
+	// Añadimos limites para que no se pueda hacer infinitamente grande o pequeño, funcionalidad propia, para aumentar o disminuir el grosor del borde, en funcion de la rueda del ratón
 	if (dy > 0)
 	{
 		borderWidth = std::min(borderWidth + dy, (float)(MAX_BORDER_WIDTH));
