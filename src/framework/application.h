@@ -100,5 +100,6 @@ public:
 
 	bool clickedOnToolbarButton = false;
 
+	// Buffer temporal para almacenar la imagen antes de dibujarla en el framebuffer, si se tiene que restaurar o cargar mientras se está previsualizando alguna cosa.
 	Image tempbuffer;
 };

@@ -58,19 +58,18 @@ void Application::Init(void)
 	{
 		// Crea cada botón con su imagen y tipo correspondiente
 		toolbarButtons.emplace_back(imagePaths[i], Vector2(toolbarIndexX, 10), buttonTypes[i]);
-		toolbarIndexX += toolbarButtons.back().GetImage().width + 10; // Cogemos image y le sumamos 10 para que haya un espacio entre cada botón
+		toolbarIndexX += toolbarButtons.back().GetImage().width + 10; // Cogemos image y le sumamos 10 para que haya un espacio entre cada botón razonable
 	}
 
 	bool inactive = true;
 }
 
-// Render one frame
 void Application::Render(void)
 {
 	// Establecemos el color de la linea
 	Color color = Color::WHITE;
 
-	/* Figuras Testing
+	/* Figuras Testing - NO DESCOMENTAR
 	// Establecemos el punto de origen de la linea en el centro de la pantalla
 	int x = this->window_width / 2;
 	int y = this->window_height / 2;
@@ -93,22 +92,22 @@ void Application::Render(void)
 	framebuffer.DrawTriangle(p0, p1, p2, color, true, Color::GREEN);
 	*/
 
-	// Dibujamos el toolbar
+	// Dibujamos el toolbar, en cada Render() para que se actualice
 	framebuffer.DrawRect(0, 0, this->window_width, 50, Color::GRAY, 2, true, Color::GRAY);
 
-	for (Button &button : toolbarButtons)
+	for (Button &button : toolbarButtons) // Creamos todos los botones
 	{
 		button.Render(framebuffer);
 	}
 
-	if (currentState == DRAWING_ANIMATION)
+	if (currentState == DRAWING_ANIMATION) // En caso de estar dibujando las particulas, las renderizamos
 	{
 		particleSystem.Render(&framebuffer);
 	}
 
-	framebuffer.Render();
+	framebuffer.Render(); // Renderizamos el framebuffer
 }
-// Called after render
+
 void Application::Update(float seconds_elapsed)
 {
 	if (currentState == DRAWING_ANIMATION)
@@ -185,13 +184,13 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
 	{
 
-		for (Button &button : toolbarButtons) // Para cada boton creado de la toolbar
+		for (Button &button : toolbarButtons) // Para cada boton creado de la toolbar comporoamos si se ha hecho click en el
 		{
 			if (button.IsMouseInside(mouse_position))
 			{
 				clickedOnToolbarButton = true;
 
-				// Usando getType() para obtener el tipo de botón
+				// Usando el método getType() para obtener el tipo de botón
 				ButtonType type = button.GetType();
 
 				// Imprimir el tipo de botón
@@ -273,16 +272,14 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 					std::cout << "Green";
 					drawingColor = Color::GREEN;
 					break;
-				// TODO: Add painting free button
 				default:
 					std::cout << "Othero";
 				}
-				std::cout << std::endl;
-				break; // Un break para que no se siga ejecutando el bucle, ya que hemos encontrado el botón (no se puede hacer click a dos a la vez)
+				std::cout << std::endl; // Salto de linea
+				break;					// Un break para que no se siga ejecutando el bucle, ya que hemos encontrado el botón (no se puede hacer click a dos a la vez)
 			}
 		}
 
-		// TODO: Poner bonito el if
 		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && !clickedOnToolbarButton) // Si se está dibujando algo
 		{
 			if (currentState == DRAWING_TRIANGLE || puntos.size() == 0)
@@ -315,7 +312,6 @@ void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
 
 	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
 	{
-		// TODO: Poner bonito el if
 		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && currentState != DRAWING_TRIANGLE && !clickedOnToolbarButton)
 		{
 			puntos.push_back(mouse_position);
@@ -350,7 +346,7 @@ void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
 void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color &color)
 {
 
-	// Algrotimo similar al de la linea con DDA, pero usando circulos para rellenar el espacio entre los puntos, no pixeles
+	// Algrotimo similar al de la linea con DDA, pero usando circulos para rellenar el espacio entre los puntos, no pixeles, para un trazo mas suave
 
 	int dx = p1.x - p0.x;
 	int dy = p1.y - p0.y;
@@ -386,7 +382,6 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 		{
 			if (currentState == DRAWING_LINE && !puntos.empty())
 			{
-				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
 				// Restaura el estado del framebuffer desde el buffer temporal.
 				framebuffer = tempbuffer;
 
@@ -395,7 +390,6 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 			}
 			else if (currentState == DRAWING_RECTANGLE && !puntos.empty())
 			{
-				// Si lastMousePosition es válida, "borra" la línea previa dibujando sobre ella en el color del fondo.
 				// Restaura el estado del framebuffer desde el buffer temporal.
 				framebuffer = tempbuffer;
 

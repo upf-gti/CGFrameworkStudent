@@ -392,7 +392,7 @@ void Image::DrawRect(int x, int y, int w, int h, const Color &borderColor, int b
 void Image::DrawCircle(int x, int y, int r, const Color &borderColor,
 					   int borderWidth, bool isFilled, const Color &fillColor)
 {
-	// Drawing the circumference
+	// Dibujamos la circunferencia utilizando un algoritmo básico de dibujo de circunferencias mediante su ecuación
 	for (int xOct = -r; xOct <= r; xOct++)
 	{
 		for (int yOct = -r; yOct <= r; yOct++)
@@ -445,14 +445,13 @@ void Image::ScanLineDDA(int x0, int y0, int x1, int y1, std::vector<Cell> &table
 
 void Image::DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2, const Color &borderColor, bool isFilled, const Color &fillColor)
 {
-	// FIXME: Modifiy to adapt to the AET Triangle drawing algorithm
 	std::vector<Cell> table(height);
 
 	ScanLineDDA(p0.x, p0.y, p1.x, p1.y, table);
 	ScanLineDDA(p1.x, p1.y, p2.x, p2.y, table);
 	ScanLineDDA(p2.x, p2.y, p0.x, p0.y, table);
 
-	// Llenamos el triángulo si es necesario
+	// Llenamos el triángulo si es necesario, utilizando el algoritmo AET (Active Edge Table)
 	if (isFilled)
 	{
 		for (int y = 0; y < table.size(); y++)
@@ -467,7 +466,7 @@ void Image::DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2
 		}
 	}
 
-	// Dibuja el borde del triángulo
+	// Dibuja el borde del triángulo, utilizando lineas
 	DrawLineDDA(p0.x, p0.y, p1.x, p1.y, borderColor);
 	DrawLineDDA(p1.x, p1.y, p2.x, p2.y, borderColor);
 	DrawLineDDA(p2.x, p2.y, p0.x, p0.y, borderColor);

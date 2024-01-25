@@ -8,8 +8,7 @@ ParticleSystem::ParticleSystem()
 
 void ParticleSystem::Init()
 {
-
-    // Initialize all particles as inactive
+    // Inicializamos todas las particulas como inactivas
     for (int i = 0; i < MAX_PARTICLES; i++)
     {
         particles[i].inactive = false;
@@ -22,7 +21,6 @@ void ParticleSystem::Init()
 
 void ParticleSystem::Render(Image *framebuffer)
 {
-
     if (particles->inactive == false)
     {
         for (int i = 0; i < MAX_PARTICLES; i++)
@@ -39,7 +37,6 @@ void ParticleSystem::Render(Image *framebuffer)
 
 void ParticleSystem::Update(float dt)
 {
-    // std::cout << "Updating particle system" << std::endl;
 
     for (int i = 0; i < MAX_PARTICLES; i++)
     {

@@ -1,6 +1,7 @@
 #pragma once
 #include "image.h"
 
+// Todos los los tipos de botones que tenemos
 enum ButtonType
 {
     BTN_CLEAR,
