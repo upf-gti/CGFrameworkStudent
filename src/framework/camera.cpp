@@ -92,12 +92,28 @@ void Camera::UpdateViewMatrix()
 	// Remember how to fill a Matrix4x4 (check framework slides)
 	// Careful with the order of matrix multiplications, and be sure to use normalized vectors!
 	
+	// Crear los vectores de la cámara
+    Vector3 forward = (center - eye).Normalize();
+    Vector3 side = forward.Cross(up).Normalize();
+    Vector3 top = side.Cross(forward);
+	
 	// Create the view matrix rotation
-	// ...
-	// view_matrix.M[3][3] = 1.0;
+	Matrix44 rotation;
+	rotation.SetIdentity();
+    rotation.M[0][0] = side.x; rotation.M[0][1] = side.y; rotation.M[0][2] = side.z; rotation.M[0][3] = 0;
+    rotation.M[1][0] = top.x; rotation.M[1][1] = top.y; rotation.M[1][2] = top.z; rotation.M[1][3] = 0;
+    rotation.M[2][0] = -forward.x; rotation.M[2][1] = -forward.y; rotation.M[2][2] = -forward.z; rotation.M[2][3] = 0;
+    rotation.M[3][0] = 0; rotation.M[3][1] = 0; rotation.M[3][2] = 0; rotation.M[3][3] = 1;
 
 	// Translate view matrix
-	// ...
+	Matrix44 translation;
+    translation.SetIdentity();
+    translation.M[0][3] = -eye.x;
+    translation.M[1][3] = -eye.y;
+    translation.M[2][3] = -eye.z;
+
+    // Combinar las matrices de rotación y traslación para obtener la matriz de vista
+	view_matrix = rotation * translation;
 
 	UpdateViewProjectionMatrix();
 }
