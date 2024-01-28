@@ -1,17 +1,33 @@
 #include "entity.h"
 #include "image.h"
 
-Entity::Entity(const Matrix44& modelMatrix, const Mesh& mesh) : modelMatrix(modelMatrix), mesh(mesh) {
-    // Constructor que toma una matriz de modelo y una malla
+// Constructor por defecto
+Entity::Entity() {
+    // Implementación del constructor por defecto
 }
 
+// Constructor que toma una matriz de modelo
+Entity::Entity(const Matrix44& modelMatrix) : modelMatrix(modelMatrix) {
+    // Implementación del constructor con matriz de modelo
+}
+
+// Constructor que toma una malla
+Entity::Entity(const Mesh& mesh) : mesh(mesh) {
+    // Implementación del constructor con malla
+}
+
+// Constructor que toma una matriz de modelo y una malla
+Entity::Entity(const Matrix44& modelMatrix, const Mesh& mesh) : modelMatrix(modelMatrix), mesh(mesh) {
+    // Implementación del constructor con matriz de modelo y malla
+}
+
+// Método para establecer la matriz del modelo
 void Entity::setModelMatrix(const Matrix44& modelMatrix) {
-    // Establecer la matriz del modelo
     this->modelMatrix = modelMatrix;
 }
 
+// Método para establecer la malla
 void Entity::setMesh(const Mesh& mesh) {
-    // Establecer la malla
     this->mesh = mesh;
 }
 

@@ -9,17 +9,31 @@
 #include "image.h"
 #include "button.h"
 #include "particle-system.h"
+#include "entity.h"
+#include "camera.h"
+
 
 // Necesitamos un estado para saber si estamos dibujando o no y el que
 enum DrawingState
 {
+	//Lab1: Añadir estados para los diferentes tipos de dibujo
 	NOT_DRAWING,
 	DRAWING_FREE,
 	DRAWING_LINE,
 	DRAWING_RECTANGLE,
 	DRAWING_CIRCLE,
 	DRAWING_TRIANGLE,
-	DRAWING_ANIMATION
+	DRAWING_ANIMATION,
+	
+
+	// Lab2: 
+	DRAWING_SINGLE_ENTITY,
+	DRAWING_MULTIPLE_ENTITIES,
+	SET_ORTOGRAPHIC,
+	SET_PERSPECTIVE,
+	CAMERA_NEAR, 
+	CAMERA_FAR,
+
 };
 
 // Constantes para el tamaño del borde
@@ -53,8 +67,14 @@ public:
 	// CPU Global framebuffer
 	Image framebuffer;
 
-	//
+	// Declarar y crear un sistema de particulas
 	ParticleSystem particleSystem;
+
+	// Declarar y crear una entidad
+	Entity entity;
+
+	// Declarar y crear una cámara
+	Camera camera;
 
 	// Constructor and main methods
 	Application(const char *caption, int width, int height);
@@ -93,6 +113,9 @@ public:
 
 	// Vector para almacenar los puntos de los dibujos (temporal)
 	std::vector<Vector2> puntos;
+
+	// Lista de entidades para almacenar los dibujos
+	std::vector<Entity> entities;  
 
 	void DrawCirclesDDA(Vector2 start, Vector2 end, int radius, const Color &color);
 	// Última posición del ratón para pintar y que no se vea el trazo

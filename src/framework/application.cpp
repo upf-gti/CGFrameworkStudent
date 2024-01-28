@@ -30,7 +30,7 @@ void Application::Init(void)
 
 	framebuffer.Fill(Color::BLACK);
 
-	// Creamos un loop para cargar todas las imagenes una al lado del otra con un loop
+	/* Creamos un loop para cargar todas las imagenes una al lado del otra con un loop
 	std::vector<const char *> imagePaths = {
 		"../res/images/clear.png",
 		"../res/images/load.png",
@@ -62,6 +62,17 @@ void Application::Init(void)
 	}
 
 	bool inactive = true;
+	*/
+
+	// Cargar la malla
+	Mesh * mesh = new Mesh();
+	mesh->LoadOBJ("meshes/lee.obj");
+
+	// Asignar la malla a esa entidad
+    entity.mesh = *mesh;
+
+	// Agregar la entidad a la lista de entidades
+	entities.push_back(entity);
 }
 
 void Application::Render(void)
@@ -90,11 +101,12 @@ void Application::Render(void)
 	Vector2 p2(100, 300); // Tercer punto
 
 	framebuffer.DrawTriangle(p0, p1, p2, color, true, Color::GREEN);
-	*/
+	
 
 	// Dibujamos el toolbar, en cada Render() para que se actualice
 	framebuffer.DrawRect(0, 0, this->window_width, 50, Color::GRAY, 2, true, Color::GRAY);
 
+		
 	for (Button &button : toolbarButtons) // Creamos todos los botones
 	{
 		button.Render(framebuffer);
@@ -104,16 +116,24 @@ void Application::Render(void)
 	{
 		particleSystem.Render(&framebuffer);
 	}
+	*/
+
+	for (Entity& entity : entities) {
+		entity.Render(&framebuffer, &camera, Color::WHITE);
+	}
 
 	framebuffer.Render(); // Renderizamos el framebuffer
 }
 
 void Application::Update(float seconds_elapsed)
-{
+{	
+	/* Lab1 
 	if (currentState == DRAWING_ANIMATION)
 	{
 		particleSystem.Update(seconds_elapsed);
 	}
+	*/
+
 }
 
 // keyboard press event
@@ -139,39 +159,50 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 			borderWidth--; // Debemos tener en cuenta que el borde no puede ser negativo
 		break;
 	case SDLK_1:
-		// Draw a line
+		/* Lab1: Dibujando lineas con DDA.
 		currentState = DRAWING_LINE;
 		puntos.clear();
+		*/
+
 		break;
 	case SDLK_2:
-		// Draw rectangles
+		/*Lab1: Dibujando rectangulos.
 		currentState = DRAWING_RECTANGLE;
 		puntos.clear();
+		*/
 		break;
 	case SDLK_3:
-		// Draw a circle
+		/*Lab1: Dibujando circulos
 		currentState = DRAWING_CIRCLE;
 		puntos.clear();
+		*/
 		break;
 	case SDLK_4:
-		// Draw triangles
+		/*Lab1: Dibuja triangulos
 		currentState = DRAWING_TRIANGLE;
 		puntos.clear();
+		*/
 		break;
 	case SDLK_5:
-		// Paint
+		/*Lab1: Modo libre
 		currentState = DRAWING_FREE;
 		puntos.clear();
+		*/
 		break;
 	case SDLK_6:
-		// Animation
+		/*Lab1: Modo animacion
 		currentState = DRAWING_ANIMATION;
 		particleSystem.Init();
 		puntos.clear();
+		*/
 		break;
 	case SDLK_f:
-		// Fill Shapes
+		/*Lab1: Relleno
 		isFilled = !isFilled; // Ponemos el valor contrario
+		*/
+		break;
+    case SDLK_b:
+		framebuffer.Fill(Color::BLACK);
 		break;
 	}
 }
@@ -293,14 +324,14 @@ void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 				std::cout << "Estado actual: " << currentState << std::endl;
 				switch (currentState)
 				{
-				case DRAWING_TRIANGLE:
-					if (puntos.size() == 3)
-					{
-						framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
-						puntos.clear();
-					}
-					break;
-				}
+                    case DRAWING_TRIANGLE:
+                        if (puntos.size() == 3)
+                        {
+                            framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
+                            puntos.clear();
+                        }
+						break;
+                }
 			}
 		}
 	}

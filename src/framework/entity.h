@@ -3,10 +3,14 @@
 
 class Entity {
 
+    
+public:
+    // Matriz de modelo
     Matrix44 modelMatrix;
+
+    // Malla
     Mesh mesh;
 
-public:
     // Constructor por defecto
     Entity();
 
@@ -27,7 +31,4 @@ public:
 
     // Método para renderizar la entidad
     void Render(Image* framebuffer, Camera* camera, const Color& c);
-
 };
-
-

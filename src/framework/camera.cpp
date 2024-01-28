@@ -128,14 +128,27 @@ void Camera::UpdateProjectionMatrix()
 	SetExampleProjectionMatrix();
 
 	// Remember how to fill a Matrix4x4 (check framework slides)
-	
+
 	if (type == PERSPECTIVE) {
-		// projection_matrix.M[2][3] = -1;
-		// ...
+        float aspect_ratio = 1280 / 720;
+        float tan_half_fov = tan(fov / 2.0f);
+
+        projection_matrix.M[0][0] = 1.0f / (aspect_ratio * tan_half_fov);
+        projection_matrix.M[1][1] = 1.0f / tan_half_fov;
+        projection_matrix.M[2][2] = -(far_plane + near_plane) / (far_plane - near_plane);
+        projection_matrix.M[2][3] = -1.0f;
+        projection_matrix.M[3][2] = -(2.0f * far_plane * near_plane) / (far_plane - near_plane);
+
 	}
 	else if (type == ORTHOGRAPHIC) {
-		// ...
-	} 
+        projection_matrix.M[0][0] = 2.0f / (right - left);
+        projection_matrix.M[1][1] = 2.0f / (top - bottom);
+        projection_matrix.M[2][2] = -2.0f / (far_plane - near_plane);
+        projection_matrix.M[3][0] = -(right + left) / (right - left);
+        projection_matrix.M[3][1] = -(top + bottom) / (top - bottom);
+        projection_matrix.M[3][2] = -(far_plane + near_plane) / (far_plane - near_plane);
+        projection_matrix.M[3][3] = 1.0f;
+    } 
 
 	UpdateViewProjectionMatrix();
 }
