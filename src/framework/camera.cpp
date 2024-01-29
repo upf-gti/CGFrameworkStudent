@@ -125,7 +125,7 @@ void Camera::UpdateProjectionMatrix()
 	projection_matrix.SetIdentity();
 
 	// Comment this line to create your own projection matrix!
-	SetExampleProjectionMatrix();
+	// SetExampleProjectionMatrix();
 
 	// Remember how to fill a Matrix4x4 (check framework slides)
 
