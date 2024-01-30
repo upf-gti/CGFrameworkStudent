@@ -1,10 +1,14 @@
 #include "mesh.h"
 #include "image.h"
+#include "framework.h"
 
 class Entity {
-
+float time;
     
 public:
+
+    std::vector<Vector3> lastTriangleVertices; // Almacenar la última posición de los vértices
+
     // Matriz de modelo
     Matrix44 modelMatrix;
 
@@ -31,4 +35,6 @@ public:
 
     // Método para renderizar la entidad
     void Render(Image* framebuffer, Camera* camera, const Color& c);
+
+    void Update(float seconds_elapsed);
 };

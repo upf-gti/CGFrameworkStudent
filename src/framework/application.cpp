@@ -68,11 +68,26 @@ void Application::Init(void)
 	Mesh * mesh = new Mesh();
 	mesh->LoadOBJ("meshes/lee.obj");
 
-	// Asignar la malla a esa entidad
-    entity.mesh = *mesh;
+	// Crear algunas entidades
+	Entity entity1, entity2, entity3;
 
-	// Agregar la entidad a la lista de entidades
-	entities.push_back(entity);
+    // Asignar la malla a las entidades
+	entity1.mesh = *mesh;
+	entity2.mesh = *mesh;
+	entity3.mesh = *mesh;
+
+	// Establecer las matrices de modelo para posicionar las entidades
+	entity1.modelMatrix.Translate(0.0, 0, 0); // Simula una escala de 1x1x1
+	entity2.modelMatrix.Translate(-0.4, -0.2, 0); // Simula una escala de 2x2x2
+	entity3.modelMatrix.Translate(0.5, 0, 0); // Simula una escala de 3x3x3
+
+	entity2.modelMatrix.Rotate(45 * DEG2RAD, Vector3(0, 1, 0)); // Rota 45 grados sobre el eje Y
+    entity3.modelMatrix.SetTranslation(0, 0, 0.5);
+	
+	// Añadir las entidades a la lista
+	entities.push_back(entity1);
+	entities.push_back(entity2);
+	entities.push_back(entity3);
 }
 
 void Application::Render(void)
@@ -134,6 +149,10 @@ void Application::Update(float seconds_elapsed)
 	}
 	*/
 
+    // Actualizar todas las entidades
+   for (Entity& entity : entities) {
+      // entity.Update(seconds_elapsed);
+   }
 }
 
 // keyboard press event

@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "image.h"
 
 // Constructor por defecto
 Entity::Entity() {
@@ -64,10 +63,17 @@ void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
         if (skipTriangle) {
             continue;
         }
-
-        // Dibujar las líneas del triángulo
+         // Dibujar las líneas del triángulo
         framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), c);
         framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), c);
         framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), c);
     }
+}
+
+ void Entity::Update(float seconds_elapsed){
+    float angle = seconds_elapsed; // O cualquier otro valor que quieras usar para el ángulo
+    Vector3 axis(0, 2, 0); // Eje Y
+    Matrix44 rotationMatrix;
+    rotationMatrix.Rotate(angle, axis);
+    modelMatrix = modelMatrix * rotationMatrix;
 }
