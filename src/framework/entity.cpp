@@ -71,9 +71,8 @@ void Entity::Render(Image* framebuffer, Camera* camera, const Color& c) {
 }
 
  void Entity::Update(float seconds_elapsed){
-    float angle = seconds_elapsed; // O cualquier otro valor que quieras usar para el ángulo
-    Vector3 axis(0, 2, 0); // Eje Y
-    Matrix44 rotationMatrix;
-    rotationMatrix.Rotate(angle, axis);
-    modelMatrix = modelMatrix * rotationMatrix;
+
+    Vector3 axis(0, 1, 0); // Eje Y
+    modelMatrix.Rotate(5.0 * DEG2RAD, axis);
+
 }

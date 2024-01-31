@@ -71,7 +71,7 @@ public:
 	ParticleSystem particleSystem;
 
 	// Declarar y crear una entidad
-	Entity entity;
+	Entity entity1, entity2, entity3;
 
 	// Declarar y crear una cámara
 	Camera camera;

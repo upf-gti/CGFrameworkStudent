@@ -151,7 +151,8 @@ void Application::Update(float seconds_elapsed)
 
     // Actualizar todas las entidades
    for (Entity& entity : entities) {
-      // entity.Update(seconds_elapsed);
+		framebuffer.Fill(Color::BLACK);
+		entity.Update(seconds_elapsed);
    }
 }
 
