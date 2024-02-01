@@ -116,8 +116,23 @@ void Application::Update(float seconds_elapsed)
 	if (cameraState == DRAW_SINGLE || cameraState == DRAW_MULTIPLE) {
 		entity1.modelMatrix.Rotate(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
 
-		float scale_factor = sin(time) * 0.5 + 1.0; // Oscila entre 0.5 y 1.5
-		entity2.modelMatrix.Scale(scale_factor, scale_factor, scale_factor);
+		float current_scale = 1.0f; // Factor de escala inicial
+		float scale_speed = 0.01f; // Velocidad de cambio de la escala
+		float min_scale = 0.5f; // Escala mínima
+		float max_scale = 3.0f; // Escala máxima
+
+		 // Calculamos el cambio de escala basado en el tiempo
+		float scale_change = sin(time) * scale_speed;
+		current_scale += scale_change;
+
+		// Limitamos la escala entre los valores mínimo y máximo
+		current_scale = std::max(min_scale, std::min(max_scale, current_scale));
+
+		// Aplicar la escala a la entidad
+		entity2.modelMatrix.Scale(current_scale, current_scale, current_scale);
+
+		// Reducimos la velocidad 
+		scale_speed *= 0.99f;
 
 		entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
 	}
@@ -161,7 +176,7 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		} else if (cameraState == CAMERA_FAR) {
 			camera.far_plane += 0.1f; // Incrementa de a poco el far_plane
 		}else if (camera.type == Camera::PERSPECTIVE) {
-        	camera.fov = std::min(179.0f, camera.fov + 0.01f); // Incrementa el FOV, asegurándose de que no sea mayor a 179
+        	camera.fov = std::min(179.0f, camera.fov + 0.001f); // Incrementa el FOV, asegurándose de que no sea mayor a 179
     	}
 		camera.UpdateProjectionMatrix();
 		break;
