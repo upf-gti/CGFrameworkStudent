@@ -81,6 +81,7 @@ void Application::Init(void)
 	entity2.modelMatrix.Translate(-0.4, -0.2, 0); // Simula una escala de 2x2x2
 	entity3.modelMatrix.Translate(0.5, 0, 0); // Simula una escala de 3x3x3
 
+
 	entity2.modelMatrix.Rotate(45 * DEG2RAD, Vector3(0, 1, 0)); // Rota 45 grados sobre el eje Y
     entity3.modelMatrix.SetTranslation(0, 0, 0.5);
 	
@@ -92,47 +93,7 @@ void Application::Init(void)
 
 void Application::Render(void)
 {
-	// Establecemos el color de la linea
-	Color color = Color::WHITE;
-
-	/* Figuras Testing - NO DESCOMENTAR
-	// Establecemos el punto de origen de la linea en el centro de la pantalla
-	int x = this->window_width / 2;
-	int y = this->window_height / 2;
-	framebuffer.DrawRect(x, y, 220, 100, color, 2, true, Color::PURPLE);
-
-	x = this->window_width / 4;
-	y = this->window_height / 2;
-
-	framebuffer.DrawLineDDA(x, y, x + 100 * cos(time), y + 100 * sin(time), color);
-
-	x = this->window_width / 3;
-	y = this->window_height / 6;
-
-	framebuffer.DrawCircle(x, y, 100, color, 2, true, Color::RED);
-
-	Vector2 p0(100, 100); // Primer punto
-	Vector2 p1(300, 300); // Segundo punto
-	Vector2 p2(100, 300); // Tercer punto
-
-	framebuffer.DrawTriangle(p0, p1, p2, color, true, Color::GREEN);
 	
-
-	// Dibujamos el toolbar, en cada Render() para que se actualice
-	framebuffer.DrawRect(0, 0, this->window_width, 50, Color::GRAY, 2, true, Color::GRAY);
-
-		
-	for (Button &button : toolbarButtons) // Creamos todos los botones
-	{
-		button.Render(framebuffer);
-	}
-
-	if (currentState == DRAWING_ANIMATION) // En caso de estar dibujando las particulas, las renderizamos
-	{
-		particleSystem.Render(&framebuffer);
-	}
-	*/
-
 	for (Entity& entity : entities) {
 		entity.Render(&framebuffer, &camera, Color::WHITE);
 	}
