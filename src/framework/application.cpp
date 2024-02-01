@@ -160,7 +160,9 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 			camera.near_plane = std::min(camera.near_plane + 0.01f, camera.far_plane - 0.01f); // Incrementa de a poco el near_plane, asegurándose de que sea siempre menor que far_plane
 		} else if (cameraState == CAMERA_FAR) {
 			camera.far_plane += 0.1f; // Incrementa de a poco el far_plane
-		}
+		}else if (camera.type == Camera::PERSPECTIVE) {
+        	camera.fov = std::min(179.0f, camera.fov + 0.01f); // Incrementa el FOV, asegurándose de que no sea mayor a 179
+    	}
 		camera.UpdateProjectionMatrix();
 		break;
 	case SDLK_MINUS:
@@ -168,7 +170,9 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 			camera.near_plane = std::max(0.01f, camera.near_plane - 0.01f); // Decrementa de a poco el near_plane, no permite que sea menor a 0.01
 		} else if (cameraState == CAMERA_FAR) {
 			camera.far_plane = std::max(camera.near_plane + 0.01f, camera.far_plane - 0.1f); // Decrementa de a poco el far_plane, asegurándose de que sea siempre mayor que near_plane
-		}
+		}else if (camera.type == Camera::PERSPECTIVE) {
+        	camera.fov = std::max(1.0f, camera.fov - 0.01f); // Decrementa el FOV en incrementos más pequeños
+    	}
 		camera.UpdateProjectionMatrix();
 		break;
     case SDLK_1:
@@ -270,7 +274,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 
 		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
 		Vector3 up = camera.GetLocalVector(Vector3::UP);
-		Vector3 delta_position = right * (float)delta_x * 0.01f + up * (float)-delta_y * 0.01f;
+		Vector3 delta_position = right * (float)delta_x * 0.001f + up * (float)-delta_y * 0.001f;
 
 		camera.Move(delta_position);
 
@@ -282,7 +286,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 		int delta_x = event.x - last_mouse_x;
 		int delta_y = event.y - last_mouse_y;
 
-		float rotation_speed = 0.01f; // Adjust the rotation speed as needed
+		float rotation_speed = 0.001f; // Adjust the rotation speed as needed
 
 		Vector3 eye_direction = (camera.center - camera.eye).Normalize();
 		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
