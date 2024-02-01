@@ -16,7 +16,6 @@
 // Necesitamos un estado para saber si estamos dibujando o no y el que
 enum DrawingState
 {
-	//Lab1: Añadir estados para los diferentes tipos de dibujo
 	NOT_DRAWING,
 	DRAWING_FREE,
 	DRAWING_LINE,
@@ -24,14 +23,14 @@ enum DrawingState
 	DRAWING_CIRCLE,
 	DRAWING_TRIANGLE,
 	DRAWING_ANIMATION,
-	
+};
 
-	// Lab2: 
-	DRAW_SINGLE,
-	DRAW_MULTIPLE,
-	CAMERA_NEAR, 
+enum CameraState{
+	CAMERA_NEAR,
 	CAMERA_FAR,
-
+	CAMERA_NONE,
+	DRAW_SINGLE,
+    DRAW_MULTIPLE
 };
 
 // Constantes para el tamaño del borde
@@ -123,4 +122,18 @@ public:
 
 	// Buffer temporal para almacenar la imagen antes de dibujarla en el framebuffer, si se tiene que restaurar o cargar mientras se está previsualizando alguna cosa.
 	Image tempbuffer;
+
+	// Estado de la camara
+	CameraState cameraState = CAMERA_NONE;
+
+	// Configuración de la cámara
+	float fov = 45.0f; // Campo de visión
+	float aspect = 1280.0 / 720.0; // Relación de aspecto
+	float near_plane = 0.01; // Plano cercano
+	float far_plane = 100.0; // Plano lejano
+
+	// Variables para rastrear la posición previa del ratón
+	int last_mouse_x, last_mouse_y;
+	bool is_right_button_pressed = false;
+	bool is_left_button_pressed = false;
 };

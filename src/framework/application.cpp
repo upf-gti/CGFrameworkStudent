@@ -84,15 +84,8 @@ void Application::Init(void)
 	entity2.modelMatrix.Translate(0.4, -0.2, 0);  // Posiciona entity2 en el origen
 	entity3.modelMatrix.Translate(-0.1, -0.2 ,0); // Posiciona entity3
 
-	// Configuración de la cámara
-	float fov = 45.0f; // Campo de visión
-	float aspect = 1280.0 / 720.0; // Relación de aspecto
-	float near_plane = 0.01; // Plano cercano
-	float far_plane = 100.0; // Plano lejano
-
 	// Configurar la vista de la cámara y la perspectiva
 	camera.LookAt(Vector3(0, 0.2, 0.75), Vector3(0, 0.2, 0), Vector3(0,10,0));
-	camera.SetPerspective(fov, aspect, near_plane, far_plane);
 
 	// Añadir las entidades a la lista
 	entities.push_back(entity1);
@@ -119,22 +112,18 @@ void Application::Update(float seconds_elapsed)
 		particleSystem.Update(seconds_elapsed);
 	}
 	*/
+	
+	if (cameraState == DRAW_SINGLE || cameraState == DRAW_MULTIPLE) {
+		entity1.modelMatrix.Rotate(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
 
-    entity1.modelMatrix.Rotate(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
+		float scale_factor = sin(time) * 0.5 + 1.0; // Oscila entre 0.5 y 1.5
+		entity2.modelMatrix.Scale(scale_factor, scale_factor, scale_factor);
 
-    float scale_factor = sin(time) * 0.5 + 1.0; // Oscila entre 0.5 y 1.5
-    entity2.modelMatrix.Scale(scale_factor, scale_factor, scale_factor);
-
-    entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
-
-    // Actualiza cada entidad
-    for (Entity& entity : entities) {
-        framebuffer.Fill(Color::BLACK);
-        entity.Update(seconds_elapsed);
-    }
-     
-     // Actualizar y dibujar las entidades dependiendo del estado actual
-    switch (currentState)
+		entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
+	}
+   
+    // Actualizar y dibujar las entidades dependiendo del estado actual
+    switch (cameraState)
     {
     case DRAW_SINGLE:
         // Dibujar una sola entidad
@@ -167,81 +156,43 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		exit(0);
 		break; // ESC key, kill the app
 	case SDLK_PLUS:
-        // Aumentamos el near o el far dependiendo del estado actual
-            if (currentState == CAMERA_NEAR){
-                camera.near_plane += 1.0f;
-                camera.UpdateProjectionMatrix();
-            }
-            else if (currentState == CAMERA_FAR){
-                camera.far_plane += 1.0f;
-                camera.UpdateProjectionMatrix();
-            }
+		if (cameraState == CAMERA_NEAR) {
+			camera.near_plane = std::min(camera.near_plane + 0.01f, camera.far_plane - 0.01f); // Incrementa de a poco el near_plane, asegurándose de que sea siempre menor que far_plane
+		} else if (cameraState == CAMERA_FAR) {
+			camera.far_plane += 0.1f; // Incrementa de a poco el far_plane
+		}
+		camera.UpdateProjectionMatrix();
 		break;
 	case SDLK_MINUS:
-        // Disminuimos el near o el far dependiendo del estado actual
-            if (currentState == CAMERA_NEAR){
-                camera.near_plane -= 1.0f;
-                camera.UpdateProjectionMatrix();
-            }
-            else if (currentState == CAMERA_FAR){
-                camera.far_plane -= 1.0f;
-                camera.UpdateProjectionMatrix();
-            }
+		if (cameraState == CAMERA_NEAR) {
+			camera.near_plane = std::max(0.01f, camera.near_plane - 0.01f); // Decrementa de a poco el near_plane, no permite que sea menor a 0.01
+		} else if (cameraState == CAMERA_FAR) {
+			camera.far_plane = std::max(camera.near_plane + 0.01f, camera.far_plane - 0.1f); // Decrementa de a poco el far_plane, asegurándose de que sea siempre mayor que near_plane
+		}
+		camera.UpdateProjectionMatrix();
 		break;
-	case SDLK_1:
-		/* Lab1: Dibujando lineas con DDA.
-		currentState = DRAWING_LINE;
-		puntos.clear();
-		*/
- 		// Cambiamos al estado DRAW_SINGLE
-        currentState = DRAW_SINGLE;
+    case SDLK_1:
+        cameraState = DRAW_SINGLE; // Cambia a dibujar una sola entidad
         break;
-		
-	case SDLK_2:
-		/*Lab1: Dibujando rectangulos.
-		currentState = DRAWING_RECTANGLE;
-		puntos.clear();
-		*/
-
-		// Cambiamos al estado DRAW_MULTIPLE
-        currentState = DRAW_MULTIPLE;
+    case SDLK_2:
+        cameraState = DRAW_MULTIPLE; // Cambia a dibujar entidades animadas
         break;
-	case SDLK_o:
-		/*Lab1: Dibujando circulos
-		currentState = DRAWING_CIRCLE;
-		puntos.clear();
-		*/
-		
-		// Establecemos el modo de camara ortográfico
+    case SDLK_o:
         camera.type = Camera::ORTHOGRAPHIC;
-        camera.UpdateProjectionMatrix();
-		break;
-	case SDLK_p:
-		/*Lab1: Dibuja triangulos
-		currentState = DRAWING_TRIANGLE;
-		puntos.clear();
-		*/
-
-		// Establecemos el modo de camara perspectiva
-        camera.type = Camera::PERSPECTIVE;
+		camera.SetOrthographic(-0.2, 0.2, 0.2, -0.2, near_plane, far_plane);
         camera.UpdateProjectionMatrix();
         break;
-
-	case SDLK_n:
-		/*Lab1: Modo libre
-		currentState = DRAWING_FREE;
-		puntos.clear();
-		*/
-		currentState == CAMERA_NEAR;
-		break;
-	case SDLK_f:
-		/*Lab1: Modo animacion
-		currentState = DRAWING_ANIMATION;
-		particleSystem.Init();
-		puntos.clear();
-		*/
-		currentState == CAMERA_FAR;
-		break;
+    case SDLK_p:
+        camera.type = Camera::PERSPECTIVE;
+		camera.SetPerspective(fov, aspect, near_plane, far_plane);
+        camera.UpdateProjectionMatrix();
+        break;
+    case SDLK_n:
+        cameraState = CAMERA_NEAR; // Ajustar el near plane
+        break;
+    case SDLK_f:
+        cameraState = CAMERA_FAR; // Ajustar el far plane
+        break;
 	case SDLK_b:
 		/*Lab1: Relleno
 		isFilled = !isFilled; // Ponemos el valor contrario
@@ -254,168 +205,37 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 {
 	// std::cout << "Mouse button pressed: " << (int)event.button << SDL_BUTTON_LEFT << std::endl;
-	clickedOnToolbarButton = false;
 
-	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
+	if ((int)event.button == SDL_BUTTON_RIGHT) // Miramos que sea el botón izquierdo
 	{
+        // Iniciar el seguimiento de la cámara
+        is_right_button_pressed = true;
+        last_mouse_x = event.x;
+        last_mouse_y = event.y;
+    }
+    else if (event.button == SDL_BUTTON_LEFT) // Botón izquierdo del ratón
+    {
+        // Iniciar el seguimiento del órbita
+        is_left_button_pressed = true;
+        last_mouse_x = event.x;
+        last_mouse_y = event.y;
+    }
 
-		for (Button &button : toolbarButtons) // Para cada boton creado de la toolbar comporoamos si se ha hecho click en el
-		{
-			if (button.IsMouseInside(mouse_position))
-			{
-				clickedOnToolbarButton = true;
-
-				// Usando el método getType() para obtener el tipo de botón
-				ButtonType type = button.GetType();
-
-				// Imprimir el tipo de botón
-				std::cout << "Click en el boton: ";
-				switch (type)
-				{
-				case BTN_CLEAR:
-					std::cout << "Clear";
-					framebuffer.Fill(Color::BLACK);
-					break;
-				case BTN_LOAD:
-					std::cout << "Load";
-					framebuffer.LoadPNG("../res/images/gos.png");
-					break;
-				case BTN_SAVE:
-					std::cout << "Save";
-					framebuffer.SaveTGA("../res/images/save.tga");
-					break;
-				case BTN_ERASER:
-					std::cout << "Eraser";
-					currentState = DRAWING_FREE;
-					drawingColor = Color::BLACK;
-					puntos.clear();
-					break;
-				case BTN_PAINT:
-					std::cout << "Paint";
-					currentState = DRAWING_FREE;
-					puntos.clear();
-					break;
-				case BTN_LINE:
-					std::cout << "Line";
-					currentState = DRAWING_LINE;
-					puntos.clear();
-					break;
-				case BTN_RECTANGLE:
-					std::cout << "Rectangle";
-					currentState = DRAWING_RECTANGLE;
-					puntos.clear();
-					break;
-				case BTN_CIRCLE:
-					std::cout << "Circle";
-					currentState = DRAWING_CIRCLE;
-					puntos.clear();
-					break;
-				case BTN_TRIANGLE:
-					std::cout << "Triangle";
-					currentState = DRAWING_TRIANGLE;
-					puntos.clear();
-					break;
-				case BTN_BLACK:
-					std::cout << "Black";
-					drawingColor = Color::BLACK;
-					break;
-				case BTN_WHITE:
-					std::cout << "White";
-					drawingColor = Color::WHITE;
-					break;
-				case BTN_PINK:
-					std::cout << "Pink";
-					drawingColor = Color::PURPLE;
-					break;
-				case BTN_YELLOW:
-					std::cout << "Yellow";
-					drawingColor = Color::YELLOW;
-					break;
-				case BTN_RED:
-					std::cout << "Red";
-					drawingColor = Color::RED;
-					break;
-				case BTN_BLUE:
-					std::cout << "Blue";
-					drawingColor = Color::BLUE;
-					break;
-				case BTN_CYAN:
-					std::cout << "Cyan";
-					drawingColor = Color::CYAN;
-					break;
-				case BTN_GREEN:
-					std::cout << "Green";
-					drawingColor = Color::GREEN;
-					break;
-				default:
-					std::cout << "Othero";
-				}
-				std::cout << std::endl; // Salto de linea
-				break;					// Un break para que no se siga ejecutando el bucle, ya que hemos encontrado el botón (no se puede hacer click a dos a la vez)
-			}
-		}
-
-		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && !clickedOnToolbarButton) // Si se está dibujando algo
-		{
-			if (currentState == DRAWING_TRIANGLE || puntos.size() == 0)
-			{
-				puntos.push_back(mouse_position);
-
-				tempbuffer = framebuffer; // Guardamos el framebuffer en el temporal
-				// Añadimos un punto al vector de puntos
-				std::cout << "Punto añadido: " << mouse_position.x << ", " << mouse_position.y << std::endl;
-				std::cout << "Puntos en el vector: " << puntos.size() << std::endl;
-				std::cout << "Estado actual: " << currentState << std::endl;
-				switch (currentState)
-				{
-                    case DRAWING_TRIANGLE:
-                        if (puntos.size() == 3)
-                        {
-                            framebuffer.DrawTriangle(puntos[0], puntos[1], puntos[2], drawingColor, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
-                            puntos.clear();
-                        }
-						break;
-                }
-			}
-		}
-	}
 }
+
 
 void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
 {
 	// std::cout << "Mouse button released: " << (int)event.button << std::endl;
 
-	if ((int)event.button == SDL_BUTTON_LEFT) // Miramos que sea el botón izquierdo
-	{
-		if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && currentState != DRAWING_TRIANGLE && !clickedOnToolbarButton)
-		{
-			puntos.push_back(mouse_position);
-
-			switch (currentState)
-			{
-			case DRAWING_LINE:
-				if (puntos.size() == 2)
-				{
-					puntos.clear();
-				}
-				break;
-			case DRAWING_RECTANGLE:
-				if (puntos.size() == 2)
-				{
-					puntos.clear();
-				}
-				break;
-			case DRAWING_CIRCLE:
-				if (puntos.size() == 2)
-				{
-					puntos.clear();
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	}
+    if (event.button == SDL_BUTTON_RIGHT) // Botón derecho del ratón
+    {
+        is_right_button_pressed = false;
+    }
+    else if (event.button == SDL_BUTTON_LEFT) // Botón izquierdo del ratón
+    {
+        is_left_button_pressed = false;
+    }
 }
 
 void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color &color)
@@ -443,46 +263,38 @@ void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color
 
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-	if (mouse_state == SDL_BUTTON_LEFT) // Miramos si se está pintando y si se está pintando libremente
-	{
-		if (currentState == DRAWING_FREE)
-		{
-			if (lastMousePosition.x != -1 && lastMousePosition.y != -1) // Miramos si es la primera vez que se pinta
-			{
-				// Dibuja círculos interpolados entre la última posición y la actual
-				DrawCirclesDDA(lastMousePosition, mouse_position, borderWidth / 2, drawingColor);
-			}
-		}
-		else if (currentState != NOT_DRAWING && currentState != DRAWING_FREE && currentState != DRAWING_TRIANGLE && !clickedOnToolbarButton)
-		{
-			if (currentState == DRAWING_LINE && !puntos.empty())
-			{
-				// Restaura el estado del framebuffer desde el buffer temporal.
-				framebuffer = tempbuffer;
+	if (is_right_button_pressed){
+		// Calcular el cambio de posición del ratón	
+		int delta_x = event.x - last_mouse_x;
+		int delta_y = event.y - last_mouse_y;
 
-				// Dibuja la nueva línea temporal.
-				framebuffer.DrawLineDDA(puntos[0].x, puntos[0].y, mouse_position.x, mouse_position.y, drawingColor);
-			}
-			else if (currentState == DRAWING_RECTANGLE && !puntos.empty())
-			{
-				// Restaura el estado del framebuffer desde el buffer temporal.
-				framebuffer = tempbuffer;
+		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
+		Vector3 up = camera.GetLocalVector(Vector3::UP);
+		Vector3 delta_position = right * (float)delta_x * 0.01f + up * (float)-delta_y * 0.01f;
 
-				// Dibuja la nueva línea temporal.
-				framebuffer.DrawRect(puntos[0].x, puntos[0].y, mouse_position.x - puntos[0].x, mouse_position.y - puntos[0].y, drawingColor, borderWidth, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
-			}
-			else if (currentState == DRAWING_CIRCLE && !puntos.empty())
-			{
-				framebuffer = tempbuffer;
-				framebuffer.DrawCircle(puntos[0].x, puntos[0].y, sqrt(pow(mouse_position.x - puntos[0].x, 2) + pow(mouse_position.y - puntos[0].y, 2)), drawingColor, borderWidth, isFilled, Color::GREEN); // Hardcodeamos el color del interior, para que podamos diferenciarlo del borde
-			}
-		}
+		camera.Move(delta_position);
 
-		lastMousePosition = mouse_position; // Cambiamos la última posición por la actual
+		camera.UpdateViewMatrix();
 	}
-	else // Si no se está pintando libremente, se resetea la última posición
+	else if (is_left_button_pressed) 
 	{
-		lastMousePosition = {-1, -1};
+		// Calcular el cambio de posición del ratón	
+		int delta_x = event.x - last_mouse_x;
+		int delta_y = event.y - last_mouse_y;
+
+		float rotation_speed = 0.01f; // Adjust the rotation speed as needed
+
+		Vector3 eye_direction = (camera.center - camera.eye).Normalize();
+		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
+		Vector3 up = camera.GetLocalVector(Vector3::UP);
+
+		Vector3 delta_rotation = right * (float)delta_x * rotation_speed + up * (float)-delta_y * rotation_speed;
+
+		framebuffer.Fill(Color::BLACK); // Agregar esta línea para borrar la última posición
+
+		camera.Rotate(delta_rotation.Length(), delta_rotation.Normalize());
+
+		camera.UpdateViewMatrix();
 	}
 }
 
@@ -493,14 +305,13 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 	// Añadimos limites para que no se pueda hacer infinitamente grande o pequeño, funcionalidad propia, para aumentar o disminuir el grosor del borde, en funcion de la rueda del ratón
 	if (dy > 0)
 	{
-		borderWidth = std::min(borderWidth + dy, (float)(MAX_BORDER_WIDTH));
+		camera.eye = camera.eye * 0,95;
 	}
 	else if (dy < 0)
 	{
-		borderWidth = std::max(borderWidth + dy, (float)(MIN_BORDER_WIDTH));
+		camera.eye = camera.eye * 1,05;
 	}
-
-	// ...
+	
 }
 
 void Application::OnFileChanged(const char *filename)
