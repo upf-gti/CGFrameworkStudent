@@ -149,11 +149,22 @@ void Application::Update(float seconds_elapsed)
 	}
 	*/
 
-    // Actualizar todas las entidades
-   for (Entity& entity : entities) {
-		framebuffer.Fill(Color::BLACK);
-		entity.Update(seconds_elapsed);
-   }
+     // Actualizar y dibujar las entidades dependiendo del estado actual
+    switch (currentState)
+    {
+    case DRAW_SINGLE:
+        // Dibujar una sola entidad
+        framebuffer.Fill(Color::BLACK);
+        entities[0].Update(seconds_elapsed);
+        break;
+    case DRAW_MULTIPLE:
+        // Dibujar múltiples entidades
+        for (Entity& entity : entities) {
+            framebuffer.Fill(Color::BLACK);
+            entity.Update(seconds_elapsed);
+        }
+        break;
+    }
 }
 
 // keyboard press event
@@ -171,57 +182,85 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		exit(0);
 		break; // ESC key, kill the app
 	case SDLK_PLUS:
-		if (borderWidth < MAX_BORDER_WIDTH)
-			borderWidth++; // Ponemos un limite por cuestiones de rendimiento
+        // Aumentamos el near o el far dependiendo del estado actual
+            if (currentState == CAMERA_NEAR){
+                camera.near_plane += 1.0f;
+                camera.UpdateProjectionMatrix();
+            }
+            else if (currentState == CAMERA_FAR){
+                camera.far_plane += 1.0f;
+                camera.UpdateProjectionMatrix();
+            }
 		break;
 	case SDLK_MINUS:
-		if (borderWidth > MIN_BORDER_WIDTH)
-			borderWidth--; // Debemos tener en cuenta que el borde no puede ser negativo
+        // Disminuimos el near o el far dependiendo del estado actual
+            if (currentState == CAMERA_NEAR){
+                camera.near_plane -= 1.0f;
+                camera.UpdateProjectionMatrix();
+            }
+            else if (currentState == CAMERA_FAR){
+                camera.far_plane -= 1.0f;
+                camera.UpdateProjectionMatrix();
+            }
 		break;
 	case SDLK_1:
 		/* Lab1: Dibujando lineas con DDA.
 		currentState = DRAWING_LINE;
 		puntos.clear();
 		*/
-
-		break;
+ 		// Cambiamos al estado DRAW_SINGLE
+        currentState = DRAW_SINGLE;
+        break;
+		
 	case SDLK_2:
 		/*Lab1: Dibujando rectangulos.
 		currentState = DRAWING_RECTANGLE;
 		puntos.clear();
 		*/
-		break;
-	case SDLK_3:
+
+		// Cambiamos al estado DRAW_MULTIPLE
+        currentState = DRAW_MULTIPLE;
+        break;
+	case SDLK_o:
 		/*Lab1: Dibujando circulos
 		currentState = DRAWING_CIRCLE;
 		puntos.clear();
 		*/
+		
+		// Establecemos el modo de camara ortográfico
+        camera.type = Camera::ORTHOGRAPHIC;
+        camera.UpdateProjectionMatrix();
 		break;
-	case SDLK_4:
+	case SDLK_p:
 		/*Lab1: Dibuja triangulos
 		currentState = DRAWING_TRIANGLE;
 		puntos.clear();
 		*/
-		break;
-	case SDLK_5:
+
+		// Establecemos el modo de camara perspectiva
+        camera.type = Camera::PERSPECTIVE;
+        camera.UpdateProjectionMatrix();
+        break;
+
+	case SDLK_n:
 		/*Lab1: Modo libre
 		currentState = DRAWING_FREE;
 		puntos.clear();
 		*/
+		currentState == CAMERA_NEAR;
 		break;
-	case SDLK_6:
+	case SDLK_f:
 		/*Lab1: Modo animacion
 		currentState = DRAWING_ANIMATION;
 		particleSystem.Init();
 		puntos.clear();
 		*/
+		currentState == CAMERA_FAR;
 		break;
-	case SDLK_f:
+	case SDLK_b:
 		/*Lab1: Relleno
 		isFilled = !isFilled; // Ponemos el valor contrario
 		*/
-		break;
-    case SDLK_b:
 		framebuffer.Fill(Color::BLACK);
 		break;
 	}

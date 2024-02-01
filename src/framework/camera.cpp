@@ -189,5 +189,5 @@ void Camera::SetExampleProjectionMatrix()
 
 	glGetFloatv(GL_PROJECTION_MATRIX, projection_matrix.m );
 	glMatrixMode(GL_MODELVIEW);
-}
+} 
 
