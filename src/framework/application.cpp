@@ -64,26 +64,32 @@ void Application::Init(void)
 	bool inactive = true;
 	*/
 
-	// Cargar la malla
-	Mesh * mesh = new Mesh();
-	mesh->LoadOBJ("meshes/lee.obj");
-
-	// Crear algunas entidades
-	Entity entity1, entity2, entity3;
+	// Cargar las 3 mallas
+	Mesh * mesh_lee = new Mesh();
+	mesh_lee->LoadOBJ("meshes/lee.obj");
+    
+    Mesh * mesh_anna = new Mesh();
+    mesh_anna->LoadOBJ("meshes/anna.obj");
+    
+    Mesh * mesh_cleo = new Mesh();
+    mesh_cleo->LoadOBJ("meshes/cleo.obj");
 
     // Asignar la malla a las entidades
-	entity1.mesh = *mesh;
-	entity2.mesh = *mesh;
-	entity3.mesh = *mesh;
+	entity1.mesh = *mesh_lee;
+	entity2.mesh = *mesh_anna;
+	entity3.mesh = *mesh_cleo;
 
 	// Establecer las matrices de modelo para posicionar las entidades
 	entity1.modelMatrix.Translate(0.0, 0, 0); // Simula una escala de 1x1x1
 	entity2.modelMatrix.Translate(-0.4, -0.2, 0); // Simula una escala de 2x2x2
-	entity3.modelMatrix.Translate(0.5, 0, 0); // Simula una escala de 3x3x3
+    entity3.modelMatrix.SetTranslation(-window_width / 2, 0, 0);// Simula una escala de 3x3x3
 
-
-	entity2.modelMatrix.Rotate(45 * DEG2RAD, Vector3(0, 1, 0)); // Rota 45 grados sobre el eje Y
-    entity3.modelMatrix.SetTranslation(0, 0, 0.5);
+    
+    // TODO: Añadir cámara y perspective (ya está creada globalmente, no la instancies otra vez)
+    
+    
+	/*entity2.modelMatrix.Rotate(45 * DEG2RAD, Vector3(0, 1, 0)); // Rota 45 grados sobre el eje Y
+    entity3.modelMatrix.SetTranslation(0, 0, 0.5);*/
 	
 	// Añadir las entidades a la lista
 	entities.push_back(entity1);
@@ -93,10 +99,10 @@ void Application::Init(void)
 
 void Application::Render(void)
 {
-	
-	for (Entity& entity : entities) {
-		entity.Render(&framebuffer, &camera, Color::WHITE);
-	}
+    //TODO: Aplicar la cámara creada anteriormente
+    entity1.Render(&framebuffer, &camera, Color::BLUE);
+    entity2.Render(&framebuffer, &camera, Color::YELLOW);
+    entity3.Render(&framebuffer, &camera, Color::RED);
 
 	framebuffer.Render(); // Renderizamos el framebuffer
 }
@@ -109,6 +115,21 @@ void Application::Update(float seconds_elapsed)
 		particleSystem.Update(seconds_elapsed);
 	}
 	*/
+
+    
+    //TODO: añadir las modificaciones necessarias para que queden bien
+    framebuffer.Fill(Color::BLACK);
+    entity1.modelMatrix.Rotate(10 * DEG2RAD, Vector3(0,1,0));
+    
+    //FIXME: Escalar i desescalar envez de rotar
+    entity2.modelMatrix.RotateLocal(10 * DEG2RAD, Vector3(0,1,0));
+    
+    entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
+    
+    /*for (Entity& entity : entities) {
+        framebuffer.Fill(Color::BLACK);
+        entity.Update(seconds_elapsed);
+    }*/
 
      // Actualizar y dibujar las entidades dependiendo del estado actual
     switch (currentState)
@@ -126,6 +147,7 @@ void Application::Update(float seconds_elapsed)
         }
         break;
     }
+
 }
 
 // keyboard press event
