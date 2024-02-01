@@ -46,19 +46,6 @@ void Camera::Move(Vector3 delta)
 	UpdateViewMatrix();
 }
 
-void Camera::Scale(float amount)
-{
-	// Cambiamos el campo de visión de la cámara
-	fov -= amount;
-
-	// Aseguramos de que el FOV se mantenga dentro de límites razonables
-	if (fov < 1.0f) fov = 1.0f;
-	if (fov > 179.0f) fov = 179.0f;
-
-	// Actualizar la matriz de proyección
-    UpdateViewMatrix();
-}
-
 void Camera::SetOrthographic(float left, float right, float top, float bottom, float near_plane, float far_plane)
 {
 	type = ORTHOGRAPHIC;

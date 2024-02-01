@@ -74,35 +74,39 @@ void Application::Init(void)
     Mesh * mesh_cleo = new Mesh();
     mesh_cleo->LoadOBJ("meshes/cleo.obj");
 
-    // Asignar la malla a las entidades
+	// Asignar la malla a las entidades
 	entity1.mesh = *mesh_lee;
 	entity2.mesh = *mesh_anna;
 	entity3.mesh = *mesh_cleo;
 
 	// Establecer las matrices de modelo para posicionar las entidades
-	entity1.modelMatrix.Translate(0.0, 0, 0); // Simula una escala de 1x1x1
-	entity2.modelMatrix.Translate(-0.4, -0.2, 0); // Simula una escala de 2x2x2
-    entity3.modelMatrix.SetTranslation(-window_width / 2, 0, 0);// Simula una escala de 3x3x3
+	entity1.modelMatrix.Translate(0, -0.2, 0); // Posiciona entity1
+	entity2.modelMatrix.Translate(0.4, -0.2, 0);  // Posiciona entity2 en el origen
+	entity3.modelMatrix.Translate(-0.1, -0.2 ,0); // Posiciona entity3
 
-    
-    // TODO: Añadir cámara y perspective (ya está creada globalmente, no la instancies otra vez)
-    
-    
-	/*entity2.modelMatrix.Rotate(45 * DEG2RAD, Vector3(0, 1, 0)); // Rota 45 grados sobre el eje Y
-    entity3.modelMatrix.SetTranslation(0, 0, 0.5);*/
-	
+	// Configuración de la cámara
+	float fov = 45.0f; // Campo de visión
+	float aspect = 1280.0 / 720.0; // Relación de aspecto
+	float near_plane = 0.01; // Plano cercano
+	float far_plane = 100.0; // Plano lejano
+
+	// Configurar la vista de la cámara y la perspectiva
+	camera.LookAt(Vector3(0, 0.2, 0.75), Vector3(0, 0.2, 0), Vector3(0,10,0));
+	camera.SetPerspective(fov, aspect, near_plane, far_plane);
+
 	// Añadir las entidades a la lista
 	entities.push_back(entity1);
 	entities.push_back(entity2);
 	entities.push_back(entity3);
+
 }
 
 void Application::Render(void)
 {
     //TODO: Aplicar la cámara creada anteriormente
-    entity1.Render(&framebuffer, &camera, Color::BLUE);
-    entity2.Render(&framebuffer, &camera, Color::YELLOW);
-    entity3.Render(&framebuffer, &camera, Color::RED);
+    entity1.Render(&framebuffer, &camera, Color::WHITE);
+    entity2.Render(&framebuffer, &camera, Color::RED);
+    entity3.Render(&framebuffer, &camera, Color::BLUE);
 
 	framebuffer.Render(); // Renderizamos el framebuffer
 }
@@ -116,21 +120,19 @@ void Application::Update(float seconds_elapsed)
 	}
 	*/
 
-    
-    //TODO: añadir las modificaciones necessarias para que queden bien
-    framebuffer.Fill(Color::BLACK);
-    entity1.modelMatrix.Rotate(10 * DEG2RAD, Vector3(0,1,0));
-    
-    //FIXME: Escalar i desescalar envez de rotar
-    entity2.modelMatrix.RotateLocal(10 * DEG2RAD, Vector3(0,1,0));
-    
+    entity1.modelMatrix.Rotate(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
+
+    float scale_factor = sin(time) * 0.5 + 1.0; // Oscila entre 0.5 y 1.5
+    entity2.modelMatrix.Scale(scale_factor, scale_factor, scale_factor);
+
     entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
-    
-    /*for (Entity& entity : entities) {
+
+    // Actualiza cada entidad
+    for (Entity& entity : entities) {
         framebuffer.Fill(Color::BLACK);
         entity.Update(seconds_elapsed);
-    }*/
-
+    }
+     
      // Actualizar y dibujar las entidades dependiendo del estado actual
     switch (currentState)
     {

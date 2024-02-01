@@ -47,7 +47,6 @@ public:
 	// Translate and rotate the camera
 	void Move(Vector3 delta);
 	void Rotate(float angle, const Vector3& axis);
-	void Scale(float amount);
 
 	// Transform a local camera vector to world coordinates
 	Vector3 GetLocalVector(const Vector3& v);
