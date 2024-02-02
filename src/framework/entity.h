@@ -2,10 +2,20 @@
 #include "image.h"
 #include "framework.h"
 
-class Entity {
-float time;
-    
+enum class eRenderMode
+{
+    POINTCLOUD,
+    WIREFRAME,
+    TRIANGLES,
+    TRIANGLES_INTERPOLATED
+};
+class Entity
+{
+
+    float time;
+
 public:
+    eRenderMode mode;
 
     std::vector<Vector3> lastTriangleVertices; // Almacenar la última posición de los vértices
 
@@ -19,22 +29,22 @@ public:
     Entity();
 
     // Constructor que toma una matriz de modelo
-    Entity(const Matrix44& modelMatrix);
+    Entity(const Matrix44 &modelMatrix);
 
     // Constructor que toma una malla
-    Entity(const Mesh& mesh);
+    Entity(const Mesh &mesh);
 
     // Constructor que toma una matriz de modelo y una malla
-    Entity(const Matrix44& modelMatrix, const Mesh& mesh);
+    Entity(const Matrix44 &modelMatrix, const Mesh &mesh);
 
     // Método para establecer la matriz del modelo
-    void setModelMatrix(const Matrix44& modelMatrix);
+    void setModelMatrix(const Matrix44 &modelMatrix);
 
     // Método para establecer la malla
-    void setMesh(const Mesh& mesh); 
+    void setMesh(const Mesh &mesh);
 
     // Método para renderizar la entidad
-    void Render(Image* framebuffer, Camera* camera, const Color& c);
+    void Render(Image *framebuffer, Camera *camera, const Color &c);
 
     void Update(float seconds_elapsed);
 };
