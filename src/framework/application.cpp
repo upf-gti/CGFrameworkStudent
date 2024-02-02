@@ -65,14 +65,14 @@ void Application::Init(void)
 	*/
 
 	// Cargar las 3 mallas
-	Mesh * mesh_lee = new Mesh();
+	Mesh *mesh_lee = new Mesh();
 	mesh_lee->LoadOBJ("meshes/lee.obj");
-    
-    Mesh * mesh_anna = new Mesh();
-    mesh_anna->LoadOBJ("meshes/anna.obj");
-    
-    Mesh * mesh_cleo = new Mesh();
-    mesh_cleo->LoadOBJ("meshes/cleo.obj");
+
+	Mesh *mesh_anna = new Mesh();
+	mesh_anna->LoadOBJ("meshes/anna.obj");
+
+	Mesh *mesh_cleo = new Mesh();
+	mesh_cleo->LoadOBJ("meshes/cleo.obj");
 
 	// Asignar la malla a las entidades
 	entity1.mesh = *mesh_lee;
@@ -80,48 +80,58 @@ void Application::Init(void)
 	entity3.mesh = *mesh_cleo;
 
 	// Establecer las matrices de modelo para posicionar las entidades
-	entity1.modelMatrix.Translate(0, -0.2, 0); // Posiciona entity1
-	entity2.modelMatrix.Translate(0.4, -0.2, 0);  // Posiciona entity2 en el origen
-	entity3.modelMatrix.Translate(-0.1, -0.2 ,0); // Posiciona entity3
+	entity1.modelMatrix.SetTranslation(0, 0.2, -0.4);	  // Posiciona entity1
+	entity2.modelMatrix.SetTranslation(-0.5, -0.1, -0.5); // Posiciona entity2 en el origen
+	entity3.modelMatrix.SetTranslation(0.3, -0.4, -0.5);  // Posiciona entity3
+
+	camera = new Camera();
 
 	// Configurar la vista de la cámara y la perspectiva
-	camera.LookAt(Vector3(0, 0.2, 0.75), Vector3(0, 0.2, 0), Vector3(0,10,0));
+	// camera->Move(Vector3(0, 0, 25)); // Mover la cámara hacia atrás
+	camera->LookAt(Vector3(0, 0.2, 0.75), Vector3(0, 0.2, 0), Vector3::UP);
+	camera->SetPerspective(fov, aspect, near_plane, far_plane);
 
 	// Añadir las entidades a la lista
 	entities.push_back(entity1);
 	entities.push_back(entity2);
 	entities.push_back(entity3);
-
 }
 
 void Application::Render(void)
 {
-    //TODO: Aplicar la cámara creada anteriormente
-    entity1.Render(&framebuffer, &camera, Color::WHITE);
-    entity2.Render(&framebuffer, &camera, Color::RED);
-    entity3.Render(&framebuffer, &camera, Color::BLUE);
+	if (cameraState == DRAW_SINGLE)
+	{
+		entity1.Render(&framebuffer, camera, Color::WHITE);
+	}
+	else if (cameraState == DRAW_MULTIPLE)
+	{
+		entity1.Render(&framebuffer, camera, Color::WHITE);
+		entity2.Render(&framebuffer, camera, Color::RED);
+		entity3.Render(&framebuffer, camera, Color::BLUE);
+	}
 
 	framebuffer.Render(); // Renderizamos el framebuffer
 }
 
 void Application::Update(float seconds_elapsed)
-{	
-	/* Lab1 
+{
+	/* Lab1
 	if (currentState == DRAWING_ANIMATION)
 	{
 		particleSystem.Update(seconds_elapsed);
 	}
 	*/
-	
-	if (cameraState == DRAW_SINGLE || cameraState == DRAW_MULTIPLE) {
-		entity1.modelMatrix.Rotate(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
+
+	if (cameraState == DRAW_MULTIPLE)
+	{
+		entity1.modelMatrix.RotateLocal(seconds_elapsed * 10 * DEG2RAD, Vector3(0, 1, 0));
 
 		float current_scale = 1.0f; // Factor de escala inicial
-		float scale_speed = 0.01f; // Velocidad de cambio de la escala
-		float min_scale = 0.5f; // Escala mínima
-		float max_scale = 3.0f; // Escala máxima
+		float scale_speed = 0.01f;	// Velocidad de cambio de la escala
+		float min_scale = 0.5f;		// Escala mínima
+		float max_scale = 3.0f;		// Escala máxima
 
-		 // Calculamos el cambio de escala basado en el tiempo
+		// Calculamos el cambio de escala basado en el tiempo
 		float scale_change = sin(time) * scale_speed;
 		current_scale += scale_change;
 
@@ -131,29 +141,29 @@ void Application::Update(float seconds_elapsed)
 		// Aplicar la escala a la entidad
 		entity2.modelMatrix.Scale(current_scale, current_scale, current_scale);
 
-		// Reducimos la velocidad 
+		// Reducimos la velocidad
 		scale_speed *= 0.99f;
 
 		entity3.modelMatrix.Translate(0.01 * sin(time), 0, 0);
 	}
-   
-    // Actualizar y dibujar las entidades dependiendo del estado actual
-    switch (cameraState)
-    {
-    case DRAW_SINGLE:
-        // Dibujar una sola entidad
-        framebuffer.Fill(Color::BLACK);
-        entities[0].Update(seconds_elapsed);
-        break;
-    case DRAW_MULTIPLE:
-        // Dibujar múltiples entidades
-        for (Entity& entity : entities) {
-            framebuffer.Fill(Color::BLACK);
-            entity.Update(seconds_elapsed);
-        }
-        break;
-    }
 
+	// Actualizar y dibujar las entidades dependiendo del estado actual
+	switch (cameraState)
+	{
+	case DRAW_SINGLE:
+		// Dibujar una sola entidad
+		framebuffer.Fill(Color::BLACK);
+		entities[0].Update(seconds_elapsed);
+		break;
+	case DRAW_MULTIPLE:
+		// Dibujar múltiples entidades
+		for (Entity &entity : entities)
+		{
+			framebuffer.Fill(Color::BLACK);
+			entity.Update(seconds_elapsed);
+		}
+		break;
+	}
 }
 
 // keyboard press event
@@ -171,47 +181,64 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		exit(0);
 		break; // ESC key, kill the app
 	case SDLK_PLUS:
-		if (cameraState == CAMERA_NEAR) {
-			camera.near_plane = std::min(camera.near_plane + 0.01f, camera.far_plane - 0.01f); // Incrementa de a poco el near_plane, asegurándose de que sea siempre menor que far_plane
-		} else if (cameraState == CAMERA_FAR) {
-			camera.far_plane += 0.1f; // Incrementa de a poco el far_plane
-		}else if (camera.type == Camera::PERSPECTIVE) {
-        	camera.fov = std::min(179.0f, camera.fov + 0.001f); // Incrementa el FOV, asegurándose de que no sea mayor a 179
-    	}
-		camera.UpdateProjectionMatrix();
+		if (propertyState == CAMERA_NEAR)
+		{
+			camera->near_plane = std::min(camera->near_plane + 0.15f, camera->far_plane - 0.15f); // Incrementa de a poco el near_plane, asegurándose de que sea siempre menor que far_plane
+		}
+		else if (propertyState == CAMERA_FAR)
+		{
+			camera->far_plane += camera->far_plane = std::max(camera->near_plane + 0.2f, camera->far_plane); // Incrementa de a poco el far_plane
+		}
+		else if (camera->type == Camera::PERSPECTIVE)
+		{
+			camera->fov = std::min(179.0f, camera->fov + 3.0f); // Incrementa el FOV, asegurándose de que no sea mayor a 179
+		}
+		camera->UpdateProjectionMatrix();
 		break;
 	case SDLK_MINUS:
-		if (cameraState == CAMERA_NEAR) {
-			camera.near_plane = std::max(0.01f, camera.near_plane - 0.01f); // Decrementa de a poco el near_plane, no permite que sea menor a 0.01
-		} else if (cameraState == CAMERA_FAR) {
-			camera.far_plane = std::max(camera.near_plane + 0.01f, camera.far_plane - 0.1f); // Decrementa de a poco el far_plane, asegurándose de que sea siempre mayor que near_plane
-		}else if (camera.type == Camera::PERSPECTIVE) {
-        	camera.fov = std::max(1.0f, camera.fov - 0.01f); // Decrementa el FOV en incrementos más pequeños
-    	}
-		camera.UpdateProjectionMatrix();
+		if (propertyState == CAMERA_NEAR)
+		{
+			camera->near_plane = std::max(0.15f, camera->near_plane - 0.15f); // Decrementa de a poco el near_plane, no permite que sea menor a 0.01
+		}
+		else if (propertyState == CAMERA_FAR)
+		{
+			camera->far_plane = std::max(camera->near_plane + 0.2f, camera->far_plane - 0.2f); // Decrementa de a poco el far_plane, asegurándose de que sea siempre mayor que near_plane
+		}
+		else if (camera->type == Camera::PERSPECTIVE)
+		{
+			camera->fov = std::max(1.0f, camera->fov - 3.0f); // Decrementa el FOV en incrementos más pequeños
+		}
+		camera->UpdateProjectionMatrix();
 		break;
-    case SDLK_1:
-        cameraState = DRAW_SINGLE; // Cambia a dibujar una sola entidad
-        break;
-    case SDLK_2:
-        cameraState = DRAW_MULTIPLE; // Cambia a dibujar entidades animadas
-        break;
-    case SDLK_o:
-        camera.type = Camera::ORTHOGRAPHIC;
-		camera.SetOrthographic(-0.2, 0.2, 0.2, -0.2, near_plane, far_plane);
-        camera.UpdateProjectionMatrix();
-        break;
-    case SDLK_p:
-        camera.type = Camera::PERSPECTIVE;
-		camera.SetPerspective(fov, aspect, near_plane, far_plane);
-        camera.UpdateProjectionMatrix();
-        break;
-    case SDLK_n:
-        cameraState = CAMERA_NEAR; // Ajustar el near plane
-        break;
-    case SDLK_f:
-        cameraState = CAMERA_FAR; // Ajustar el far plane
-        break;
+	case SDLK_1:
+		cameraState = DRAW_SINGLE; // Cambia a dibujar una sola entidad
+		break;
+	case SDLK_2:
+		cameraState = DRAW_MULTIPLE; // Cambia a dibujar entidades animadas
+		break;
+	case SDLK_o:
+	{
+		camera->type = Camera::ORTHOGRAPHIC;
+
+		float aspect_ratio = static_cast<float>(window_width) / static_cast<float>(window_height);
+		float ortho_size = 1.0f;
+
+		camera->SetOrthographic(-ortho_size * aspect_ratio, ortho_size * aspect_ratio, -ortho_size, ortho_size, camera->near_plane, camera->far_plane);
+		camera->UpdateProjectionMatrix();
+		break;
+	}
+	case SDLK_p:
+		camera->type = Camera::PERSPECTIVE;
+		propertyState = CAMERA_NONE;
+		camera->SetPerspective(camera->fov, static_cast<float>(window_width) / static_cast<float>(window_height), camera->near_plane, camera->far_plane);
+		camera->UpdateProjectionMatrix();
+		break;
+	case SDLK_n:
+		propertyState = CAMERA_NEAR; // Ajustar el near plane
+		break;
+	case SDLK_f:
+		propertyState = CAMERA_FAR; // Ajustar el far plane
+		break;
 	case SDLK_b:
 		/*Lab1: Relleno
 		isFilled = !isFilled; // Ponemos el valor contrario
@@ -224,37 +251,11 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 void Application::OnMouseButtonDown(SDL_MouseButtonEvent event)
 {
 	// std::cout << "Mouse button pressed: " << (int)event.button << SDL_BUTTON_LEFT << std::endl;
-
-	if ((int)event.button == SDL_BUTTON_RIGHT) // Miramos que sea el botón izquierdo
-	{
-        // Iniciar el seguimiento de la cámara
-        is_right_button_pressed = true;
-        last_mouse_x = event.x;
-        last_mouse_y = event.y;
-    }
-    else if (event.button == SDL_BUTTON_LEFT) // Botón izquierdo del ratón
-    {
-        // Iniciar el seguimiento del órbita
-        is_left_button_pressed = true;
-        last_mouse_x = event.x;
-        last_mouse_y = event.y;
-    }
-
 }
-
 
 void Application::OnMouseButtonUp(SDL_MouseButtonEvent event)
 {
 	// std::cout << "Mouse button released: " << (int)event.button << std::endl;
-
-    if (event.button == SDL_BUTTON_RIGHT) // Botón derecho del ratón
-    {
-        is_right_button_pressed = false;
-    }
-    else if (event.button == SDL_BUTTON_LEFT) // Botón izquierdo del ratón
-    {
-        is_left_button_pressed = false;
-    }
 }
 
 void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color &color)
@@ -282,39 +283,58 @@ void Application::DrawCirclesDDA(Vector2 p0, Vector2 p1, int radius, const Color
 
 void Application::OnMouseMove(SDL_MouseButtonEvent event)
 {
-	if (is_right_button_pressed){
-		// Calcular el cambio de posición del ratón	
-		int delta_x = event.x - last_mouse_x;
-		int delta_y = event.y - last_mouse_y;
-
-		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
-		Vector3 up = camera.GetLocalVector(Vector3::UP);
-		Vector3 delta_position = right * (float)delta_x * 0.001f + up * (float)-delta_y * 0.001f;
-
-		camera.Move(delta_position);
-
-		camera.UpdateViewMatrix();
-	}
-	else if (is_left_button_pressed) 
+	if (mouse_state == SDL_BUTTON_RIGHT || mouse_state == SDL_BUTTON_X1)
 	{
-		// Calcular el cambio de posición del ratón	
+		// Calcular el cambio de posición del ratón
 		int delta_x = event.x - last_mouse_x;
 		int delta_y = event.y - last_mouse_y;
 
-		float rotation_speed = 0.001f; // Adjust the rotation speed as needed
+		// Calcular el vector de desplazamiento en el espacio del mundo
+		Vector3 right = camera->GetLocalVector(Vector3::RIGHT);
+		Vector3 up = camera->GetLocalVector(Vector3::UP);
+		Vector3 delta_position = right * (float)delta_x * 0.001f - up * (float)delta_y * 0.001f;
 
-		Vector3 eye_direction = (camera.center - camera.eye).Normalize();
-		Vector3 right = camera.GetLocalVector(Vector3::RIGHT);
-		Vector3 up = camera.GetLocalVector(Vector3::UP);
+		// Mover el centro de la cámara basándose en el desplazamiento calculado
+		camera->center = camera->center + delta_position;
 
-		Vector3 delta_rotation = right * (float)delta_x * rotation_speed + up * (float)-delta_y * rotation_speed;
-
-		framebuffer.Fill(Color::BLACK); // Agregar esta línea para borrar la última posición
-
-		camera.Rotate(delta_rotation.Length(), delta_rotation.Normalize());
-
-		camera.UpdateViewMatrix();
+		camera->UpdateViewMatrix();
 	}
+	else if (mouse_state == SDL_BUTTON_LEFT)
+	{
+		int delta_x = event.x - last_mouse_x;
+		int delta_y = event.y - last_mouse_y;
+
+		float angle_y = delta_x * 0.08;
+		float angle_x = -delta_y * 0.05;
+
+		// Calcular la nueva posición de 'eye' para la rotación horizontal
+		Vector3 center_to_eye = camera->eye - camera->center;
+		Vector3 horizontal_axis = Vector3::UP; // Eje de rotación horizontal (arriba global)
+
+		// Rotar 'center_to_eye' alrededor del eje Y global
+		Matrix44 rot_y;
+		rot_y.SetIdentity();
+		rot_y.Rotate(angle_y, horizontal_axis);
+		center_to_eye = rot_y.RotateVector(center_to_eye);
+
+		// Calcular eje de rotación vertical (perpendicular a 'center_to_eye' y 'UP')
+		Vector3 vertical_axis = center_to_eye.Cross(Vector3::UP).Normalize();
+
+		// Rotar 'center_to_eye' alrededor del nuevo eje vertical
+		Matrix44 rot_x;
+		rot_x.SetIdentity();
+		rot_x.Rotate(angle_x, vertical_axis);
+		center_to_eye = rot_x.RotateVector(center_to_eye);
+
+		// Actualizar 'eye' con la nueva posición calculada
+		camera->eye = camera->center + center_to_eye;
+
+		camera->UpdateViewMatrix();
+	}
+
+	// Actualizar la posición anterior del ratón
+	last_mouse_x = event.x;
+	last_mouse_y = event.y;
 }
 
 void Application::OnWheel(SDL_MouseWheelEvent event)
@@ -324,13 +344,12 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 	// Añadimos limites para que no se pueda hacer infinitamente grande o pequeño, funcionalidad propia, para aumentar o disminuir el grosor del borde, en funcion de la rueda del ratón
 	if (dy > 0)
 	{
-		camera.eye = camera.eye * 0,95;
+		camera->eye = camera->eye * 0, 95;
 	}
 	else if (dy < 0)
 	{
-		camera.eye = camera.eye * 1,05;
+		camera->eye = camera->eye * 1, 05;
 	}
-	
 }
 
 void Application::OnFileChanged(const char *filename)

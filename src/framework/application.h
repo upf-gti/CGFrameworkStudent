@@ -12,7 +12,6 @@
 #include "entity.h"
 #include "camera.h"
 
-
 // Necesitamos un estado para saber si estamos dibujando o no y el que
 enum DrawingState
 {
@@ -25,12 +24,17 @@ enum DrawingState
 	DRAWING_ANIMATION,
 };
 
-enum CameraState{
+enum CameraState
+{
+	DRAW_SINGLE,
+	DRAW_MULTIPLE
+};
+
+enum PropertyState
+{
 	CAMERA_NEAR,
 	CAMERA_FAR,
-	CAMERA_NONE,
-	DRAW_SINGLE,
-    DRAW_MULTIPLE
+	CAMERA_NONE
 };
 
 // Constantes para el tamaño del borde
@@ -71,7 +75,7 @@ public:
 	Entity entity1, entity2, entity3;
 
 	// Declarar y crear una cámara
-	Camera camera;
+	Camera *camera;
 
 	// Constructor and main methods
 	Application(const char *caption, int width, int height);
@@ -112,7 +116,7 @@ public:
 	std::vector<Vector2> puntos;
 
 	// Lista de entidades para almacenar los dibujos
-	std::vector<Entity> entities;  
+	std::vector<Entity> entities;
 
 	void DrawCirclesDDA(Vector2 start, Vector2 end, int radius, const Color &color);
 	// Última posición del ratón para pintar y que no se vea el trazo
@@ -124,16 +128,15 @@ public:
 	Image tempbuffer;
 
 	// Estado de la camara
-	CameraState cameraState = CAMERA_NONE;
+	CameraState cameraState;
+	PropertyState propertyState = CAMERA_NONE;
 
 	// Configuración de la cámara
-	float fov = 45.0f; // Campo de visión
-	float aspect = 1280.0 / 720.0; // Relación de aspecto
-	float near_plane = 0.01; // Plano cercano
-	float far_plane = 100.0; // Plano lejano
+	float fov = 45.0f;							 // Campo de visión
+	float aspect = window_width / window_height; // Relación de aspecto
+	float near_plane = 0.01;					 // Plano cercano
+	float far_plane = 100.0;					 // Plano lejano
 
 	// Variables para rastrear la posición previa del ratón
 	int last_mouse_x, last_mouse_y;
-	bool is_right_button_pressed = false;
-	bool is_left_button_pressed = false;
 };
