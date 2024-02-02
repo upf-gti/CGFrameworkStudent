@@ -32,7 +32,7 @@ void Entity::setMesh(const Mesh &mesh)
     this->mesh = mesh;
 }
 
-void Entity::Render(Image *framebuffer, Camera *camera, FloatImage *zBuffer)
+void Entity::Render(Image *framebuffer, Camera *camera, Color c, FloatImage *zBuffer)
 {
     // Lab 3 : Texturas en la malla
     if (texture == nullptr)
@@ -82,10 +82,13 @@ void Entity::Render(Image *framebuffer, Camera *camera, FloatImage *zBuffer)
         }
 
         // TODO: 1. Pintar los triangulos con el color c
+
+        framebuffer->DrawTriangle(Vector2(triangleVertices[0].x, triangleVertices[0].y), Vector2(triangleVertices[1].x, triangleVertices[1].y), Vector2(triangleVertices[2].x, triangleVertices[2].y), Color::WHITE, true, Color::WHITE);
+
         // Dibujar las líneas del triángulo
-        framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), c);
-        framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), c);
-        framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), c);
+        // framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), c);
+        // framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), c);
+        // framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), c);
     }
 }
 

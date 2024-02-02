@@ -48,7 +48,7 @@ public:
     void setMesh(const Mesh &mesh);
 
     // Método para renderizar la entidad
-    void Render(Image *framebuffer, Camera *camera, FloatImage *zBuffer);
+    void Render(Image *framebuffer, Camera *camera, Color c, FloatImage *zBuffer = nullptr);
 
     void Update(float seconds_elapsed);
 };
