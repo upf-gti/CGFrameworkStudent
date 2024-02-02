@@ -83,7 +83,7 @@ void Entity::Render(Image *framebuffer, Camera *camera, Color c, FloatImage *zBu
 
         // TODO: 1. Pintar los triangulos con el color c
 
-        framebuffer->DrawTriangle(Vector2(triangleVertices[0].x, triangleVertices[0].y), Vector2(triangleVertices[1].x, triangleVertices[1].y), Vector2(triangleVertices[2].x, triangleVertices[2].y), Color::WHITE, true, Color::WHITE);
+        framebuffer->DrawTriangle(Vector2(triangleVertices[0].x, triangleVertices[0].y), Vector2(triangleVertices[1].x, triangleVertices[1].y), Vector2(triangleVertices[2].x, triangleVertices[2].y), Color::WHITE, true, c);
 
         // Dibujar las líneas del triángulo
         // framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), c);

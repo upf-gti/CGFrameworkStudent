@@ -359,11 +359,11 @@ void Application::OnWheel(SDL_MouseWheelEvent event)
 	// Añadimos limites para que no se pueda hacer infinitamente grande o pequeño, funcionalidad propia, para aumentar o disminuir el grosor del borde, en funcion de la rueda del ratón
 	if (dy > 0)
 	{
-		camera->eye = camera->eye * 0, 95;
+		camera->eye = camera->eye * 0.95;
 	}
 	else if (dy < 0)
 	{
-		camera->eye = camera->eye * 1, 05;
+		camera->eye = camera->eye * 1.05;
 	}
 }
 
