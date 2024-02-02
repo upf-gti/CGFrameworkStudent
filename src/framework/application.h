@@ -139,4 +139,11 @@ public:
 
 	// Variables para rastrear la posición previa del ratón
 	int last_mouse_x, last_mouse_y;
+
+	// Lab3: Toogle para plainColor o interpolation
+	bool plainColor = true;
+	// Lab3: Toggle para occlusion
+	bool occlusion = false;
+	// Lab3: Toggle para mesh texture o plain color
+	bool meshTexture = false;
 };

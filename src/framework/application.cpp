@@ -245,6 +245,20 @@ void Application::OnKeyPressed(SDL_KeyboardEvent event)
 		*/
 		framebuffer.Fill(Color::BLACK);
 		break;
+
+	/*Lab 3 Keybindings*/
+	case SDLK_c:
+		// Cambiamos al valor contrario de plainColor
+		plainColor = !plainColor;
+		break;
+	case SDLK_z:
+		// Cambiamos al valor contrario de occlusion
+		occlusion = !occlusion;
+		break;
+	case SDLK_t:
+		// Cambiamos al valor contrario de meshTexture
+		meshTexture = !meshTexture;
+		break;
 	}
 }
 
