@@ -89,7 +89,7 @@ void Application::Init(void)
 	// Configurar la vista de la cámara y la perspectiva
 	// camera->Move(Vector3(0, 0, 25)); // Mover la cámara hacia atrás
 	camera->LookAt(Vector3(0, 0.2, 0.75), Vector3(0, 0.2, 0), Vector3::UP);
-	camera->SetPerspective(fov, aspect, near_plane, far_plane);
+	camera->SetPerspective(fov, aspect, near_plane, far_plane); // Iniciamos Perpsective por defecto
 
 	// Añadir las entidades a la lista
 	entities.push_back(entity1);
@@ -294,7 +294,8 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 		Vector3 up = camera->GetLocalVector(Vector3::UP);
 		Vector3 delta_position = right * (float)delta_x * 0.001f - up * (float)delta_y * 0.001f;
 
-		// Mover el centro de la cámara basándose en el desplazamiento calculado
+		// Mover el centro de la cámara basándose en el desplazamiento calculada
+
 		camera->center = camera->center + delta_position;
 
 		camera->UpdateViewMatrix();
@@ -304,7 +305,7 @@ void Application::OnMouseMove(SDL_MouseButtonEvent event)
 		int delta_x = event.x - last_mouse_x;
 		int delta_y = event.y - last_mouse_y;
 
-		float angle_y = delta_x * 0.08;
+		float angle_y = delta_x * 0.08; // Escalamos valores para que no se rote muy rápido
 		float angle_x = -delta_y * 0.05;
 
 		// Calcular la nueva posición de 'eye' para la rotación horizontal
