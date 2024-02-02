@@ -472,6 +472,11 @@ void Image::DrawTriangle(const Vector2 &p0, const Vector2 &p1, const Vector2 &p2
 	DrawLineDDA(p2.x, p2.y, p0.x, p0.y, borderColor);
 }
 
+void Image::DrawTriangleInterpolated(const Vector3 &p0, const Vector3 &p1, const Vector3 &p2, const Color &c0, const Color &c1, const Color &c2, FloatImage *zbuffer, Image *texture, const Vector2 &uv0, const Vector2 &uv1, const Vector2 &uv2)
+{
+	// TODO: 2. Implementación de Triangle Interpolated and 3.add zbuffer and 4.textures
+}
+
 void Image::DrawImage(const Image &image, int x, int y, bool top)
 {
 	// Calcular la coordenada Y de inicio basándose en el parámetro 'top'

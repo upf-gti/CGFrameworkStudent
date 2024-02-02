@@ -32,8 +32,18 @@ void Entity::setMesh(const Mesh &mesh)
     this->mesh = mesh;
 }
 
-void Entity::Render(Image *framebuffer, Camera *camera, const Color &c)
+void Entity::Render(Image *framebuffer, Camera *camera, FloatImage *zBuffer)
 {
+    // Lab 3 : Texturas en la malla
+    if (texture == nullptr)
+    {
+        // Use colors!
+    }
+    else
+    {
+        // Use texture!
+    }
+
     // Obtener los vértices de la malla
     const std::vector<Vector3> &vertices = mesh.GetVertices();
 
@@ -70,6 +80,8 @@ void Entity::Render(Image *framebuffer, Camera *camera, const Color &c)
         {
             continue;
         }
+
+        // TODO: 1. Pintar los triangulos con el color c
         // Dibujar las líneas del triángulo
         framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[0].x), static_cast<int>(triangleVertices[0].y), static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), c);
         framebuffer->DrawLineDDA(static_cast<int>(triangleVertices[1].x), static_cast<int>(triangleVertices[1].y), static_cast<int>(triangleVertices[2].x), static_cast<int>(triangleVertices[2].y), c);

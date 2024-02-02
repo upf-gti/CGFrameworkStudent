@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "image.h"
 #include "framework.h"
+#include "texture.h"
 
 enum class eRenderMode
 {
@@ -25,6 +26,9 @@ public:
     // Malla
     Mesh mesh;
 
+    // Lab 3: Texture for the entity
+    Texture *texture;
+
     // Constructor por defecto
     Entity();
 
@@ -44,7 +48,7 @@ public:
     void setMesh(const Mesh &mesh);
 
     // Método para renderizar la entidad
-    void Render(Image *framebuffer, Camera *camera, const Color &c);
+    void Render(Image *framebuffer, Camera *camera, FloatImage *zBuffer);
 
     void Update(float seconds_elapsed);
 };
