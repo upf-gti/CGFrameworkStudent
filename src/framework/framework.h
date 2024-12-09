@@ -85,7 +85,7 @@ public:
 
 	void set(float x, float y) { this->x = x; this->y = y; }
 
-	Vector2& normalize() { *this *= (float)length(); return *this; }
+	Vector2& normalize() { *this *= 1 / (float)length(); return *this; }
 
 	float Distance(const Vector2& v);
 	void Random(float range);
