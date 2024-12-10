@@ -126,7 +126,7 @@ void Camera::UpdateProjectionMatrix()
 
 void Camera::UpdateViewProjectionMatrix()
 {
-	viewprojection_matrix = view_matrix * projection_matrix;
+	viewprojection_matrix = projection_matrix * view_matrix;
 }
 
 Matrix44 Camera::GetViewProjectionMatrix()
@@ -161,4 +161,3 @@ void Camera::SetExampleProjectionMatrix()
 	glGetFloatv(GL_PROJECTION_MATRIX, projection_matrix.m );
 	glMatrixMode(GL_MODELVIEW);
 }
-

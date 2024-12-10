@@ -85,7 +85,7 @@ public:
 
 	void set(float x, float y) { this->x = x; this->y = y; }
 
-	Vector2& normalize() { *this *= 1 / (float)length(); return *this; }
+	Vector2& normalize() { *this *= 1/(float)length(); return *this; }
 
 	float Distance(const Vector2& v);
 	void Random(float range);
@@ -165,16 +165,16 @@ class Matrix44
 {
 	public:
 
-		// This matrix works in 
+		// Memory column-major, math column-vectors. (M * p)
 		union { // Allows to access the same var using different ways
 			struct
 			{
-				float        _11, _12, _13, _14;
-				float        _21, _22, _23, _24;
-				float        _31, _32, _33, _34;
-				float        _41, _42, _43, _44;
+				float        _11, _12, _13, _14;	// column 1 (left)
+				float        _21, _22, _23, _24;	// column 2
+				float        _31, _32, _33, _34;	// column 3
+				float        _41, _42, _43, _44;	// column 4 (right)
 			};
-			float M[4][4]; // [row][column]
+			float M[4][4]; // [column][row]
 			float m[16];
 		};
 

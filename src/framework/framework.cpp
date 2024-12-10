@@ -168,14 +168,14 @@ void Matrix44::Translate(float x, float y, float z)
 {
 	Matrix44 T;
 	T.SetTranslation(x, y, z);
-	*this = *this * T;
+	*this = T * (*this);
 }
 
 void Matrix44::Rotate( float angle_in_rad, const Vector3& axis )
 {
 	Matrix44 R;
 	R.SetRotation(angle_in_rad, axis);
-	*this = *this * R;
+	*this = R * (*this);
 }
 
 Vector3 Matrix44::RotateVector(const Vector3& v)
@@ -191,14 +191,14 @@ void Matrix44::TranslateLocal(float x, float y, float z)
 {
 	Matrix44 T;
 	T.SetTranslation(x, y, z);
-	*this = T * *this;
+	*this = *this * T;
 }
 
 void Matrix44::RotateLocal( float angle_in_rad, const Vector3& axis )
 {
 	Matrix44 R;
 	R.SetRotation(angle_in_rad, axis);
-	*this = R * *this;
+	*this = *this * R;
 }
 
 //To create a traslation matrix
@@ -211,9 +211,8 @@ void Matrix44::SetTranslation(float x, float y, float z)
 }
 
 //To create a rotation matrix
-void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis  )
+void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis )
 {
-	Clear();
 	Vector3 axis_n = axis;
 	axis_n.Normalize();
 
@@ -221,19 +220,28 @@ void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis  )
 	float s = sin( angle_in_rad );
 	float t = 1 - c;
 
-	M[0][0] = t * axis.x * axis.x + c;
-	M[0][1] = t * axis.x * axis.y - s * axis.z;
-	M[0][2] = t * axis.x * axis.z + s * axis.y;
+	// first column
+	m[0] = t * axis.x * axis.x + c;
+	m[1] = t * axis.x * axis.y + s * axis.z;
+	m[2] = t * axis.x * axis.z - s * axis.y;
+	m[3] = 0;
 
-	M[1][0] = t * axis.x * axis.y + s * axis.z;
-	M[1][1] = t * axis.y * axis.y + c;
-	M[1][2] = t * axis.y * axis.z - s * axis.x;
+	// second column
+	m[4] = t * axis.x * axis.y - s * axis.z;
+	m[5] = t * axis.y * axis.y + c;
+	m[6] = t * axis.y * axis.z + s * axis.x;
+	m[7] = 0;
 
-	M[2][0] = t * axis.x * axis.z - s * axis.y;
-	M[2][1] = t * axis.y * axis.z + s * axis.x;
-	M[2][2] = t * axis.z * axis.z + c;
+	// third column
+	m[8] = t * axis.x * axis.z + s * axis.y;
+	m[9] = t * axis.y * axis.z - s * axis.x;
+	m[10] = t * axis.z * axis.z + c;
+	m[11] = 0;
 
-	M[3][3] = 1.0f;
+	m[12] = 0;
+	m[13] = 0;
+	m[14] = 0;
+	m[15] = 1;
 }
 
 Matrix44 Matrix44::GetRotationOnly()
@@ -294,13 +302,13 @@ Matrix44 Matrix44::operator*(const Matrix44& matrix) const
 	Matrix44 ret;
 
 	unsigned int i,j,k;
-	for (i=0;i<4;i++) 	
+	for (i=0;i<4;i++)
 	{
-		for (j=0;j<4;j++) 
+		for (j=0;j<4;j++)
 		{
 			ret.M[i][j]=0.0;
 			for (k=0;k<4;k++) 
-				ret.M[i][j] += M[i][k] * matrix.M[k][j];
+				ret.M[i][j] += M[k][j] * matrix.M[i][k];
 		}
 	}
 
@@ -356,8 +364,8 @@ Vector3 Matrix44::ProjectVector(Vector3 v)
    return Vector3(x/z, y/z, z);
 }
 
-//Multiplies a vector by a matrix and returns the new vector
-Vector3 operator * (const Matrix44& matrix, const Vector3& v) 
+//Multiplies a vector by a matrix and returns the new vector ( assumes v4 = (v.x, v.y, v.z, 1) )
+Vector3 operator * (const Matrix44& matrix, const Vector3& v)
 {   
    float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12]; 
    float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13]; 
@@ -369,46 +377,41 @@ void Matrix44::SetUpAndOrthonormalize(Vector3 up)
 {
 	up.Normalize();
 
-	//put the up vector in the matrix
-	m[4] = up.x;
-	m[5] = up.y;
-	m[6] = up.z;
-
 	//orthonormalize
 	Vector3 right,front;
-	right = RightVector();
+	right = RightVector().Normalize();
 
 	if ( abs(right.Dot( up )) < 0.99998 )
 	{
-		right = up.Cross( FrontVector() );
 		front = right.Cross( up );
+		right = up.Cross( front );
 	}
 	else
 	{
-		front = Vector3(right).Cross( up );
-		right = up.Cross( front );
+		right = up.Cross( FrontVector().Normalize() );
+		front = right.Cross( up );
 	}
 
 	right.Normalize();
 	front.Normalize();
 
+	m[0] = right.x;
+	m[1] = right.y;
+	m[2] = right.z;
+
+	m[4] = up.x;
+	m[5] = up.y;
+	m[6] = up.z;
+
 	m[8] = front.x;
 	m[9] = front.y;
 	m[10] = front.z;
 
-	m[0] = right.x;
-	m[1] = right.y;
-	m[2] = right.z;
 }
 
 void Matrix44::SetFrontAndOrthonormalize(Vector3 front)
 {
 	front.Normalize();
-
-	//put the up vector in the matrix
-	m[8] = front.x;
-	m[9] = front.y;
-	m[10] = front.z;
 
 	//orthonormalize
 	Vector3 right,up;
@@ -416,30 +419,40 @@ void Matrix44::SetFrontAndOrthonormalize(Vector3 front)
 
 	if ( abs(right.Dot( front )) < 0.99998 )
 	{
-		right = TopVector().Cross( front  );
-		up = front.Cross( right );
+		up = front.Cross(right);
+		right = up.Cross(front);
 	}
 	else
 	{
-		up = front.Cross( right );
-		right = up.Cross( front );
+		right = TopVector().Cross(front);
+		up = front.Cross(right);
 	}
 
 	right.Normalize();
 	up.Normalize();
 
+	m[0] = right.x;
+	m[1] = right.y;
+	m[2] = right.z;
+
 	m[4] = up.x;
 	m[5] = up.y;
 	m[6] = up.z;
 
-	m[0] = right.x;
-	m[1] = right.y;
-	m[2] = right.z;
+	m[8] = front.x;
+	m[9] = front.y;
+	m[10] = front.z;
 	
 }
 
 bool Matrix44::Inverse()
 {
+	// Guassian elimination
+	// this code is meant for MemoryRowMajor
+	// this works for both ( MemoryRowMajor ) and ( MemoryColMajor ) systems
+	//							inv(A)			trans(inv(trans(A)) = inv(A)
+	// note: inv(trans(A)) = trans(inv(A))
+
    unsigned int i, j, k, swap;
    float t;
    Matrix44 temp, final;
@@ -473,10 +486,8 @@ bool Matrix44::Inverse()
 
       // No non-zero pivot.  The CMatrix is singular, which shouldn't
       // happen.  This means the user gave us a bad CMatrix.
-
-
+	  
 #define MATRIX_SINGULAR_THRESHOLD 0.00001 //change this if you experience problems with matrices
-
       if ( fabsf(temp.M[i][i]) <= MATRIX_SINGULAR_THRESHOLD)
 	  {
 		  final.SetIdentity();
