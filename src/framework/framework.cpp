@@ -291,9 +291,9 @@ bool Matrix44::GetXYZ(float* euler) const
     // | r20 r21 r22 |   | -cx*cz*sy+sx*sz   cz*sx+cx*sy*sz   cx*cy |
     // +-           -+   +-                                        -+
 
-    if (_13 < 1.0f)
+    if (_31 < 1.0f)
     {
-        if (_13 > - 1.0f)
+        if (_31 > - 1.0f)
         {
             // y_angle = asin(r02)
             // x_angle = atan2(-r12,r22)

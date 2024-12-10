@@ -218,7 +218,7 @@ class Matrix44
 		void SetTranslation(float x, float y, float z);
 		void SetRotation(float angle_in_rad, const Vector3& axis);
 
-		// returns Euler angles [ X,Y,Z ] from PURE ROTATION MATRIX (unscaled). To reconstruct the matrix M = XYZ (math column major M*p)
+		// returns Euler angles [ X,Y,Z ] from PURE ROTATION MATRIX (unscaled). To reconstruct the matrix M = XYZ (math column-vector M*p)
 		bool GetXYZ(float* euler) const;
 
 		Matrix44 operator * (const Matrix44& matrix) const;
