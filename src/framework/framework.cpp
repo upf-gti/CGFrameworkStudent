@@ -133,16 +133,22 @@ Matrix44::Matrix44()
 	SetIdentity();
 }
 
-void Matrix44::Set()
+Matrix44::Matrix44(const float* v)
 {
-//	glMatrixMode( GL_MODELVIEW );
-//	glMultMatrixf(m);
+	memcpy(m, v, sizeof(float) * 16);
 }
 
-void Matrix44::Load()
-{
-//	glMatrixMode( GL_MODELVIEW );
-//	glLoadMatrixf(m);
+
+void Matrix44::Set(
+	float r1c1, float r1c2, float r1c3, float r1c4,
+	float r2c1, float r2c2, float r2c3, float r2c4,
+	float r3c1, float r3c2, float r3c3, float r3c4,
+	float r4c1, float r4c2, float r4c3, float r4c4
+) {
+	m[0] = r1c1;	m[4] = r1c2;	m[8] = r1c3;	m[12] = r1c4;
+	m[1] = r2c1;	m[5] = r2c2;	m[9] = r2c3;	m[13] = r2c4;
+	m[2] = r3c1;	m[6] = r3c2;	m[10] = r3c3;	m[14] = r3c4;
+	m[3] = r4c1;	m[7] = r4c2;	m[11] = r4c3;	m[15] = r4c4;
 }
 
 void Matrix44::Clear()
@@ -246,10 +252,31 @@ void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis )
 
 Matrix44 Matrix44::GetRotationOnly()
 {
-	Matrix44 trans = *this;
-	trans.Transpose();
-	trans.Inverse();
-	return trans;
+	Vector3 v;
+	Matrix44 result; // constructor already sets identity
+	
+	// right
+	v.Set(m[0], m[1], m[2]);
+	v = v.Normalize();
+	result.m[0] = v.x;
+	result.m[1] = v.y;
+	result.m[2] = v.z;
+	
+	// up
+	v.Set(m[4], m[5], m[6]);
+	v = v.Normalize();
+	result.m[4] = v.x;
+	result.m[5] = v.y;
+	result.m[6] = v.z;
+	
+	// front
+	v.Set(m[8], m[9], m[10]);
+	v = v.Normalize();
+	result.m[8] = v.x;
+	result.m[9] = v.y;
+	result.m[10] = v.z;
+	
+	return result;
 }
 
 bool Matrix44::GetXYZ(float* euler) const
@@ -415,7 +442,7 @@ void Matrix44::SetFrontAndOrthonormalize(Vector3 front)
 
 	//orthonormalize
 	Vector3 right,up;
-	right = RightVector();
+	right = RightVector().Normalize();
 
 	if ( abs(right.Dot( front )) < 0.99998 )
 	{

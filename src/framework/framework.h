@@ -181,8 +181,12 @@ class Matrix44
 		Matrix44();
 		Matrix44(const float* v);
 
-		void Set(); // Multiply with opengl matrix
-		void Load(); // Load in opengl matrix
+		void Set(
+			float r1c1, float r1c2, float r1c3, float r1c4, 
+			float r2c1, float r2c2, float r2c3, float r2c4, 
+			float r3c1, float r3c2, float r3c3, float r3c4, 
+			float r4c1, float r4c2, float r4c3, float r4c4 
+		);
 		void Clear();
 		void SetIdentity();
 		void Transpose();
@@ -196,7 +200,8 @@ class Matrix44
 		void SetUpAndOrthonormalize(Vector3 up);
 		void SetFrontAndOrthonormalize(Vector3 front);
 
-		Matrix44 GetRotationOnly(); //used when having scale
+		// does not accept negative scale
+		Matrix44 GetRotationOnly();
 
 		// Rotate only
 		Vector3 RotateVector( const Vector3& v);
