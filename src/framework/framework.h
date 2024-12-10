@@ -203,23 +203,22 @@ class Matrix44
 		// does not accept negative scale
 		Matrix44 GetRotationOnly();
 
-		// Rotate only
-		Vector3 RotateVector( const Vector3& v);
-
-		Vector3 ProjectVector(Vector3 v);
+		// Rotate (and Scale) only
+		Vector3 RotateVector(const Vector3& v);
 
 		// Transform using world coordinates
 		void Translate(float x, float y, float z);
-		void Rotate( float angle_in_rad, const Vector3& axis  );
+		void Rotate(float angle_in_rad, const Vector3& axis);
 
 		// Transform using local coordinates
 		void TranslateLocal(float x, float y, float z);
-		void RotateLocal( float angle_in_rad, const Vector3& axis  );
+		void RotateLocal(float angle_in_rad, const Vector3& axis);
 
 		// Create a transformation matrix from scratch
 		void SetTranslation(float x, float y, float z);
-		void SetRotation( float angle_in_rad, const Vector3& axis );
+		void SetRotation(float angle_in_rad, const Vector3& axis);
 
+		// returns Euler angles [ X,Y,Z ] from PURE ROTATION MATRIX (unscaled). To reconstruct the matrix M = XYZ (math column major M*p)
 		bool GetXYZ(float* euler) const;
 
 		Matrix44 operator * (const Matrix44& matrix) const;

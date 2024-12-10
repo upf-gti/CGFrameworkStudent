@@ -281,13 +281,16 @@ Matrix44 Matrix44::GetRotationOnly()
 
 bool Matrix44::GetXYZ(float* euler) const
 {
-	// Code adapted from www.geometrictools.com
+	// see https://en.wikipedia.org/wiki/Euler_angles Tait-Bryan -> angles table -> XYZ row
+
+	// Code adapted from www.geometrictools.com  (math column major)
 	//	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ 
     // +-           -+   +-                                        -+
     // | r00 r01 r02 |   |  cy*cz           -cy*sz            sy    |
     // | r10 r11 r12 | = |  cz*sx*sy+cx*sz   cx*cz-sx*sy*sz  -cy*sx |
     // | r20 r21 r22 |   | -cx*cz*sy+sx*sz   cz*sx+cx*sy*sz   cx*cy |
     // +-           -+   +-                                        -+
+
     if (_13 < 1.0f)
     {
         if (_13 > - 1.0f)
@@ -295,10 +298,11 @@ bool Matrix44::GetXYZ(float* euler) const
             // y_angle = asin(r02)
             // x_angle = atan2(-r12,r22)
             // z_angle = atan2(-r01,r00)
-            euler[1] = asinf(_13);
-            euler[0] = atan2f(-_23,_33);
-            euler[2] = atan2f(-_12,_11);
-            return true;
+			euler[1] = asinf(_31);
+			euler[0] = atan2f(-_32, _33);
+			euler[2] = atan2f(-_21, _11);
+			return true;
+
         }
         else
         {
@@ -306,7 +310,7 @@ bool Matrix44::GetXYZ(float* euler) const
             // z_angle - x_angle = atan2(r10,r11)
             // WARNING.  The solution is not unique.  Choosing z_angle = 0.
             euler[1] = (float)-M_PI_2;
-            euler[0] = -atan2f(_21,_22);
+            euler[0] = -atan2f(_12,_22);
             euler[2] = 0.0f;
             return false;
         }
@@ -317,7 +321,7 @@ bool Matrix44::GetXYZ(float* euler) const
         // z_angle + x_angle = atan2(r10,r11)
         // WARNING.  The solutions is not unique.  Choosing z_angle = 0.
         euler[1] = (float)M_PI_2;
-        euler[0] = atan2f(_21,_22);
+        euler[0] = atan2f(_12,_22);
         euler[2] = 0.0f;
     }
 	return false;
@@ -381,14 +385,6 @@ Vector4 operator * (const Matrix44& matrix, const Vector4& v)
 	float z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14] * v.w;
 	float w = matrix.m[3] * v.x + matrix.m[7] * v.y + matrix.m[11] * v.z + matrix.m[15] * v.w;
 	return Vector4(x, y, z, w);
-}
-
-Vector3 Matrix44::ProjectVector(Vector3 v)
-{
-   float x = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12]; 
-   float y = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13]; 
-   float z = m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14];
-   return Vector3(x/z, y/z, z);
 }
 
 //Multiplies a vector by a matrix and returns the new vector ( assumes v4 = (v.x, v.y, v.z, 1) )
