@@ -102,10 +102,10 @@ Image Image::GetArea(unsigned int start_x, unsigned int start_y, unsigned int wi
 {
 	Image result(width, height);
 	for(unsigned int x = 0; x < width; ++x)
-		for(unsigned int y = 0; y < height; ++x)
+		for(unsigned int y = 0; y < height; ++y)
 		{
 			if( (x + start_x) < this->width && (y + start_y) < this->height) 
-				result.SetPixel( x, y, GetPixel(x + start_x,y + start_y) );
+				result.SetPixelUnsafe( x, y, GetPixel(x + start_x,y + start_y) );
 		}
 	return result;
 }
@@ -254,7 +254,7 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 			unsigned int pos = y * width * bytesPerPixel + x * bytesPerPixel;
 			// Make sure we don't access out of memory
 			if( (pos < imageSize) && (pos + 1 < imageSize) && (pos + 2 < imageSize))
-				SetPixel(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
+				SetPixelUnsafe(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
 		}
 	}
 
@@ -311,14 +311,15 @@ bool Image::SaveTGA(const char* filename)
 
 void Image::DrawRect(int x, int y, int w, int h, const Color& c)
 {
+
 	for (int i = 0; i < w; ++i) {
-		SetPixel(x + i, y, c);
-		SetPixel(x + i, y + h - 1, c);
+		SetPixelUnsafe(x + i, y, c);
+		SetPixelUnsafe(x + i, y + h - 1, c);
 	}
 
 	for (int j = 0; j < h; ++j) {
-		SetPixel(x, y + j, c);
-		SetPixel(x + w - 1, y + j, c);
+		SetPixelUnsafe(x, y + j, c);
+		SetPixelUnsafe(x + w - 1, y + j, c);
 	}
 }
 
