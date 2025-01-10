@@ -4,6 +4,29 @@ Clone and initialize the repository:
 ```
 git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
 ```
+If you want to work on your own repository:
+  - Go to the CGFrameworkStudent cloned repository folder:
+```
+  cd CGFrameworkStudent
+```
+  - Create an empty private repository on GitHub.
+  - Make the cloned repository point to your own repository:
+```
+  git remote set-url origin <your-repository.git>
+```
+  - IMPORTANT make sure that both "fetch" and "push" are pointing to your repository:
+```
+  git remote -v
+```
+  - You should see something like:
+```
+  origin  <your-repository.git> (fetch)
+  origin  <your-repository.git> (push)
+```
+  - Update changes to the remote
+```
+  git push
+```
 
 The framework provided is compatible with all operating systems.
 The steps for each platform are mandatory to be able to build the framework.
