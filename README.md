@@ -4,29 +4,6 @@ Clone and initialize the repository:
 ```
 git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
 ```
-If you want to work on your own repository:
-  - Go to the CGFrameworkStudent cloned repository folder:
-```
-  cd CGFrameworkStudent
-```
-  - Create an empty private repository on GitHub.
-  - Make the cloned repository point to your own repository:
-```
-  git remote set-url origin <your-repository.git>
-```
-  - IMPORTANT make sure that both "fetch" and "push" are pointing to your repository:
-```
-  git remote -v
-```
-  - You should see something like:
-```
-  origin  <your-repository.git> (fetch)
-  origin  <your-repository.git> (push)
-```
-  - Update changes to the remote
-```
-  git push
-```
 
 The framework provided is compatible with all operating systems.
 The steps for each platform are mandatory to be able to build the framework.
@@ -46,6 +23,7 @@ In addition you need to install *CMake* which can be downloaded from [here](http
 
 Once you have all required open a Windows Terminal, go to the project folder and do this steps:
 ```console
+cd CGFrameworkStudent
 mkdir build
 cd build
 cmake ..
@@ -69,6 +47,7 @@ brew install cmake
 
 Once you have all required open a MacOS Terminal, go to the project folder and do this steps:
 ```console
+cd CGFrameworkStudent
 mkdir build && cd build
 cmake -G "Xcode" ..
 ```
@@ -92,6 +71,7 @@ sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-d
 
 Once you have all required open a Linux Terminal, go to the project folder and do this steps:
 ```console
+cd CGFrameworkStudent
 mkdir build && cd build
 cmake ..
 ```
@@ -120,3 +100,31 @@ Cmake Tools
 Check [this link](https://gourav.io/blog/setup-vscode-to-run-debug-c-cpp-code) to learn how to debug the framework in Visual Studio Code.
 
 First, open the project folder where the CMakeLists.txt is located, then open the CMake tab on the left, configure and build the project.
+
+
+## Creating your own repository
+
+After cloning the framework's repository, if you want to work on your own repository:
+  - Open the terminal
+  - Go to the CGFrameworkStudent cloned repository folder:
+```
+  cd CGFrameworkStudent
+```
+  - Create an empty private repository on GitHub.
+  - Make the CGFrameworkStudent cloned repository point to your own repository:
+```
+  git remote set-url origin <your-repository.git>
+```
+  - IMPORTANT make sure that both "fetch" and "push" are pointing to your repository:
+```
+  git remote -v
+```
+  - You should see something like:
+```
+  origin  <your-repository.git> (fetch)
+  origin  <your-repository.git> (push)
+```
+  - Update changes to the remote
+```
+  git push
+```
