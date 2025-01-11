@@ -113,7 +113,7 @@ After cloning the framework's repository, if you want to work on your own reposi
   - Create an empty private repository on GitHub.
   - Make the CGFrameworkStudent cloned repository point to your own repository:
 ```
-  git remote set-url origin <your-repository.git>
+  git remote set-url origin <your-repository-url.git>
 ```
   - IMPORTANT make sure that both "fetch" and "push" are pointing to your repository:
 ```
@@ -121,8 +121,8 @@ After cloning the framework's repository, if you want to work on your own reposi
 ```
   - You should see something like:
 ```
-  origin  <your-repository.git> (fetch)
-  origin  <your-repository.git> (push)
+  origin  <your-repository-url.git> (fetch)
+  origin  <your-repository-url.git> (push)
 ```
   - Update changes to the remote
 ```
