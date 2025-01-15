@@ -62,7 +62,7 @@ sudo xcode-select --reset
 
 ## Linux
 
-Install *cmake* and needed libraries using this command:
+Install *cmake*, libraries and compilers using this command:
 ```console
 sudo apt install cmake
 sudo apt install build-essential
@@ -80,15 +80,17 @@ This will generate a Makefile inside the folder ``build/`` that you can use to c
 
 Use ``make`` to compile. You can speed-up compilation using more threads with ``-j(num threads)``, for example: ``make -j8``.
 
-### Visual Studio Code (Linux, optional for other platforms)
+### Visual Studio Code (Linux)
 
-After installing all the libs for your platform, if you need a more light weight IDEs which can be used in any platform (included Linux), this is your better option.
+After installing all the libs for your platform, if you need a more light weight IDE which can be used in any platform (included Linux), this is your better option.
 
 Visual Studio Code can be downloaded for each platform [here](https://code.visualstudio.com/download).
 
+**NOTE**: you must have a C/C++ compiler installed and added to the path before progressing with the installation.
+
 #### Configuring VSCode
 
-After the VSCode and the requirements for each platform are installed **(the steps for each platform are mandatory!)**, the following extensions are needed to work with C++ code:
+After VSCode and the requirements for each platform are installed **(the steps for each platform are mandatory!)**, the following extensions are needed to work with C++ code:
 
 ```
 C/C++
@@ -97,9 +99,11 @@ C/C++ Themes
 Cmake Tools
 ```
 
-Check [this link](https://gourav.io/blog/setup-vscode-to-run-debug-c-cpp-code) to learn how to debug the framework in Visual Studio Code.
+Then, on VSCode, open the project folder where the CMakeLists.txt is located and the configuration of the project should start automatically. At this point you should be able to build and run the project using the VSCode interface. 
 
-First, open the project folder where the CMakeLists.txt is located, then open the CMake tab on the left, configure and build the project.
+If not, then open the CMake tab on the left of VSCode, and select the configure and build the project options.
+
+Check [this link](https://gourav.io/blog/setup-vscode-to-run-debug-c-cpp-code) to learn how to debug the framework in Visual Studio Code.
 
 
 ## Creating your own repository
