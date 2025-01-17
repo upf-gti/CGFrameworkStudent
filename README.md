@@ -54,10 +54,22 @@ cmake -G "Xcode" ..
 
 This will generate a XCode project inside the folder ``build/`` that you can use to compile and debug the framework.
 
-If this process leads to cmake errors, run this command an try again:
+### How to solve errors in Mac build
 
+If this process leads to cmake errors, run this command an try again:
 ```console
 sudo xcode-select --reset
+```
+
+If the error says that it cannot find C/C++ compilers, find them using:
+```console
+xcrun -find c++
+xcrun -find cc
+```
+
+Then, try to build again (inside the build directory) specifying the paths:
+```console
+cmake -D CMAKE_C_COMPILER="Path_of_C_compiler" -D CMAKE_CXX_COMPILER="Path_of_C++_compiler" -G Xcode ..
 ```
 
 ## Linux
