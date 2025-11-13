@@ -15,6 +15,8 @@ The mandatory C++ IDEs are the following:
 
 Detailed installation information can be seen below.
 
+After cloning the framework, you can [work on your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
+
 ## Windows
 
 MS Visual Studio Community can be downloaded from [here](https://visualstudio.microsoft.com/es/free-developer-offers/). Make sure you select **"Desktop Development with C++"**.
@@ -30,6 +32,8 @@ cmake ..
 ```
 
 This will generate a Visual Studio project inside the folder ``build/`` (.sln) that you can use to compile and debug the framework.
+
+Check how to [create your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
 
 ## Mac
 
@@ -53,6 +57,8 @@ cmake -G "Xcode" ..
 ```
 
 This will generate a XCode project inside the folder ``build/`` that you can use to compile and debug the framework.
+
+Check how to [create your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
 
 ### How to solve errors in Mac build
 
@@ -91,6 +97,8 @@ cmake ..
 This will generate a Makefile inside the folder ``build/`` that you can use to compile framework.
 
 Use ``make`` to compile. You can speed-up compilation using more threads with ``-j(num threads)``, for example: ``make -j8``.
+
+Check also how to create your own repository [here](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
 
 ### Visual Studio Code (Linux)
 
