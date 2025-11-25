@@ -39,7 +39,7 @@ Image::Image(const Image& c)
 // Assign operator
 Image& Image::operator = (const Image& c)
 {
-	if(pixels) delete pixels;
+	if(pixels) delete[] pixels;
 	pixels = NULL;
 
 	width = c.width;
@@ -57,7 +57,7 @@ Image& Image::operator = (const Image& c)
 Image::~Image()
 {
 	if(pixels) 
-		delete pixels;
+		delete[] pixels;
 }
 
 void Image::Render()
@@ -77,7 +77,7 @@ void Image::Resize(unsigned int width, unsigned int height)
 		for(unsigned int y = 0; y < min_height; ++y)
 			new_pixels[ y * width + x ] = GetPixel(x,y);
 
-	delete pixels;
+	delete[] pixels;
 	this->width = width;
 	this->height = height;
 	pixels = new_pixels;
@@ -92,7 +92,7 @@ void Image::Scale(unsigned int width, unsigned int height)
 		for(unsigned int y = 0; y < height; ++y)
 			new_pixels[ y * width + x ] = GetPixel((unsigned int)(this->width * (x / (float)width)), (unsigned int)(this->height * (y / (float)height)) );
 
-	delete pixels;
+	delete[] pixels;
 	this->width = width;
 	this->height = height;
 	pixels = new_pixels;
@@ -136,8 +136,10 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 	if (file.seekg(0, std::ios::end).good()) size = file.tellg();
 	if (file.seekg(0, std::ios::beg).good()) size -= file.tellg();
 
-	if (!size)
+	if (!size){
+		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
 		return false;
+	}
 
 	std::vector<unsigned char> buffer;
 
@@ -152,8 +154,10 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 
 	std::vector<unsigned char> out_image;
 
-	if (decodePNG(out_image, width, height, buffer.empty() ? 0 : &buffer[0], (unsigned long)buffer.size(), true) != 0)
+	if (decodePNG(out_image, width, height, buffer.empty() ? 0 : &buffer[0], (unsigned long)buffer.size(), true) != 0){
+		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
 		return false;
+	}
 
 	size_t bufferSize = out_image.size();
 	unsigned int originalBytesPerPixel = (unsigned int)bufferSize / (width * height);
@@ -162,10 +166,12 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 	bytes_per_pixel = 3;
 
 	if (originalBytesPerPixel == 3) {
+		if (pixels) delete[] pixels;
 		pixels = new Color[bufferSize];
 		memcpy(pixels, &out_image[0], bufferSize);
 	}
 	else if (originalBytesPerPixel == 4) {
+		if (pixels) delete[] pixels;
 
 		unsigned int newBufferSize = width * height * bytes_per_pixel;
 		pixels = new Color[newBufferSize];
@@ -180,6 +186,8 @@ bool Image::LoadPNG(const char* filename, bool flip_y)
 	// Flip pixels in Y
 	if (flip_y)
 		FlipY();
+
+	std::cout << "+++ File loaded: " << sfullPath.c_str() << std::endl;
 
 	return true;
 }
@@ -200,7 +208,7 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 		memcmp(TGAheader, TGAcompare, sizeof(TGAheader)) != 0 ||
 		fread(header, 1, sizeof(header), file) != sizeof(header))
 	{
-		std::cerr << "File not found: " << sfullPath.c_str() << std::endl;
+		std::cerr << "--- File not found: " << sfullPath.c_str() << std::endl;
 		if (file == NULL)
 			return NULL;
 		else
@@ -217,6 +225,7 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
     
 	if (tgainfo->width <= 0 || tgainfo->height <= 0 || (header[4] != 24 && header[4] != 32))
 	{
+		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
 		fclose(file);
 		delete tgainfo;
 		return NULL;
@@ -230,8 +239,10 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
     
 	if (tgainfo->data == NULL || fread(tgainfo->data, 1, imageSize, file) != imageSize)
 	{
+		std::cerr << "--- Failed to load file: " << sfullPath.c_str() << std::endl;
+
 		if (tgainfo->data != NULL)
-			delete tgainfo->data;
+			delete[] tgainfo->data;
             
 		fclose(file);
 		delete tgainfo;
@@ -242,7 +253,7 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 
 	// Save info in image
 	if(pixels)
-		delete pixels;
+		delete[] pixels;
 
 	width = tgainfo->width;
 	height = tgainfo->height;
@@ -262,8 +273,10 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 	if (flip_y)
 		FlipY();
 
-	delete tgainfo->data;
+	delete[] tgainfo->data;
 	delete tgainfo;
+
+	std::cout << "+++ File loaded: " << sfullPath.c_str() << std::endl;
 
 	return true;
 }
@@ -277,7 +290,7 @@ bool Image::SaveTGA(const char* filename)
 	FILE *file = fopen(fullPath.c_str(), "wb");
 	if ( file == NULL )
 	{
-		perror("Failed to open file: ");
+		std::cerr << "--- Failed to save file: " << fullPath.c_str() << std::endl;
 		return false;
 	}
 
@@ -305,6 +318,10 @@ bool Image::SaveTGA(const char* filename)
 
 	fwrite(bytes, 1, width*height*3, file);
 	fclose(file);
+
+	delete[] bytes;
+
+	std::cout << "+++ File saved: " << fullPath.c_str() << std::endl;
 
 	return true;
 }
@@ -359,7 +376,7 @@ FloatImage::FloatImage(const FloatImage& c) {
 // Assign operator
 FloatImage& FloatImage::operator = (const FloatImage& c)
 {
-	if (pixels) delete pixels;
+	if (pixels) delete[] pixels;
 	pixels = NULL;
 
 	width = c.width;
@@ -375,7 +392,7 @@ FloatImage& FloatImage::operator = (const FloatImage& c)
 FloatImage::~FloatImage()
 {
 	if (pixels)
-		delete pixels;
+		delete[] pixels;
 }
 
 // Change image size (the old one will remain in the top-left corner)
@@ -389,7 +406,7 @@ void FloatImage::Resize(unsigned int width, unsigned int height)
 		for (unsigned int y = 0; y < min_height; ++y)
 			new_pixels[y * width + x] = GetPixel(x, y);
 
-	delete pixels;
+	delete[] pixels;
 	this->width = width;
 	this->height = height;
 	pixels = new_pixels;
