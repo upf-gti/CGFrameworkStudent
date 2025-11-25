@@ -32,7 +32,7 @@ Vector3 Camera::ProjectVector(Vector3 pos, bool& negZ)
 void Camera::Rotate(float angle, const Vector3& axis)
 {
 	Matrix44 R;
-	R.SetRotation(angle, axis);
+	R.MakeRotationMatrix(angle, axis);
 	Vector3 new_front = R * (center - eye);
 	center = eye + new_front;
 	UpdateViewMatrix();

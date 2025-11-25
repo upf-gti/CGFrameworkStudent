@@ -170,20 +170,6 @@ void Matrix44::Transpose()
    std::swap(m[6],m[9]); std::swap(m[7],m[13]); std::swap(m[11],m[14]);
 }
 
-void Matrix44::Translate(float x, float y, float z)
-{
-	Matrix44 T;
-	T.SetTranslation(x, y, z);
-	*this = T * (*this);
-}
-
-void Matrix44::Rotate( float angle_in_rad, const Vector3& axis )
-{
-	Matrix44 R;
-	R.SetRotation(angle_in_rad, axis);
-	*this = R * (*this);
-}
-
 Vector3 Matrix44::RotateVector(const Vector3& v)
 {
 	Matrix44 temp = *this;
@@ -193,22 +179,8 @@ Vector3 Matrix44::RotateVector(const Vector3& v)
 	return temp * v;
 }
 
-void Matrix44::TranslateLocal(float x, float y, float z)
-{
-	Matrix44 T;
-	T.SetTranslation(x, y, z);
-	*this = *this * T;
-}
-
-void Matrix44::RotateLocal( float angle_in_rad, const Vector3& axis )
-{
-	Matrix44 R;
-	R.SetRotation(angle_in_rad, axis);
-	*this = *this * R;
-}
-
 //To create a traslation matrix
-void Matrix44::SetTranslation(float x, float y, float z)
+void Matrix44::MakeTranslationMatrix(float x, float y, float z)
 {
 	SetIdentity();
 	m[12] = x;
@@ -217,7 +189,7 @@ void Matrix44::SetTranslation(float x, float y, float z)
 }
 
 //To create a rotation matrix
-void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis )
+void Matrix44::MakeRotationMatrix( float angle_in_rad, const Vector3& axis )
 {
 	Vector3 axis_n = axis;
 	axis_n.Normalize();
@@ -248,6 +220,14 @@ void Matrix44::SetRotation( float angle_in_rad, const Vector3& axis )
 	m[13] = 0;
 	m[14] = 0;
 	m[15] = 1;
+}
+
+void Matrix44::MakeScaleMatrix(float sx, float sy, float sz)
+{
+	SetIdentity();
+	m[0] = sx;
+	m[5] = sy;
+	m[10] = sz;
 }
 
 Matrix44 Matrix44::GetRotationOnly()
