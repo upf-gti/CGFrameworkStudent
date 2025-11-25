@@ -18,11 +18,10 @@ Vector3 Camera::GetLocalVector(const Vector3& v)
 	return result;
 }
 
-Vector3 Camera::ProjectVector(Vector3 pos, bool& negZ)
+Vector3 Camera::ProjectVector(Vector3 pos)
 {
 	Vector4 pos4 = Vector4(pos.x, pos.y, pos.z, 1.0);
 	Vector4 result = viewprojection_matrix * pos4;
-	negZ = result.z < 0;
 	if (type == ORTHOGRAPHIC)
 		return result.GetVector3();
 	else

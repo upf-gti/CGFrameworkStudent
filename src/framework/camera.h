@@ -52,9 +52,7 @@ public:
 	Vector3 GetLocalVector(const Vector3& v);
 
 	// Project 3D Vectors to 2D Homogeneous Space
-	// If negZ is true, the projected point IS NOT inside the frustum, 
-	// so it does not have to be rendered!
-	Vector3 ProjectVector(Vector3 pos, bool& negZ);
+	Vector3 ProjectVector(Vector3 pos);
 
 	// Set the info for each projection
 	void SetPerspective(float fov, float aspect, float near_plane, float far_plane);
