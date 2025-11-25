@@ -28,7 +28,7 @@ Once you have all required open a Windows Terminal, go to the project folder and
 cd CGFrameworkStudent
 mkdir build
 cd build
-cmake ..
+cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
 This will generate a Visual Studio project inside the folder ``build/`` (.sln) that you can use to compile and debug the framework.

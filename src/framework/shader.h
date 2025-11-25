@@ -45,6 +45,7 @@ public:
 	virtual bool IsVar(const char* varname) { return (GetUniformLocation(varname) != -1); }
 
 	// Upload
+	virtual void SetInt(const char* varname, const int& input) { SetUniform1(varname, input); }
 	virtual void SetFloat(const char* varname, const float& input) { SetUniform1(varname, input); }
 	virtual void SetVector2(const char* varname, const Vector2& input) { SetUniform2(varname, input.x, input.y); }
 	virtual void SetVector3(const char* varname, const Vector3& input) { SetUniform3(varname, input.x, input.y, input.z); }
