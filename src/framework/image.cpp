@@ -326,20 +326,6 @@ bool Image::SaveTGA(const char* filename)
 	return true;
 }
 
-void Image::DrawRect(int x, int y, int w, int h, const Color& c)
-{
-
-	for (int i = 0; i < w; ++i) {
-		SetPixelUnsafe(x + i, y, c);
-		SetPixelUnsafe(x + i, y + h - 1, c);
-	}
-
-	for (int j = 0; j < h; ++j) {
-		SetPixelUnsafe(x, y + j, c);
-		SetPixelUnsafe(x + w - 1, y + j, c);
-	}
-}
-
 #ifndef IGNORE_LAMBDAS
 
 // You can apply and algorithm for two images and store the result in the first one
