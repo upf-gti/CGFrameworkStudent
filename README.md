@@ -1,29 +1,28 @@
 # Computer Graphics
+Follow the instructions below to clone, configure, and build the project.
 
-Clone and initialize the repository:
+#### Clone and initialize the repository:
 ```
 git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
 ```
 
-The framework provided is compatible with all operating systems.
-The steps for each platform are mandatory to be able to build the framework.
-The mandatory C++ IDEs are the following:
+Once cloned, you can optionally [work on your own repository](#creating-your-own-repository).
 
-* MS Visual Studio Community (Windows)
-* XCode (Mac)
-* Visual Studio Code (Linux, optional for other platforms)
+The framework provided is compatible with all operating systems. Here are the steps for each platform:
+1. [Windows](#windows)
+2. [Mac](#mac)
+3. [Linux](#linux)
 
-Detailed installation information can be seen below.
-
-After cloning the framework, you can [work on your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
 
 ## Windows
+1. Install [MS Visual Studio Community](https://visualstudio.microsoft.com/es/free-developer-offers/) <br>
+&rarr; Select **"Desktop Development with C++"**
+2. Install [*CMake*](https://cmake.org/download/) <br>
+  &rarr; Select "Windows x64 Installer" for the last version. <br>
+  &rarr; Enable **"Add CMake to PATH"** during installation (otherwise CMake won't work in the terminal)
 
-MS Visual Studio Community can be downloaded from [here](https://visualstudio.microsoft.com/es/free-developer-offers/). Make sure you select **"Desktop Development with C++"**.
-
-In addition you need to install *CMake* which can be downloaded from [here](https://cmake.org/download/). Select "Windows x64 Installer" for the last version. Remember to set **"Add CMake to PATH"** when asked while installing, otherwhise you won't be able to call CMake from the terminal.
-
-Once you have all required open a Windows Terminal, go to the project folder and do this steps:
+#### Configure the project: <br>
+Open a Windows Terminal, go to the project folder, and run:
 ```console
 cd CGFrameworkStudent
 mkdir build
@@ -31,38 +30,40 @@ cd build
 cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
-This will generate a Visual Studio project inside the folder ``build/`` (.sln) that you can use to compile and debug the framework.
+Double click on the ``.sln`` VS project inside the ``build/`` folder.
 
-Check how to [create your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
+You are all set!
+
+Remember you can optionally [create your own repository](#creating-your-own-repository).
 
 ## Mac
-
-You need XCode installed in your system (you may need to update MacOS version), Homebrew to install the missing libraries and also *CMake*. 
-
-To install Homebrew open a terminal and run this command:
+1. Install XCode (you may need to update MacOS version)
+2. Install Homebrew (to install the missing libraries). Open a terminal and run this command:
 ```console
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-
-Continue by installing *cmake* using this command:
+3. Install *CMake*:
 ```console
 brew install cmake
 ```
 
-Once you have all required open a MacOS Terminal, go to the project folder and do this steps:
+#### Configure the project: <br>
+Open a MacOS Terminal, go to the project folder, and run:
 ```console
 cd CGFrameworkStudent
 mkdir build && cd build
 cmake -G "Xcode" ..
 ```
 
-This will generate a XCode project inside the folder ``build/`` that you can use to compile and debug the framework.
+This will generate a XCode project inside the folder ``build/``.
 
-Check how to [create your own repository](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
+You are all set!
+
+Remember you can optionally [create your own repository](#creating-your-own-repository).
 
 ### How to solve errors in Mac build
 
-If this process leads to cmake errors, run this command an try again:
+If *CMake* fails, run this command an try again:
 ```console
 sudo xcode-select --reset
 ```
@@ -79,26 +80,26 @@ cmake -D CMAKE_C_COMPILER="Path_of_C_compiler" -D CMAKE_CXX_COMPILER="Path_of_C+
 ```
 
 ## Linux
-
-Install *cmake*, libraries and compilers using this command:
+1. Install *CMake*, libraries and compilers using these commands:
 ```console
 sudo apt install cmake
 sudo apt install build-essential
 sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
 ```
 
-Once you have all required open a Linux Terminal, go to the project folder and do this steps:
+#### Configure the project: <br>
+Open a Linux Terminal, go to the project folder, and run:
 ```console
 cd CGFrameworkStudent
 mkdir build && cd build
 cmake ..
 ```
 
-This will generate a Makefile inside the folder ``build/`` that you can use to compile framework.
+This will generate a Makefile inside the folder ``build/``.
 
 Use ``make`` to compile. You can speed-up compilation using more threads with ``-j(num threads)``, for example: ``make -j8``.
 
-Check also how to create your own repository [here](https://github.com/upf-gti/CGFrameworkStudent?tab=readme-ov-file#creating-your-own-repository). (Optional)
+Remember you can optionally [create your own repository](#creating-your-own-repository).
 
 ### Visual Studio Code (Linux)
 
@@ -127,28 +128,27 @@ Check [this link](https://gourav.io/blog/setup-vscode-to-run-debug-c-cpp-code) t
 
 
 ## Creating your own repository
-
-After cloning the framework's repository, if you want to work on your own repository:
-  - Open the terminal
-  - Go to the CGFrameworkStudent cloned repository folder:
+If you want to push your local copy to your own GitHub repo:
+1. Create an empty private repository on GitHub
+2. Open the terminal
+3. Go to the *CGFrameworkStudent* cloned repository folder:
 ```
   cd CGFrameworkStudent
 ```
-  - Create an empty private repository on GitHub.
-  - Make the CGFrameworkStudent cloned repository point to your own repository:
+4. Point your local repo to your newly created GitHub repo:
 ```
   git remote set-url origin <your-repository-url.git>
 ```
-  - IMPORTANT make sure that both "fetch" and "push" are pointing to your repository:
+5. **IMPORTANT:** verify both "fetch" and "push" are pointing to your repository:
 ```
   git remote -v
 ```
-  - You should see something like:
+&emsp;&emsp;You should see:
 ```
   origin  <your-repository-url.git> (fetch)
   origin  <your-repository-url.git> (push)
 ```
-  - Update changes to the remote
+6. Update changes to the remote
 ```
   git push
 ```
