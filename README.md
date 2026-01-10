@@ -1,6 +1,6 @@
 # Computer Graphics
 Follow the instructions below to clone, configure, and build the project.
-In case you do not have Git installed, please refer to [Git](git-scm.com) to install it
+In case you do not have Git installed, please refer to [Git](https://git-scm.com/) to install it
 #### Clone and initialize the repository:
 ```
 git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
