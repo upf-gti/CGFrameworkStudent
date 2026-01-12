@@ -30,7 +30,7 @@ cd build
 cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
-Double click on the ``.sln`` VS project inside the ``build/`` folder.
+Double click on the ``.sln`` (or ``.slnx``) VS project inside the ``build/`` folder.
 
 You are all set!
 
@@ -52,7 +52,7 @@ Open a MacOS Terminal, go to the project folder, and run:
 ```console
 cd CGFrameworkStudent
 mkdir build && cd build
-cmake -G "Xcode" ..
+cmake .. -G "Xcode" -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
 Double click on the ``.xcodeproj`` Xcode project inside the ``build/`` folder.
