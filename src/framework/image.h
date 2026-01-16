@@ -70,6 +70,8 @@ public:
 	// Fill the image with the color C
 	void Fill(const Color& c) { for(unsigned int pos = 0; pos < width*height; ++pos) pixels[pos] = c; }
 
+    void DrawLineDDA(int x0, int y0, int x1, int y1, const Color& c);
+    
 	// Returns a new image with the area from (startx,starty) of size width,height
 	Image GetArea(unsigned int start_x, unsigned int start_y, unsigned int width, unsigned int height);
 
