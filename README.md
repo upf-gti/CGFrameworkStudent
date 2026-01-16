@@ -1,6 +1,6 @@
 # Computer Graphics
 Follow the instructions below to clone, configure, and build the project.
-In case you do not have Git installed, please refer to [Git](git-scm.com) to install it
+In case you do not have Git installed, please refer to [Git](https://git-scm.com/) to install it
 #### Clone and initialize the repository:
 ```
 git clone --recurse-submodules -j8 https://github.com/upf-gti/CGFrameworkStudent.git
@@ -30,7 +30,7 @@ cd build
 cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
-Double click on the ``.sln`` VS project inside the ``build/`` folder.
+Double click on the ``.sln`` (or ``.slnx``) VS project inside the ``build/`` folder.
 
 You are all set!
 
@@ -52,32 +52,50 @@ Open a MacOS Terminal, go to the project folder, and run:
 ```console
 cd CGFrameworkStudent
 mkdir build && cd build
-cmake -G "Xcode" ..
+cmake .. -G "Xcode" -DCMAKE_POLICY_VERSION_MINIMUM=3.12
 ```
 
-This will generate a XCode project inside the folder ``build/``.
+Double click on the ``.xcodeproj`` Xcode project inside the ``build/`` folder.
 
 You are all set!
 
 Remember you can optionally [create your own repository](#creating-your-own-repository).
 
 ### How to solve errors in Mac build
+#### *CMake* fails
+1. Run this command an try again:
+   ```console
+   sudo xcode-select --reset
+   ```
 
-If *CMake* fails, run this command an try again:
-```console
-sudo xcode-select --reset
-```
+#### Cannot find C/C++ compilers
+1. Find them using:
+   ```console
+   xcrun -find c++
+   xcrun -find cc
+   ```
 
-If the error says that it cannot find C/C++ compilers, find them using:
-```console
-xcrun -find c++
-xcrun -find cc
-```
+2. Then, try to build again (inside the build directory) specifying the paths:
+   ```console
+   cmake -D CMAKE_C_COMPILER="Path_of_C_compiler" -D CMAKE_CXX_COMPILER="Path_of_C++_compiler" -G Xcode ..
+   ```
 
-Then, try to build again (inside the build directory) specifying the paths:
-```console
-cmake -D CMAKE_C_COMPILER="Path_of_C_compiler" -D CMAKE_CXX_COMPILER="Path_of_C++_compiler" -G Xcode ..
-```
+#### Xcode compilation error "AGL Framework not found"
+
+1. Open the "libraries/glew-cmake/CMakeLists.txt" file
+2. Comment/Delete lines 113 & 114
+   ```console
+   find_library(AGL_LIBRARY AGL REQUIRED)
+   list(APPEND LIBRARIES ${AGL_LIBRARY})
+   ```
+4. Execute the ``cmake`` command again
+
+#### Xcode compiles sucessfully but does not show anything
+1. Make sure the "ComputerGraphics" compilation target is selected
+2. If not, click on the red squared item (see image) and select it 
+<img width="880" height="53" alt="xcode_target" src="https://github.com/user-attachments/assets/64cf18a6-292d-44d8-a559-ea29e63e9120" />
+
+3. Compile again
 
 ## Linux
 1. Install *CMake*, libraries and compilers using these commands:
