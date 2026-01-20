@@ -259,19 +259,25 @@ bool Image::LoadTGA(const char* filename, bool flip_y)
 	height = tgainfo->height;
 	pixels = new Color[width*height];
 
+	const char imageDescriptor = header[5];
+	bool tgaFlipY = (imageDescriptor & 0x20) > 0; // bit 5 (0-7) -> true == origin on top
+	bool tgaFlipX = (imageDescriptor & 0x10) > 0; // bit 4 (0-7) -> true == origin on right
+
+	if (flip_y) {
+		tgaFlipY = !tgaFlipY;
+	}
+
 	// Convert to float all pixels
 	for (unsigned int y = 0; y < height; ++y) {
 		for (unsigned int x = 0; x < width; ++x) {
-			unsigned int pos = y * width * bytesPerPixel + x * bytesPerPixel;
+			unsigned int offsetY = (tgaFlipY ? (height - 1 - y) : y) * width * bytesPerPixel;
+			unsigned int offsetX = (tgaFlipX ? (width - 1 - x) : x) * bytesPerPixel;
+			unsigned int pos = offsetY + offsetX;
 			// Make sure we don't access out of memory
-			if( (pos < imageSize) && (pos + 1 < imageSize) && (pos + 2 < imageSize))
-				SetPixelUnsafe(x, height - y - 1, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
+			if( pos + 2 < imageSize ) // assuming 1 bytes per channel
+				SetPixelUnsafe(x, y, Color(tgainfo->data[pos + 2], tgainfo->data[pos + 1], tgainfo->data[pos]));
 		}
 	}
-
-	// Flip pixels in Y
-	if (flip_y)
-		FlipY();
 
 	delete[] tgainfo->data;
 	delete tgainfo;
@@ -299,7 +305,7 @@ bool Image::SaveTGA(const char* filename)
 	header_short[1] = height;
 	unsigned char* header = (unsigned char*)header_short;
 	header[4] = 24;
-	header[5] = 0;
+	header[5] = 0; // image descriptor: origin in bottom-left
 
 	fwrite(TGAheader, 1, sizeof(TGAheader), file);
 	fwrite(header, 1, 6, file);
