@@ -309,7 +309,7 @@ bool Image::SaveTGA(const char* filename)
 	for(unsigned int y = 0; y < height; ++y)
 		for(unsigned int x = 0; x < width; ++x)
 		{
-			Color c = pixels[y*width+x];
+			Color c = pixels[(height - y - 1) * width + x];
 			unsigned int pos = (y*width+x)*3;
 			bytes[pos+2] = c.r;
 			bytes[pos+1] = c.g;
